@@ -4,6 +4,7 @@ build
 target
 gradle
 classes
+out/
 
 # IDEA artifacts and output dirs
 *.iml
