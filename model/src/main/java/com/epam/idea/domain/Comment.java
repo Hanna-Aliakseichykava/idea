@@ -36,6 +36,7 @@ public class Comment implements Persistent {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -63,6 +64,5 @@ public class Comment implements Persistent {
     public void setRelatedIdea(Idea relatedIdea) {
         this.relatedIdea = relatedIdea;
     }
-    
-    
+
 }

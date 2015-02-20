@@ -35,6 +35,7 @@ public class Tag implements Persistent {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }

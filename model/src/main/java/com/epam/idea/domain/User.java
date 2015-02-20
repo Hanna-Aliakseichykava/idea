@@ -29,6 +29,8 @@ public class User implements Persistent {
     private List<Idea> ideas;
     
     private List<Comment> comments;
+    
+    private List<Role> roles;
 
     public User() {
         //empty
@@ -44,6 +46,7 @@ public class User implements Persistent {
         return id;
     }
 
+    @Override
     public void setId(int id) {
         this.id = id;
     }
@@ -80,6 +83,14 @@ public class User implements Persistent {
         this.comments = comments;
     }
 
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -87,25 +98,5 @@ public class User implements Persistent {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        User user = (User) o;
-
-        if (!email.equals(user.email)) return false;
-        if (!password.equals(user.password)) return false;
-
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = email.hashCode();
-        result = 42 * result + password.hashCode();
-        return result;
     }
 }
