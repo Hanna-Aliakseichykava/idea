@@ -1,0 +1,32 @@
+allprojects {
+    group = 'com.epam.idea'
+    version = '0.1-SNAPSHOT'
+}
+
+subprojects {
+    apply plugin: 'java'
+
+    // Uses JDK 8
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
+
+    // Spring version
+    ext.springVersion = '4.0.6.RELEASE'
+    ext.hibernateVersion = '4.3.8.Final'
+
+    repositories {
+        jcenter()
+    }
+
+    dependencies { 
+        testCompile 'junit:junit:4.11'
+        compile "org.springframework:spring-core:$springVersion"
+    }
+
+}
+
+// The Gradle Wrapper is the preferred way of starting a Gradle build
+// Run the following command to download and initialize the wrapper scripts: gradle wrapper
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}

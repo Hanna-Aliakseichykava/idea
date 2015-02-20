@@ -1,0 +1,6 @@
+rootProject.name = 'Idea'
+include 'model', 'repository', 'service', 'web'
+
+rootProject.children.each {
+    it.buildFileName = it.name + '.gradle'
+}
