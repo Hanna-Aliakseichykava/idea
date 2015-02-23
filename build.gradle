@@ -10,9 +10,12 @@ subprojects {
     sourceCompatibility = 1.8
     targetCompatibility = 1.8
 
-    // Spring version
-    ext.springVersion = '4.0.6.RELEASE'
-    ext.hibernateVersion = '4.3.8.Final'
+
+    ext {
+        springVersion = '4.0.9.RELEASE'
+        hibernateVersion = '4.3.8.Final'
+        sl4jVersion = '1.7.10'
+    }
 
     repositories {
         jcenter()
@@ -21,6 +24,7 @@ subprojects {
     dependencies { 
         testCompile 'junit:junit:4.11'
         compile "org.springframework:spring-core:$springVersion"
+        compile "org.slf4j:slf4j-simple:$sl4jVersion"
     }
 
 }
