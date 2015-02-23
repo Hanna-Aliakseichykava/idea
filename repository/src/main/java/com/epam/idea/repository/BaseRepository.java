@@ -10,11 +10,11 @@ import java.util.Optional;
 @NoRepositoryBean
 interface BaseRepository<T, ID extends Serializable> extends Repository<T, ID> {
 
-    void delete(T deleted);
+	void delete(T deleted);
 
-    List<T> findAll();
+	List<T> findAll();
 
-    Optional<T> findOne(ID id);
+	Optional<T> findOne(ID id);
 
-    T save(T persisted);
+	T save(T persisted);
 }

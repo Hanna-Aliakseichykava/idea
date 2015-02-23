@@ -3,12 +3,18 @@ apply plugin: 'jetty'
 
 httpPort = 9090
 
+ext {
+    securityVersion = '3.2.5.RELEASE'
+}
+
 dependencies {
     compile project(':service')
 
-    compile "org.springframework:spring-web:$springVersion",
-            "org.springframework:spring-webmvc:$springVersion"
+    compile "org.springframework:spring-web:$springVersion" 
+    compile "org.springframework:spring-webmvc:$springVersion"
+//    compile "org.springframework.security:spring-security-config:$securityVersion"
+//    compile "org.springframework.security:spring-security-web:$securityVersion"
 
     //include in compile only, exclude in the war
-    providedCompile 'javax.servlet:servlet-api:2.5'
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 }
