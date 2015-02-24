@@ -1,31 +1,20 @@
 package com.epam.idea.web.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import com.epam.idea.domain.User;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/")
+@RestController
 public class IndexController {
-	
-//	@Autowired
-//	private UserService userService;
-	
-	
-	
-	@Autowired
-	AnnotationConfigWebApplicationContext context;
 
-	@ResponseBody
-	public String showIndex() {
-		System.out.println("here");
-//		Optional<User> one = userService.findOne(1l);
-//		if (one.isPresent()) {
-//			User user = one.get();
-//			System.out.println(user);
-//		}
-		return "Hello world";
+
+//	@Autowired
+//	AnnotationConfigWebApplicationContext context;
+
+	@RequestMapping(value = "/test", method = RequestMethod.POST)
+	public User showIndex(@RequestBody User user) {
+		return user;
 	}
 }

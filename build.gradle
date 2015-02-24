@@ -15,16 +15,28 @@ subprojects {
         springVersion = '4.0.9.RELEASE'
         hibernateVersion = '4.3.8.Final'
         sl4jVersion = '1.7.10'
+        jUnitVersion = '4.11'
+        mockitoVersion = '1.10.19'
+        jsonpathVesrion = '0.9.1'
     }
 
     repositories {
         jcenter()
     }
 
-    dependencies { 
-        testCompile 'junit:junit:4.11'
+    dependencies {
         compile "org.springframework:spring-core:$springVersion"
         compile "org.slf4j:slf4j-simple:$sl4jVersion"
+
+        // Test dependencies
+        testCompile "junit:junit:$jUnitVersion"
+        testCompile "org.springframework:spring-test:$springVersion"
+        testCompile "org.mockito:mockito-all:$mockitoVersion"
+        
+        // Adds a simple way to extract parts of a given document.
+        testCompile "com.jayway.jsonpath:json-path:$jsonpathVesrion"
+        testCompile "com.jayway.jsonpath:json-path-assert:$jsonpathVesrion"
+
     }
 
 }

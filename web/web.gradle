@@ -3,8 +3,12 @@ apply plugin: 'jetty'
 
 httpPort = 9090
 
+war.archiveName = 'idea.war'
+
 ext {
-    securityVersion = '3.2.5.RELEASE'
+    springSecurityVersion = '3.2.5.RELEASE'
+    springHateoasVersion = '0.16.0.RELEASE'
+    jacksonVersion = '2.5.1'
 }
 
 dependencies {
@@ -12,9 +16,18 @@ dependencies {
 
     compile "org.springframework:spring-web:$springVersion" 
     compile "org.springframework:spring-webmvc:$springVersion"
-//    compile "org.springframework.security:spring-security-config:$securityVersion"
-//    compile "org.springframework.security:spring-security-web:$securityVersion"
+    compile "org.springframework.hateoas:spring-hateoas:$springHateoasVersion"
+
+    //    compile "org.springframework.security:spring-security-config:$springSecurityVersion"
+    //    compile "org.springframework.security:spring-security-web:$springSecurityVersion"
+
+    // JSON processing
+    compile "com.fasterxml.jackson.core:jackson-core:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion"
+    compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
 
     //include in compile only, exclude in the war
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    
+
 }
