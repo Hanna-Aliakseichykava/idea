@@ -3,12 +3,12 @@ package com.epam.idea.core.service.impl;
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.repository.CommentRepository;
 import com.epam.idea.core.service.CommentService;
+import com.epam.idea.core.service.exception.CommentDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,8 +30,8 @@ public class CommentServiceImpl implements CommentService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<Comment> findOne(Long id) {
-		return commentRepository.findOne(id);
+	public Comment findOne(Long id) {
+		return commentRepository.findOne(id).orElseThrow(CommentDoesNotExistException::new);
 	}
 
 	@Override

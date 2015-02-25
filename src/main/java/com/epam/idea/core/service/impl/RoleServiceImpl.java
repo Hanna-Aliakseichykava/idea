@@ -3,12 +3,12 @@ package com.epam.idea.core.service.impl;
 import com.epam.idea.core.model.Role;
 import com.epam.idea.core.repository.RoleRepository;
 import com.epam.idea.core.service.RoleService;
+import com.epam.idea.core.service.exception.RoleDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,8 +30,8 @@ public class RoleServiceImpl implements RoleService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<Role> findOne(Long id) {
-		return roleRepository.findOne(id);
+	public Role findOne(Long id) {
+		return roleRepository.findOne(id).orElseThrow(RoleDoesNotExistException::new);
 	}
 
 	@Override

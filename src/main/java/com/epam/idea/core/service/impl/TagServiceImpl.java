@@ -3,12 +3,12 @@ package com.epam.idea.core.service.impl;
 import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.repository.TagRepository;
 import com.epam.idea.core.service.TagService;
+import com.epam.idea.core.service.exception.TagDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,8 +30,8 @@ public class TagServiceImpl implements TagService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Optional<Tag> findOne(Long id) {
-		return tagRepository.findOne(id);
+	public Tag findOne(Long id) {
+		return tagRepository.findOne(id).orElseThrow(TagDoesNotExistException::new);
 	}
 
 	@Override
