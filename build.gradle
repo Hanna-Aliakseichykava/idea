@@ -1,44 +1,75 @@
-allprojects {
-    group = 'com.epam.idea'
-    version = '0.1-SNAPSHOT'
+plugins {
+    id "io.spring.dependency-management" version "0.4.0.RELEASE"
 }
 
-subprojects {
-    apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'jetty'
 
-    // Uses JDK 8
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+group = 'com.epam.idea'
+version = '0.1-SNAPSHOT'
+
+// Uses JDK 8
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+httpPort = 9090
+war.archiveName = 'idea.war'
 
 
-    ext {
-        springVersion = '4.0.9.RELEASE'
-        hibernateVersion = '4.3.8.Final'
-        sl4jVersion = '1.7.10'
-        jUnitVersion = '4.11'
-        mockitoVersion = '1.10.19'
-        jsonpathVesrion = '0.9.1'
+repositories {
+    jcenter()
+    maven { url 'http://repo.spring.io/libs-snapshot' }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.spring.platform:platform-bom:2.0.0.BUILD-SNAPSHOT'
     }
+}
 
-    repositories {
-        jcenter()
-    }
+ext {
+    hikariVersion = '2.3.2'
+    jadiraVersion = '3.2.0.GA'
+    jsonPathVesrion = '0.9.1'
+    sl4jVersion = '1.7.10'
+}
 
-    dependencies {
-        compile "org.springframework:spring-core:$springVersion"
-        compile "org.slf4j:slf4j-simple:$sl4jVersion"
+dependencies {
+    compile 'org.springframework:spring-core'
+    compile "org.springframework:spring-web"
+    compile 'org.springframework:spring-webmvc'
+    compile 'org.springframework.hateoas:spring-hateoas'
+    compile 'org.springframework.data:spring-data-jpa'
+    
+    // JPA Provider (Hibernate)
+    compile 'org.hibernate:hibernate-core'
 
-        // Test dependencies
-        testCompile "junit:junit:$jUnitVersion"
-        testCompile "org.springframework:spring-test:$springVersion"
-        testCompile "org.mockito:mockito-all:$mockitoVersion"
-        
-        // Adds a simple way to extract parts of a given document.
-        testCompile "com.jayway.jsonpath:json-path:$jsonpathVesrion"
-        testCompile "com.jayway.jsonpath:json-path-assert:$jsonpathVesrion"
+    // Database (H2)
+    compile 'com.h2database:h2'
+    
+    // DataSource (HikariCP)
+    compile "com.zaxxer:HikariCP:$hikariVersion"
 
-    }
+    // Adds support for Java 8 dates
+    compile "org.jadira.usertype:usertype.extended:$jadiraVersion"
 
+    compile "org.slf4j:slf4j-simple:$sl4jVersion"
+
+    // JSON processing
+    compile 'com.fasterxml.jackson.core:jackson-core'
+    compile 'com.fasterxml.jackson.core:jackson-annotations'
+    compile 'com.fasterxml.jackson.core:jackson-databind'
+
+    // Test dependencies
+    testCompile 'junit:junit'
+    testCompile 'org.springframework:spring-test'
+    testCompile 'org.mockito:mockito-all'
+
+    // Adds a simple way to extract parts of a given document.
+    testCompile "com.jayway.jsonpath:json-path:$jsonPathVesrion"
+    testCompile "com.jayway.jsonpath:json-path-assert:$jsonPathVesrion"
+
+    providedCompile 'javax.servlet:javax.servlet-api'
 }
 
 // The Gradle Wrapper is the preferred way of starting a Gradle build
