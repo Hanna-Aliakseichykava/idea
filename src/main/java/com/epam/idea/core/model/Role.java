@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "ROLES")
+@Table(name = "ROLE")
 public class Role implements Serializable {
 
     @Id
@@ -29,7 +29,7 @@ public class Role implements Serializable {
     private Authority name;
 
     @ManyToMany
-    @JoinTable(name = "USER_ROLES",
+    @JoinTable(name = "USER_ROLE",
             joinColumns = @JoinColumn(name = "ROLE_ID"),
             inverseJoinColumns = @JoinColumn(name = "USER_ID"))
     private List<User> usersWithRole;

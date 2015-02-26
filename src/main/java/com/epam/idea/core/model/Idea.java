@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "IDEAS")
+@Table(name = "IDEA")
 public class Idea implements Serializable {
 
     @Id
@@ -53,7 +53,7 @@ public class Idea implements Serializable {
     private User author;
 
     @ManyToMany
-    @JoinTable(name = "IDEA_TAGS",
+    @JoinTable(name = "IDEA_TAG",
             joinColumns = @JoinColumn(name = "IDEA_ID"),
             inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
     private List<Tag> relatedTags;

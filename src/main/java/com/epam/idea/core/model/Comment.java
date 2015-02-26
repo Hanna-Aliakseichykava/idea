@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "COMMENTS")
+@Table(name = "COMMENT")
 public class Comment implements Serializable {
 
     @Id

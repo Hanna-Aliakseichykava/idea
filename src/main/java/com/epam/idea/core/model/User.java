@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "USERS")
+@Table(name = "USER")
 public class User implements Serializable {
 
 	@Id
@@ -45,7 +45,7 @@ public class User implements Serializable {
 	private List<Comment> comments = new ArrayList<>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
-	@JoinTable(name = "USER_ROLES",
+	@JoinTable(name = "USER_ROLE",
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
 	private List<Role> roles = new ArrayList<>();

@@ -61,7 +61,7 @@ public class PersistenceConfig {
 		LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactoryBean.setDataSource(dataSource);
 		entityManagerFactoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-		entityManagerFactoryBean.setPackagesToScan("com.epam.idea.domain");
+		entityManagerFactoryBean.setPackagesToScan("com.epam.idea.core.model");
 
 		Properties jpaProperties = new Properties();
 

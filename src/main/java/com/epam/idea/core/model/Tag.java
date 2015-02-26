@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "TAGS")
+@Table(name = "TAG")
 public class Tag implements Serializable {
 
     @Id
@@ -26,7 +26,7 @@ public class Tag implements Serializable {
     private String name;
 
     @ManyToMany
-    @JoinTable(name = "IDEA_TAGS",
+    @JoinTable(name = "IDEA_TAG",
             joinColumns = @JoinColumn(name = "TAG_ID"),
             inverseJoinColumns = @JoinColumn(name = "IDEA_ID"))
     private List<Idea> ideasWithTag;
