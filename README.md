@@ -4,15 +4,16 @@ This is a single page web application for submitting your best ideas on how we c
 
 
 ###Technology stack on the server side
-App uses a number of open source projects to work properly:
-1. [Spring MVC REST service](http://spring.io/guides/gs/rest-service/) with [JSON payload](https://github.com/FasterXML/jackson). Uses spring-test for integration tests.
-2. [Gradle](http://gradle.org/) configuration for building and testing
-3. [Spring Security](http://projects.spring.io/spring-security/)
-4. [Spring HATEOAS](http://projects.spring.io/spring-hateoas/)
-4. We use [Hibernate](http://hibernate.org/orm/) because it is the most common JPA provider.
-4. [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) hides the used JPA provider behind its repository abstraction.
-5. We use the [HikariCP](https://github.com/brettwooldridge/HikariCP) datasource because it is the fastest datasource on this planet.
-6. We use the [H2 in-memory database](http://www.h2database.com/html/main.html) because it makes our application easier to run.
+App uses Java 8 and a number of open source projects to work properly:
+* With [Spring IO Platform](http://platform.spring.io/platform/) we don’t have to worry about dependency versions because the Spring IO Platform takes care of that, e.g. we don’t have to worry about incompatibility issues because we know that our dependencies work together like a charm.
+* [Spring MVC REST service](http://spring.io/guides/gs/rest-service/) with [JSON payload](https://github.com/FasterXML/jackson). Uses spring-test for integration tests.
+* [Gradle](http://gradle.org/) configuration for building and testing
+* [Spring Security](http://projects.spring.io/spring-security/)
+* [Spring HATEOAS](http://projects.spring.io/spring-hateoas/)
+* We use [Hibernate](http://hibernate.org/orm/) because it is the most common JPA provider.
+* [Spring Data JPA](http://projects.spring.io/spring-data-jpa/) hides the used JPA provider behind its repository abstraction.
+* We use the [HikariCP](https://github.com/brettwooldridge/HikariCP) datasource because it is the fastest datasource on this planet.
+* We use the [H2 in-memory database](http://www.h2database.com/html/main.html) because it makes our application easier to run.
 
 ###Technology stack on the client side
 Single Web page application:
