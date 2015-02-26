@@ -2,7 +2,6 @@
 .gradle
 build
 target
-gradle
 classes
 out/
 
