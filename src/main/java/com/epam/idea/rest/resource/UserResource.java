@@ -8,17 +8,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserResource extends ResourceSupport {
 
 	private String email;
 	private String password;
 	private ZonedDateTime creationTime;
-	private Set<Idea> ideas = new HashSet<>();
-	private Set<Comment> comments = new HashSet<>();
-	private Set<Role> roles = new HashSet<>();
+	private List<Idea> ideas = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
+	private List<Role> roles = new ArrayList<>();
 
 	public UserResource() {
 		//empty
@@ -58,27 +58,27 @@ public class UserResource extends ResourceSupport {
 		this.creationTime = creationTime;
 	}
 
-	public Set<Idea> getIdeas() {
+	public List<Idea> getIdeas() {
 		return ideas;
 	}
 
-	public void setIdeas(Set<Idea> ideas) {
+	public void setIdeas(List<Idea> ideas) {
 		this.ideas = ideas;
 	}
 
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
+	public void setRoles(List<Role> roles) {
 		this.roles = roles;
 	}
 

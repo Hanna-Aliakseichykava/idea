@@ -7,8 +7,8 @@ import com.epam.idea.core.model.User;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IdeaResource extends ResourceSupport {
 
@@ -18,8 +18,8 @@ public class IdeaResource extends ResourceSupport {
 	private ZonedDateTime modificationTime;
 	private int rating;
 	private User author;
-	private Set<Tag> relatedTags = new HashSet<>();
-	private Set<Comment> comments = new HashSet<>();
+	private List<Tag> relatedTags = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
 
 	public IdeaResource() {
 		//empty
@@ -84,19 +84,19 @@ public class IdeaResource extends ResourceSupport {
 		this.author = author;
 	}
 
-	public Set<Tag> getRelatedTags() {
+	public List<Tag> getRelatedTags() {
 		return relatedTags;
 	}
 
-	public void setRelatedTags(Set<Tag> relatedTags) {
+	public void setRelatedTags(List<Tag> relatedTags) {
 		this.relatedTags = relatedTags;
 	}
 
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public void setComments(Set<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 	

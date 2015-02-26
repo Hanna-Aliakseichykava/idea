@@ -10,8 +10,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "TAGS")
@@ -29,7 +29,7 @@ public class Tag implements Serializable {
     @JoinTable(name = "IDEA_TAGS",
             joinColumns = @JoinColumn(name = "TAG_ID"),
             inverseJoinColumns = @JoinColumn(name = "IDEA_ID"))
-    private Set<Idea> ideasWithTag;
+    private List<Idea> ideasWithTag;
 
     public Tag() {
         //empty
@@ -60,14 +60,14 @@ public class Tag implements Serializable {
         return name;
     }
 
-    public Set<Idea> getIdeasWithTag() {
+    public List<Idea> getIdeasWithTag() {
         return ideasWithTag;
     }
 
     public static class Builder {
         private long id;
         private String name;
-        private Set<Idea> ideasWithTag = new HashSet<>();
+        private List<Idea> ideasWithTag = new ArrayList<>();
 
         private Builder() {
             //empty
@@ -83,7 +83,7 @@ public class Tag implements Serializable {
             return this;
         }
 
-        public Builder withIdeas(final Set<Idea> ideasWithTag) {
+        public Builder withIdeas(final List<Idea> ideasWithTag) {
             this.ideasWithTag = ideasWithTag;
             return this;
         }

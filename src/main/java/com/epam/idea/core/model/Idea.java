@@ -19,8 +19,8 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "IDEAS")
@@ -56,10 +56,10 @@ public class Idea implements Serializable {
     @JoinTable(name = "IDEA_TAGS",
             joinColumns = @JoinColumn(name = "IDEA_ID"),
             inverseJoinColumns = @JoinColumn(name = "TAG_ID"))
-    private Set<Tag> relatedTags;
+    private List<Tag> relatedTags;
 
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
-    private Set<Comment> comments;
+    private List<Comment> comments;
 
     public Idea() {
         //empty
@@ -122,11 +122,11 @@ public class Idea implements Serializable {
         return author;
     }
 
-    public Set<Tag> getRelatedTags() {
+    public List<Tag> getRelatedTags() {
         return relatedTags;
     }
 
-    public Set<Comment> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
@@ -150,8 +150,8 @@ public class Idea implements Serializable {
         private ZonedDateTime modificationTime;
         private int rating;
         private User author;
-        private Set<Tag> relatedTags = new HashSet<>();
-        private Set<Comment> comments = new HashSet<>();
+        private List<Tag> relatedTags = new ArrayList<>();
+        private List<Comment> comments = new ArrayList<>();
 
         private Builder() {
             //empty
@@ -192,7 +192,7 @@ public class Idea implements Serializable {
             return this;
         }
 
-        public Builder withTags(final Set<Tag> relatedTags) {
+        public Builder withTags(final List<Tag> relatedTags) {
             this.relatedTags = relatedTags;
             return this;
         }
@@ -202,7 +202,7 @@ public class Idea implements Serializable {
             return this;
         }
 
-        public Builder withComments(final Set<Comment> comments) {
+        public Builder withComments(final List<Comment> comments) {
             this.comments = comments;
             return this;
         }

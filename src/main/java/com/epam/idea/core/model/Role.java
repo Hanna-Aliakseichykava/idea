@@ -12,8 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "ROLES")
@@ -32,13 +32,13 @@ public class Role implements Serializable {
     @JoinTable(name = "USER_ROLES",
             joinColumns = @JoinColumn(name = "ROLE_ID"),
             inverseJoinColumns = @JoinColumn(name = "USER_ID"))
-    private Set<User> usersWithRole;
+    private List<User> usersWithRole;
 
     public Role() {
         //empty
     }
 
-    private Role(Builder builder) {
+    private Role(final Builder builder) {
         this.name = builder.name;
         this.usersWithRole = builder.usersWithRole;
     }
@@ -62,14 +62,14 @@ public class Role implements Serializable {
         return name;
     }
 
-    public Set<User> getUsersWithRole() {
+    public List<User> getUsersWithRole() {
         return usersWithRole;
     }
 
     public static class Builder {
         private long id;
         private Authority name;
-        private Set<User> usersWithRole = new HashSet<>();
+        private List<User> usersWithRole = new ArrayList<>();
 
         private Builder() {
             //empty
@@ -85,7 +85,7 @@ public class Role implements Serializable {
             return this;
         }
 
-        public Builder withUsers(final Set<User> usersWithRole) {
+        public Builder withUsers(final List<User> usersWithRole) {
             this.usersWithRole = usersWithRole;
             return this;
         }

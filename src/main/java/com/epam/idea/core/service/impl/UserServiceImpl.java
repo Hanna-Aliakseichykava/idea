@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 @Transactional
@@ -65,8 +64,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Set<Idea> findAllIdeasByUserId(final Long userId) {
-		Optional<User> userOptional = userRepository.findOne(userId);
-		return userOptional.map(User::getIdeas).orElseThrow(UserDoesNotExistException::new);
+	public List<Idea> findAllIdeasByUserId(final Long userId) {
+		return userRepository.findOne(userId).map(User::getIdeas).orElseThrow(UserDoesNotExistException::new);
 	}
 }

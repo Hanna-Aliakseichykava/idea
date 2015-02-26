@@ -5,7 +5,6 @@ import com.epam.idea.core.model.User;
 import com.epam.idea.core.service.UserService;
 import com.epam.idea.core.service.exception.IdeaExistsException;
 import com.epam.idea.core.service.exception.UserDoesNotExistException;
-import com.epam.idea.rest.resource.IdeaSetResource;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.UserResource;
 import com.epam.idea.rest.resource.asm.IdeaResourceAsm;
@@ -22,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.net.URI;
+import java.util.List;
 
 import static org.springframework.hateoas.Link.REL_SELF;
 
@@ -64,7 +64,7 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/{userId}/ideas", method = RequestMethod.GET)
-	public HttpEntity<IdeaSetResource> getAllIdeas(@PathVariable final long userId) {
+	public HttpEntity<List<User>> getAllIdeas(@PathVariable final long userId) {
 		userService.findAllIdeasByUserId(userId);
 		return null;
 	}

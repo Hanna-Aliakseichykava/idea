@@ -16,8 +16,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -39,16 +39,16 @@ public class User implements Serializable {
 	private ZonedDateTime creationTime;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private Set<Idea> ideas = new HashSet<>();
+	private List<Idea> ideas = new ArrayList<>();
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private Set<Comment> comments = new HashSet<>();
+	private List<Comment> comments = new ArrayList<>();
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_ROLES",
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-	private Set<Role> roles = new HashSet<>();
+	private List<Role> roles = new ArrayList<>();
 
 	public User() {
 		//empty
@@ -95,15 +95,15 @@ public class User implements Serializable {
 		return creationTime;
 	}
 
-	public Set<Idea> getIdeas() {
+	public List<Idea> getIdeas() {
 		return ideas;
 	}
 
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 
-	public Set<Role> getRoles() {
+	public List<Role> getRoles() {
 		return roles;
 	}
 
@@ -117,9 +117,9 @@ public class User implements Serializable {
 		private String email;
 		private String password;
 		private ZonedDateTime creationTime;
-		private Set<Idea> ideas = new HashSet<>();
-		private Set<Comment> comments = new HashSet<>();
-		private Set<Role> roles = new HashSet<>();
+		private List<Idea> ideas = new ArrayList<>();
+		private List<Comment> comments = new ArrayList<>();
+		private List<Role> roles = new ArrayList<>();
 
 		private Builder() {
 			//empty
@@ -145,7 +145,7 @@ public class User implements Serializable {
 			return this;
 		}
 
-		public Builder withIdeas(final Set<Idea> ideas) {
+		public Builder withIdeas(final List<Idea> ideas) {
 			this.ideas = ideas;
 			return this;
 		}
@@ -155,7 +155,7 @@ public class User implements Serializable {
 			return this;
 		}
 
-		public Builder withComments(final Set<Comment> comments) {
+		public Builder withComments(final List<Comment> comments) {
 			this.comments = comments;
 			return this;
 		}
@@ -165,7 +165,7 @@ public class User implements Serializable {
 			return this;
 		}
 
-		public Builder withRoles(final Set<Role> roles) {
+		public Builder withRoles(final List<Role> roles) {
 			this.roles = roles;
 			return this;
 		}
