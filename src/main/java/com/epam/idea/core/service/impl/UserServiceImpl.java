@@ -7,6 +7,7 @@ import com.epam.idea.core.repository.UserRepository;
 import com.epam.idea.core.service.UserService;
 import com.epam.idea.core.service.exception.IdeaExistsException;
 import com.epam.idea.core.service.exception.UserDoesNotExistException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<User> findAll() {
-		return userRepository.findAll();
+		List<User> userList = userRepository.findAll();
+		userList.forEach(user -> {
+			//Hibernate.initialize(user.getIdeas());
+			Hibernate.initialize(user.getComments());
+			Hibernate.initialize(user.getRoles());
+		});
+		return userList;
 	}
 
 	@Override
@@ -64,7 +71,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<Idea> findAllIdeasByUserId(final Long userId) {
-		return userRepository.findOne(userId).map(User::getIdeas).orElseThrow(UserDoesNotExistException::new);
+	public List<Idea> getIdeasOfUser(final Long userId) {
+		return userRepository.findOne(userId).map(user -> {
+			Hibernate.initialize(user.getIdeas());
+			user.getIdeas().forEach(idea -> {
+				Hibernate.initialize(idea.getComments());
+				Hibernate.initialize(idea.getRelatedTags());
+			});
+			return user.getIdeas();
+		}).orElseThrow(UserDoesNotExistException::new);
 	}
 }

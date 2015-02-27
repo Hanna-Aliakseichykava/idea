@@ -9,5 +9,5 @@ public interface UserService extends BaseService<User, Long> {
 
 	Idea createIdea(Long userId, Idea idea);
 
-	List<Idea> findAllIdeasByUserId(Long userId);
+	List<Idea> getIdeasOfUser(Long userId);
 }

@@ -32,6 +32,9 @@ ext {
     jadiraVersion = '3.2.0.GA'
     jsonPathVesrion = '0.9.1'
     sl4jVersion = '1.7.10'
+    assertJVersion = '1.7.1'
+    mockitoVersion = '1.10.19'
+
 }
 
 dependencies {
@@ -40,13 +43,13 @@ dependencies {
     compile 'org.springframework:spring-webmvc'
     compile 'org.springframework.hateoas:spring-hateoas'
     compile 'org.springframework.data:spring-data-jpa'
-    
+
     // JPA Provider (Hibernate)
     compile 'org.hibernate:hibernate-core'
 
     // Database (H2)
     compile 'com.h2database:h2'
-    
+
     // DataSource (HikariCP)
     compile "com.zaxxer:HikariCP:$hikariVersion"
 
@@ -59,11 +62,13 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core'
     compile 'com.fasterxml.jackson.core:jackson-annotations'
     compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 
     // Test dependencies
     testCompile 'junit:junit'
     testCompile 'org.springframework:spring-test'
-    testCompile 'org.mockito:mockito-all'
+    testCompile "org.mockito:mockito-all:$mockitoVersion"
+    testCompile "org.assertj:assertj-core:$assertJVersion"
 
     // Adds a simple way to extract parts of a given document.
     testCompile "com.jayway.jsonpath:json-path:$jsonPathVesrion"

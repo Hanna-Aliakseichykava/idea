@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 public class UserResource extends ResourceSupport {
@@ -16,23 +15,14 @@ public class UserResource extends ResourceSupport {
 	private String email;
 	private String password;
 	private ZonedDateTime creationTime;
-	private List<Idea> ideas = new ArrayList<>();
-	private List<Comment> comments = new ArrayList<>();
-	private List<Role> roles = new ArrayList<>();
+	private List<Idea> ideas;
+	private List<Comment> comments;
+	private List<Role> roles;
 
 	public UserResource() {
 		//empty
 	}
-
-	public UserResource(final User user) {
-		this.email = user.getEmail();
-		this.password = user.getPassword();
-		this.creationTime = user.getCreationTime();
-		this.ideas = user.getIdeas();
-		this.comments = user.getComments();
-		this.roles = user.getRoles();
-	}
-
+	
 	public String getEmail() {
 		return email;
 	}
@@ -82,7 +72,7 @@ public class UserResource extends ResourceSupport {
 		this.roles = roles;
 	}
 
-	public User toUser(UserResource resource) {
+	public User toUser(final UserResource resource) {
 		return User.getBuilder()
 				.withEmail(resource.getEmail())
 				.withPassword(resource.getPassword())
