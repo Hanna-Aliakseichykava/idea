@@ -1,13 +1,25 @@
 package com.epam.idea.core.service;
 
-import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.User;
-
-import java.util.List;
 
 public interface UserService extends BaseService<User, Long> {
 
-	Idea createIdea(Long userId, Idea idea);
+	/**
+	 * Deletes a user.
+	 *
+	 * @param userId The id of the deleted user.
+	 * @return The deleted user.
+	 * @throws com.epam.idea.core.service.exception.UserNotFoundException if no user was found with the given id.
+	 */
+	User deleteById(long userId);
 
-	List<Idea> findAllIdeasByUserId(Long userId);
+	/**
+	 * Updates the information of a user.
+	 *
+	 * @param userId The id of the user to update.
+	 * @param source The information of the updated user.
+	 * @return The updated user.
+	 * @throws com.epam.idea.core.service.exception.UserNotFoundException If no user was found with the given id.
+	 */
+	User update(long userId, User source);
 }
