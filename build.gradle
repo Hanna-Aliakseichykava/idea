@@ -30,23 +30,27 @@ dependencyManagement {
 ext {
     hikariVersion = '2.3.2'
     jadiraVersion = '3.2.0.GA'
-    jsonPathVesrion = '0.9.1'
+    jsonPathVesrion = '1.2.0'
     sl4jVersion = '1.7.10'
+    assertJVersion = '1.7.1'
+    mockitoVersion = '1.10.19'
 }
 
 dependencies {
     compile 'org.springframework:spring-core'
     compile "org.springframework:spring-web"
     compile 'org.springframework:spring-webmvc'
+    compile 'org.springframework.security:spring-security-core'
     compile 'org.springframework.hateoas:spring-hateoas'
     compile 'org.springframework.data:spring-data-jpa'
-    
+
     // JPA Provider (Hibernate)
     compile 'org.hibernate:hibernate-core'
+    compile 'org.hibernate:hibernate-validator'
 
     // Database (H2)
     compile 'com.h2database:h2'
-    
+
     // DataSource (HikariCP)
     compile "com.zaxxer:HikariCP:$hikariVersion"
 
@@ -59,15 +63,22 @@ dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core'
     compile 'com.fasterxml.jackson.core:jackson-annotations'
     compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
 
     // Test dependencies
     testCompile 'junit:junit'
     testCompile 'org.springframework:spring-test'
-    testCompile 'org.mockito:mockito-all'
+    testCompile "org.mockito:mockito-all:$mockitoVersion"
+    testCompile "org.assertj:assertj-core:$assertJVersion"
 
     // Adds a simple way to extract parts of a given document.
     testCompile "com.jayway.jsonpath:json-path:$jsonPathVesrion"
     testCompile "com.jayway.jsonpath:json-path-assert:$jsonPathVesrion"
+
+    //Hibernate Validator requires an implementation of the Unified Expression Language for
+    //evaluating dynamic expressions in constraint violation messages.
+    testCompile 'javax.el:javax.el-api'
+    testCompile 'org.glassfish:javax.el'
 
     providedCompile 'javax.servlet:javax.servlet-api'
 }

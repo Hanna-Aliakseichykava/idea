@@ -39,29 +39,29 @@ public class User implements Serializable {
 	private ZonedDateTime creationTime;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private List<Idea> ideas = new ArrayList<>();
+	private List<Idea> ideas;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
-	private List<Comment> comments = new ArrayList<>();
+	private List<Comment> comments;
 
 	@ManyToMany(cascade = CascadeType.ALL)
 	@JoinTable(name = "USER_ROLE",
 			joinColumns = @JoinColumn(name = "USER_ID"),
 			inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
-	private List<Role> roles = new ArrayList<>();
+	private List<Role> roles;
 
 	public User() {
 		//empty
 	}
 
 	private User(final Builder builder) {
-		this.id = builder.id;
-		this.email = builder.email;
-		this.password = builder.password;
+		this.id =           builder.id;
+		this.email =        builder.email;
+		this.password =     builder.password;
 		this.creationTime = builder.creationTime;
-		this.ideas = builder.ideas;
-		this.comments = builder.comments;
-		this.roles = builder.roles;
+		this.ideas =        builder.ideas;
+		this.comments =     builder.comments;
+		this.roles =        builder.roles;
 	}
 
 	public static Builder getBuilder() {
@@ -77,6 +77,11 @@ public class User implements Serializable {
 				.withIdeas(user.ideas)
 				.withComments(user.comments)
 				.withRoles(user.roles);
+	}
+	
+	public void updateWith(final User source) {
+		this.email = source.email;
+		this.password = source.password;
 	}
 
 	public long getId() {
@@ -120,10 +125,6 @@ public class User implements Serializable {
 		private List<Idea> ideas = new ArrayList<>();
 		private List<Comment> comments = new ArrayList<>();
 		private List<Role> roles = new ArrayList<>();
-
-		private Builder() {
-			//empty
-		}
 
 		private Builder withId(final long id) {
 			this.id = id;
