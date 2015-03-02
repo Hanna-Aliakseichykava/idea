@@ -30,22 +30,25 @@ dependencyManagement {
 ext {
     hikariVersion = '2.3.2'
     jadiraVersion = '3.2.0.GA'
-    jsonPathVesrion = '0.9.1'
+    jsonPathVesrion = '1.2.0'
     sl4jVersion = '1.7.10'
     assertJVersion = '1.7.1'
     mockitoVersion = '1.10.19'
-
 }
 
 dependencies {
     compile 'org.springframework:spring-core'
     compile "org.springframework:spring-web"
     compile 'org.springframework:spring-webmvc'
+    compile 'org.springframework.security:spring-security-core'
     compile 'org.springframework.hateoas:spring-hateoas'
     compile 'org.springframework.data:spring-data-jpa'
 
     // JPA Provider (Hibernate)
     compile 'org.hibernate:hibernate-core'
+    compile 'org.hibernate:hibernate-validator'
+    compile 'javax.el:javax.el-api'
+    compile 'org.glassfish:javax.el'
 
     // Database (H2)
     compile 'com.h2database:h2'

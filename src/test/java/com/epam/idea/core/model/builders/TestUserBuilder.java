@@ -27,21 +27,21 @@ public class TestUserBuilder {
 	private List<Comment> comments = new ArrayList<>(1);
 	private List<Role> roles = new ArrayList<>(1);
 
-	private TestUserBuilder() {
+	public TestUserBuilder() {
 		this.userBuilder = User.getBuilder();
 	}
 
-	public static TestUserBuilder aDefaultUser() {
+	private static TestUserBuilder aDefaultUser() {
 		return new TestUserBuilder()
 				.withId(DEFAULT_ID)
 				.withEmail(DEFAULT_EMAIL)
 				.withPassword(DEFAULT_PASSWORD)
-				.withCreationTime(DEFAULT_CREATION_TIME)
-				.inUserRole();
+				.withCreationTime(DEFAULT_CREATION_TIME);
 	}
 
-	public static TestUserBuilder anUser() {
-		return aDefaultUser();
+	public static TestUserBuilder aUser() {
+		return aDefaultUser()
+                .inUserRole();
 	}
 
 	public static TestUserBuilder anAdmin() {

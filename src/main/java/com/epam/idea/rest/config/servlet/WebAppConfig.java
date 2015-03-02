@@ -12,7 +12,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.epam.idea.rest.controller")
+@ComponentScan(basePackages = {"com.epam.idea.rest.controller"})
 public class WebAppConfig extends WebMvcConfigurerAdapter {
-
 }

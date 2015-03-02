@@ -20,8 +20,7 @@ public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource
 	@Override
 	public UserResource toResource(final User original) {
 		UserResource userResource = new UserResource();
-		userResource.setEmail(original.getEmail());
-		userResource.setPassword(original.getPassword());
+        userResource.setEmail(original.getEmail());
 		userResource.setCreationTime(original.getCreationTime());
 		if (isInitialized(original.getComments())) {
 			userResource.setComments(original.getComments());

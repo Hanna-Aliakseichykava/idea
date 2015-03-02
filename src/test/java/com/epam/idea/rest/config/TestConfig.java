@@ -36,6 +36,4 @@ public class TestConfig {
 	public CommentService commentService() {
 		return Mockito.mock(CommentService.class);
 	}
-
-
 }

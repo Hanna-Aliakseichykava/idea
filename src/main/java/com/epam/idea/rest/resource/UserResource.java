@@ -4,7 +4,9 @@ import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Role;
 import com.epam.idea.core.model.User;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.hateoas.ResourceSupport;
 
 import java.time.ZonedDateTime;
@@ -12,7 +14,17 @@ import java.util.List;
 
 public class UserResource extends ResourceSupport {
 
+    public static final int MAX_LENGTH_EMAIL = 20;
+    public static final int MIN_LENGTH_EMAIL = 6;
+    public static final int MAX_LENGTH_PASSWORD = 20;
+
+    @NotEmpty
+    @Email
+    @Length(max = MAX_LENGTH_EMAIL)
 	private String email;
+
+    @NotEmpty
+    @Length(min = MIN_LENGTH_EMAIL, max = MAX_LENGTH_PASSWORD)
 	private String password;
 	private ZonedDateTime creationTime;
 	private List<Idea> ideas;
@@ -22,7 +34,7 @@ public class UserResource extends ResourceSupport {
 	public UserResource() {
 		//empty
 	}
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -31,12 +43,11 @@ public class UserResource extends ResourceSupport {
 		this.email = email;
 	}
 
-	@JsonIgnore
-	public String getPassword() {
+    public String getPassword() {
 		return password;
 	}
 
-	public void setPassword(String password) {
+    public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -72,13 +83,13 @@ public class UserResource extends ResourceSupport {
 		this.roles = roles;
 	}
 
-	public User toUser(final UserResource resource) {
+	public User toUser() {
 		return User.getBuilder()
-				.withEmail(resource.getEmail())
-				.withPassword(resource.getPassword())
-				.withComments(resource.getComments())
-				.withIdeas(resource.getIdeas())
-				.withRoles(resource.getRoles())
+				.withEmail(email)
+				.withPassword(password)
+				.withComments(comments)
+				.withIdeas(ideas)
+				.withRoles(roles)
 				.build();
 	}
 }
