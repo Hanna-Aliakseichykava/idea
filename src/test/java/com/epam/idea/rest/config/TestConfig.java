@@ -1,6 +1,5 @@
 package com.epam.idea.rest.config;
 
-import com.epam.idea.core.repository.UserRepository;
 import com.epam.idea.core.service.CommentService;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.RoleService;
@@ -36,10 +35,5 @@ public class TestConfig {
 	@Bean
 	public CommentService commentServiceMock() {
 		return Mockito.mock(CommentService.class);
-	}
-
-	@Bean
-	public UserRepository userRepositoryMock() {
-		return Mockito.mock(UserRepository.class);
 	}
 }

@@ -80,7 +80,7 @@ public class UserControllerTest {
 
 		when(userServiceMock.findAll()).thenReturn(asList(first, second));
 
-		mockMvc.perform(get("/api/users")
+		mockMvc.perform(get("/api/v1/users")
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -91,13 +91,13 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$[0].roles[0].name").value(is("USER")))
 				.andExpect(jsonPath("$[0].links", hasSize(1)))
 				.andExpect(jsonPath("$[0].links[0].rel").value(is("self")))
-				.andExpect(jsonPath("$[0].links[0].href").value(is("http://localhost/api/users/1")))
+				.andExpect(jsonPath("$[0].links[0].href").value(is("http://localhost/api/v1/users/1")))
 				.andExpect(jsonPath("$[1].email").value(is(DEFAULT_EMAIL)))
 				.andExpect(jsonPath("$[1].password").doesNotExist())
 				.andExpect(jsonPath("$[1].roles", hasSize(1)))
 				.andExpect(jsonPath("$[1].roles[0].name").value(is("ADMIN")))
 				.andExpect(jsonPath("$[1].links", hasSize(1)))
-				.andExpect(jsonPath("$[1].links[0].href").value(is("http://localhost/api/users/1")));
+				.andExpect(jsonPath("$[1].links[0].href").value(is("http://localhost/api/v1/users/1")));
 
 		verify(userServiceMock, times(1)).findAll();
 		verifyNoMoreInteractions(userServiceMock);
@@ -108,7 +108,7 @@ public class UserControllerTest {
 		User user = TestUserBuilder.aUser().build();
 		when(userServiceMock.findOne(1L)).thenReturn(user);
 
-		mockMvc.perform(get("/api/users/{userId}", 1L)
+		mockMvc.perform(get("/api/v1/users/{userId}", 1L)
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -118,7 +118,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.roles[0].name").value(is("USER")))
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is("self")))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
+				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/users/1")));
 
 		verify(userServiceMock, times(1)).findOne(1L);
 		verifyNoMoreInteractions(userServiceMock);
@@ -128,7 +128,7 @@ public class UserControllerTest {
 	public void shouldReturnErrorWithHttpStatus404WhenUserNotFound() throws Exception {
 		when(userServiceMock.findOne(1L)).thenThrow(new UserNotFoundException(1L));
 
-		mockMvc.perform(get("/api/users/{userId}", 1L)
+		mockMvc.perform(get("/api/v1/users/{userId}", 1L)
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -149,7 +149,7 @@ public class UserControllerTest {
 		userResource.setEmail(invalidEmail);
 		userResource.setPassword(invalidPassword);
 
-		mockMvc.perform(post("/api/users")
+		mockMvc.perform(post("/api/v1/users")
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(userResource)))
@@ -181,7 +181,7 @@ public class UserControllerTest {
 
 		when(userServiceMock.save(any(User.class))).thenReturn(saved);
 
-		mockMvc.perform(post("/api/users")
+		mockMvc.perform(post("/api/v1/users")
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(userResource)))
@@ -191,7 +191,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.password").doesNotExist())
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is("self")))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
+				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/users/1")));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 		verify(userServiceMock, times(1)).save(userCaptor.capture());
@@ -208,7 +208,7 @@ public class UserControllerTest {
 
 		when(userServiceMock.deleteById(1L)).thenReturn(deleted);
 
-		mockMvc.perform(delete("/api/users/{userId}", 1L)
+		mockMvc.perform(delete("/api/v1/users/{userId}", 1L)
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -223,7 +223,7 @@ public class UserControllerTest {
 	public void shouldReturnErrorWithHttpStatus404WhenDeleteUserWhichDoesNotExist() throws Exception {
 		when(userServiceMock.deleteById(3L)).thenThrow(new UserNotFoundException(3L));
 
-		mockMvc.perform(delete("/api/users/{userId}", 3L)
+		mockMvc.perform(delete("/api/v1/users/{userId}", 3L)
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound())
@@ -251,7 +251,7 @@ public class UserControllerTest {
 
 		when(userServiceMock.update(anyLong(), any(User.class))).thenReturn(updated);
 
-		mockMvc.perform(put("/api/users/{userId}", 1L)
+		mockMvc.perform(put("/api/v1/users/{userId}", 1L)
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(source)))
@@ -261,7 +261,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.password").doesNotExist())
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is("self")))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
+				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/users/1")));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 		verify(userServiceMock, times(1)).update(anyLong(), userCaptor.capture());
@@ -280,7 +280,7 @@ public class UserControllerTest {
 
 		when(userServiceMock.update(eq(3L), any(User.class))).thenThrow(new UserNotFoundException(3L));
 
-		mockMvc.perform(put("/api/users/{userId}", 3L)
+		mockMvc.perform(put("/api/v1/users/{userId}", 3L)
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(source)))
