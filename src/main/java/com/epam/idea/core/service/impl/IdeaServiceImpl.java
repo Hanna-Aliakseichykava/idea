@@ -3,7 +3,8 @@ package com.epam.idea.core.service.impl;
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.repository.IdeaRepository;
 import com.epam.idea.core.service.IdeaService;
-import com.epam.idea.core.service.exception.IdeaDoesNotExistException;
+import com.epam.idea.core.service.exception.IdeaNotFoundException;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,13 +26,18 @@ public class IdeaServiceImpl implements IdeaService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Idea> findAll() {
-		return ideaRepository.findAll();
+		List<Idea> allIdeas = ideaRepository.findAll();
+		allIdeas.forEach(idea -> {
+			Hibernate.initialize(idea.getAuthor());
+			Hibernate.initialize(idea.getRelatedTags());
+		});
+		return allIdeas;
 	}
 
 	@Override
 	@Transactional(readOnly = true)
-	public Idea findOne(Long id) {
-		return ideaRepository.findOne(id).orElseThrow(IdeaDoesNotExistException::new);
+	public Idea findOne(Long ideaId) {
+		return ideaRepository.findOne(ideaId).orElseThrow(() -> new IdeaNotFoundException(ideaId));
 	}
 
 	@Override

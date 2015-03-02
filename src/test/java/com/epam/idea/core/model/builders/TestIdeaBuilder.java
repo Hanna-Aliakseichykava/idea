@@ -15,7 +15,7 @@ public class TestIdeaBuilder {
 
 	public static final String DEFAULT_TITLE = "Bar";
 	public static final String DEFAULT_DESCRIPTION = "Lorem ipsum";
-	public static final int DEFAULT_RATING = 0;
+	public static final int DEFAULT_RATING = 5;
 	public static final long DEFAULT_ID = 1L;
 	public static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.of(2014, 2, 12, 10, 0, 0, 0, ZoneOffset.UTC);
 	public static final ZonedDateTime DEFAULT_MODIFICATION_TIME = ZonedDateTime.of(2014, 10, 5, 0, 0, 0, 0, ZoneOffset.UTC);
