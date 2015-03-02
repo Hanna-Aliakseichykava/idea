@@ -78,6 +78,11 @@ public class User implements Serializable {
 				.withComments(user.comments)
 				.withRoles(user.roles);
 	}
+	
+	public void updateWith(final User source) {
+		this.email = source.email;
+		this.password = source.password;
+	}
 
 	public long getId() {
 		return id;

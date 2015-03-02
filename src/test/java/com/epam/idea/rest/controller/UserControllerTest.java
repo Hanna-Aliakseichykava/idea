@@ -25,6 +25,7 @@ import static com.epam.idea.core.model.builders.TestUserBuilder.aUser;
 import static com.epam.idea.core.model.builders.TestUserBuilder.anAdmin;
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.TestUtils.convertObjectToJsonBytes;
+import static com.epam.idea.rest.TestUtils.createEmailWithLength;
 import static com.epam.idea.rest.TestUtils.createStringWithLength;
 import static com.epam.idea.rest.resource.UserResource.MAX_LENGTH_EMAIL;
 import static com.epam.idea.rest.resource.UserResource.MAX_LENGTH_PASSWORD;
@@ -34,14 +35,17 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -77,126 +81,222 @@ public class UserControllerTest {
 		when(userServiceMock.findAll()).thenReturn(asList(first, second));
 
 		mockMvc.perform(get("/api/users")
-                .accept(APPLICATION_JSON_UTF8))
+				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(2)))
-                .andExpect(jsonPath("$[0].email").value(is(DEFAULT_EMAIL)))
-                .andExpect(jsonPath("$[0].password").doesNotExist())
-                .andExpect(jsonPath("$[0].roles", hasSize(1)))
-                .andExpect(jsonPath("$[0].roles[0].name").value(is("USER")))
-                .andExpect(jsonPath("$[0].links", hasSize(1)))
-                .andExpect(jsonPath("$[0].links[0].rel").value(is("self")))
-                .andExpect(jsonPath("$[0].links[0].href").value(is("http://localhost/api/users/1")))
-                .andExpect(jsonPath("$[1].email").value(is(DEFAULT_EMAIL)))
-                .andExpect(jsonPath("$[1].password").doesNotExist())
-                .andExpect(jsonPath("$[1].roles", hasSize(1)))
-                .andExpect(jsonPath("$[1].roles[0].name").value(is("ADMIN")))
-                .andExpect(jsonPath("$[1].links", hasSize(1)))
-                .andExpect(jsonPath("$[1].links[0].href").value(is("http://localhost/api/users/1")));
+				.andExpect(jsonPath("$[0].email").value(is(DEFAULT_EMAIL)))
+				.andExpect(jsonPath("$[0].password").doesNotExist())
+				.andExpect(jsonPath("$[0].roles", hasSize(1)))
+				.andExpect(jsonPath("$[0].roles[0].name").value(is("USER")))
+				.andExpect(jsonPath("$[0].links", hasSize(1)))
+				.andExpect(jsonPath("$[0].links[0].rel").value(is("self")))
+				.andExpect(jsonPath("$[0].links[0].href").value(is("http://localhost/api/users/1")))
+				.andExpect(jsonPath("$[1].email").value(is(DEFAULT_EMAIL)))
+				.andExpect(jsonPath("$[1].password").doesNotExist())
+				.andExpect(jsonPath("$[1].roles", hasSize(1)))
+				.andExpect(jsonPath("$[1].roles[0].name").value(is("ADMIN")))
+				.andExpect(jsonPath("$[1].links", hasSize(1)))
+				.andExpect(jsonPath("$[1].links[0].href").value(is("http://localhost/api/users/1")));
 
-        verify(userServiceMock, times(1)).findAll();
-        verifyNoMoreInteractions(userServiceMock);
+		verify(userServiceMock, times(1)).findAll();
+		verifyNoMoreInteractions(userServiceMock);
 	}
 
 	@Test
 	public void shouldReturnFoundUserWithHttpCode200() throws Exception {
-        User user = TestUserBuilder.aUser().build();
-        when(userServiceMock.findOne(1L)).thenReturn(user);
+		User user = TestUserBuilder.aUser().build();
+		when(userServiceMock.findOne(1L)).thenReturn(user);
 
-		mockMvc.perform(get("/api/users/{1}", 1L)
-                .accept(APPLICATION_JSON_UTF8))
+		mockMvc.perform(get("/api/users/{userId}", 1L)
+				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.email").value(is(DEFAULT_EMAIL)))
-                .andExpect(jsonPath("$.password").doesNotExist())
-                .andExpect(jsonPath("$.roles", hasSize(1)))
-                .andExpect(jsonPath("$.roles[0].name").value(is("USER")))
-                .andExpect(jsonPath("$.links", hasSize(1)))
-                .andExpect(jsonPath("$.links[0].rel").value(is("self")))
-                .andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.email").value(is(DEFAULT_EMAIL)))
+				.andExpect(jsonPath("$.password").doesNotExist())
+				.andExpect(jsonPath("$.roles", hasSize(1)))
+				.andExpect(jsonPath("$.roles[0].name").value(is("USER")))
+				.andExpect(jsonPath("$.links", hasSize(1)))
+				.andExpect(jsonPath("$.links[0].rel").value(is("self")))
+				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
 
-        verify(userServiceMock, times(1)).findOne(1L);
-        verifyNoMoreInteractions(userServiceMock);
+		verify(userServiceMock, times(1)).findOne(1L);
+		verifyNoMoreInteractions(userServiceMock);
 	}
 
-    @Test
-    public void shouldReturnErrorWithHttpStatus404WhenUserNotFound() throws Exception {
-        when(userServiceMock.findOne(1L)).thenThrow(new UserNotFoundException(1L));
+	@Test
+	public void shouldReturnErrorWithHttpStatus404WhenUserNotFound() throws Exception {
+		when(userServiceMock.findOne(1L)).thenThrow(new UserNotFoundException(1L));
 
-        mockMvc.perform(get("/api/users/{1}", 1L)
-                .accept(APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].logref").value(is("error")))
-                .andExpect(jsonPath("$[0].message").value(is("Could not find user with id: 1.")));
+		mockMvc.perform(get("/api/users/{userId}", 1L)
+				.accept(APPLICATION_JSON_UTF8))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].logref").value(is("error")))
+				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: 1.")));
 
-        verify(userServiceMock, times(1)).findOne(1L);
-        verifyNoMoreInteractions(userServiceMock);
-    }
+		verify(userServiceMock, times(1)).findOne(1L);
+		verifyNoMoreInteractions(userServiceMock);
+	}
 
-    @Test
-    public void shouldReturnValidationErrorsForInvalidEmailAndPassword() throws Exception {
-        String invalidEmail = createStringWithLength(MAX_LENGTH_EMAIL + 1);
-        String invalidPassword = createStringWithLength(MAX_LENGTH_PASSWORD + 1);
+	@Test
+	public void shouldReturnValidationErrorsForTooLongEmailAndPassword() throws Exception {
+		String invalidEmail = createEmailWithLength(MAX_LENGTH_EMAIL + 1);
+		String invalidPassword = createStringWithLength(MAX_LENGTH_PASSWORD + 1);
 
-        UserResource userResource = new UserResource();
-        userResource.setEmail(invalidEmail);
-        userResource.setPassword(invalidPassword);
+		UserResource userResource = new UserResource();
+		userResource.setEmail(invalidEmail);
+		userResource.setPassword(invalidPassword);
 
-        mockMvc.perform(post("/api/users")
-                .contentType(APPLICATION_JSON_UTF8)
-                .accept(APPLICATION_JSON_UTF8)
-                .content(convertObjectToJsonBytes(userResource)))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(3)))
+		mockMvc.perform(post("/api/users")
+				.contentType(APPLICATION_JSON_UTF8)
+				.accept(APPLICATION_JSON_UTF8)
+				.content(convertObjectToJsonBytes(userResource)))
+				.andExpect(status().isBadRequest())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(2)))
 
-                //Spring MVC does not guarantee the ordering of the field errors,
-                //i.e. the field errors are returned in random order.
-                .andExpect(jsonPath("$[*].logref").value(containsInAnyOrder("password", "email", "email")))
-                .andExpect(jsonPath("$[*].message").value(containsInAnyOrder(
-                        "length must be between 6 and 20",
-                        "length must be between 0 and 20",
-                        "not a well-formed email address"
-                )));
+						//Spring MVC does not guarantee the ordering of the field errors,
+						//i.e. the field errors are returned in random order.
+				.andExpect(jsonPath("$[*].logref").value(containsInAnyOrder("password", "email")))
+				.andExpect(jsonPath("$[*].message").value(containsInAnyOrder(
+						"length must be between 6 and 20",
+						"length must be between 0 and 20"
+				)));
 
-        verifyZeroInteractions(userServiceMock);
-    }
+		verifyZeroInteractions(userServiceMock);
+	}
 
-    @Test
-    public void shouldCreateUserAndReturnItWithHttpCode201() throws Exception {
-        UserResource userResource = new UserResource();
-        userResource.setEmail("email@test.com");
-        userResource.setPassword("password");
-        User saved = new TestUserBuilder()
-                .withId(1L)
-                .withEmail("email@test.com")
-                .withPassword("password")
-                .build();
+	@Test
+	public void shouldCreateUserAndReturnItWithHttpCode201() throws Exception {
+		UserResource userResource = new UserResource();
+		userResource.setEmail("email@test.com");
+		userResource.setPassword("password");
+		User saved = new TestUserBuilder()
+				.withId(1L)
+				.withEmail("email@test.com")
+				.withPassword("password")
+				.build();
 
-        when(userServiceMock.save(any(User.class))).thenReturn(saved);
+		when(userServiceMock.save(any(User.class))).thenReturn(saved);
 
-        mockMvc.perform(post("/api/users")
-                .contentType(APPLICATION_JSON_UTF8)
-                .accept(APPLICATION_JSON_UTF8)
-                .content(convertObjectToJsonBytes(userResource)))
-                .andDo(print())
-                .andExpect(status().isCreated())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.email").value(is("email@test.com")))
-                .andExpect(jsonPath("$.password").doesNotExist())
-                .andExpect(jsonPath("$.links", hasSize(1)))
-                .andExpect(jsonPath("$.links[0].rel").value(is("self")))
-                .andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
+		mockMvc.perform(post("/api/users")
+				.contentType(APPLICATION_JSON_UTF8)
+				.accept(APPLICATION_JSON_UTF8)
+				.content(convertObjectToJsonBytes(userResource)))
+				.andExpect(status().isCreated())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.email").value(is("email@test.com")))
+				.andExpect(jsonPath("$.password").doesNotExist())
+				.andExpect(jsonPath("$.links", hasSize(1)))
+				.andExpect(jsonPath("$.links[0].rel").value(is("self")))
+				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
 
-        ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        verify(userServiceMock, times(1)).save(userCaptor.capture());
-        verifyNoMoreInteractions(userServiceMock);
+		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+		verify(userServiceMock, times(1)).save(userCaptor.capture());
+		verifyNoMoreInteractions(userServiceMock);
 
-        User userArgument = userCaptor.getValue();
-        assertThat(userArgument.getEmail()).isEqualTo("email@test.com");
-        assertThat(userArgument.getPassword()).isEqualTo("password");
-    }
+		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getEmail()).isEqualTo("email@test.com");
+		assertThat(userArgument.getPassword()).isEqualTo("password");
+	}
+
+	@Test
+	public void shouldDeleteUserAndReturnItWithHttpCode200() throws Exception {
+		User deleted = TestUserBuilder.aUser().build();
+
+		when(userServiceMock.deleteById(1L)).thenReturn(deleted);
+
+		mockMvc.perform(delete("/api/users/{userId}", 1L)
+				.contentType(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.email").value(is("test@email.com")))
+				.andExpect(jsonPath("$.password").doesNotExist());
+
+		verify(userServiceMock, times(1)).deleteById(1L);
+		verifyNoMoreInteractions(userServiceMock);
+	}
+
+	@Test
+	public void shouldReturnErrorWithHttpStatus404WhenDeleteUserWhichDoesNotExist() throws Exception {
+		when(userServiceMock.deleteById(3L)).thenThrow(new UserNotFoundException(3L));
+
+		mockMvc.perform(delete("/api/users/{userId}", 3L)
+				.contentType(APPLICATION_JSON_UTF8)
+				.accept(APPLICATION_JSON_UTF8))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].logref").value(is("error")))
+				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: 3.")))
+				.andExpect(jsonPath("$[0].links", hasSize(0)));
+
+		verify(userServiceMock, times(1)).deleteById(3L);
+		verifyNoMoreInteractions(userServiceMock);
+	}
+
+	@Test
+	public void shouldUpdateUserAndReturnItWithHttpCode200() throws Exception {
+		UserResource source = new UserResource();
+		source.setEmail("new_email@test.com");
+		source.setPassword("new_password");
+
+		User updated = new TestUserBuilder()
+				.withId(1L)
+				.withEmail("new_email@test.com")
+				.withPassword("new_password")
+				.build();
+
+		when(userServiceMock.update(anyLong(), any(User.class))).thenReturn(updated);
+
+		mockMvc.perform(put("/api/users/{userId}", 1L)
+				.contentType(APPLICATION_JSON_UTF8)
+				.accept(APPLICATION_JSON_UTF8)
+				.content(convertObjectToJsonBytes(source)))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.email").value(is("new_email@test.com")))
+				.andExpect(jsonPath("$.password").doesNotExist())
+				.andExpect(jsonPath("$.links", hasSize(1)))
+				.andExpect(jsonPath("$.links[0].rel").value(is("self")))
+				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/users/1")));
+
+		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+		verify(userServiceMock, times(1)).update(anyLong(), userCaptor.capture());
+		verifyNoMoreInteractions(userServiceMock);
+
+		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getEmail()).isEqualTo("new_email@test.com");
+		assertThat(userArgument.getPassword()).isEqualTo("new_password");
+	}
+
+	@Test
+	public void shouldReturnErrorWithHttpStatus404WhenUpdateUserWhichDoesNotExist() throws Exception {
+		UserResource source = new UserResource();
+		source.setEmail("new_email@test.com");
+		source.setPassword("new_password");
+
+		when(userServiceMock.update(eq(3L), any(User.class))).thenThrow(new UserNotFoundException(3L));
+
+		mockMvc.perform(put("/api/users/{userId}", 3L)
+				.contentType(APPLICATION_JSON_UTF8)
+				.accept(APPLICATION_JSON_UTF8)
+				.content(convertObjectToJsonBytes(source)))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].logref").value(is("error")))
+				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: 3.")))
+				.andExpect(jsonPath("$[0].links", hasSize(0)));
+
+		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
+		verify(userServiceMock, times(1)).update(anyLong(), userCaptor.capture());
+		verifyNoMoreInteractions(userServiceMock);
+
+		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getEmail()).isEqualTo("new_email@test.com");
+		assertThat(userArgument.getPassword()).isEqualTo("new_password");
+	}
 }

@@ -16,7 +16,7 @@ import java.util.List;
 public class TestUserBuilder {
 
 	public static final String DEFAULT_EMAIL = "test@email.com";
-	public static final String DEFAULT_PASSWORD = "42";
+	public static final String DEFAULT_PASSWORD = "password";
 	public static final long DEFAULT_ID = 1L;
 	public static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.of(2015, 1, 12, 0, 0, 0, 0, ZoneOffset.UTC);
 

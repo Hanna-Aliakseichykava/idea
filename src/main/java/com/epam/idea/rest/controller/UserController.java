@@ -21,40 +21,40 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping(method = RequestMethod.POST)
 	public HttpEntity<UserResource> create(@Valid @RequestBody final UserResource userRes) {
-        User savedUser = userService.save(userRes.toUser());
-        return new ResponseEntity<>(new UserResourceAsm().toResource(savedUser), HttpStatus.CREATED);
+		User savedUser = userService.save(userRes.toUser());
+		return new ResponseEntity<>(new UserResourceAsm().toResource(savedUser), HttpStatus.CREATED);
 	}
 
-    @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<List<UserResource>> showAll() {
-        List<User> userList = userService.findAll();
-        List<UserResource> userResources = new UserResourceAsm().toResources(userList);
-        return new ResponseEntity<>(userResources, HttpStatus.OK);
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	public HttpEntity<List<UserResource>> showAll() {
+		List<User> userList = userService.findAll();
+		List<UserResource> userResources = new UserResourceAsm().toResources(userList);
+		return new ResponseEntity<>(userResources, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-    public HttpEntity<UserResource> show(@PathVariable long userId) {
-        User user = userService.findOne(userId);
-        UserResource res = new UserResourceAsm().toResource(user);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+	public HttpEntity<UserResource> show(@PathVariable long userId) {
+		User user = userService.findOne(userId);
+		UserResource res = new UserResourceAsm().toResource(user);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
-    public HttpEntity<UserResource> update(@Valid @RequestBody final UserResource userRes, @PathVariable long userId) {
-        User user = userService.findOne(userId);
-        UserResource res = new UserResourceAsm().toResource(user);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
+	public HttpEntity<UserResource> update(@Valid @RequestBody final UserResource userRes, @PathVariable long userId) {
+		User updated = userService.update(userId, userRes.toUser());
+		UserResource updatedRes = new UserResourceAsm().toResource(updated);
+		return new ResponseEntity<>(updatedRes, HttpStatus.OK);
+	}
 
-    @RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
-    public HttpEntity<UserResource> delete(@PathVariable long userId) {
-        User user = userService.deleteById(userId);
-        UserResource res = new UserResourceAsm().toResource(user);
-        return new ResponseEntity<>(res, HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
+	public HttpEntity<UserResource> delete(@PathVariable long userId) {
+		User user = userService.deleteById(userId);
+		UserResource res = new UserResourceAsm().toResource(user);
+		return new ResponseEntity<>(res, HttpStatus.OK);
+	}
 }

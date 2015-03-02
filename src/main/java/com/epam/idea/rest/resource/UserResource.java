@@ -6,25 +6,25 @@ import com.epam.idea.core.model.Role;
 import com.epam.idea.core.model.User;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.hateoas.ResourceSupport;
 
+import javax.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.List;
 
 public class UserResource extends ResourceSupport {
 
-    public static final int MAX_LENGTH_EMAIL = 20;
-    public static final int MIN_LENGTH_EMAIL = 6;
-    public static final int MAX_LENGTH_PASSWORD = 20;
+	public static final int MAX_LENGTH_EMAIL = 20;
+	public static final int MIN_LENGTH_PASSWORD = 6;
+	public static final int MAX_LENGTH_PASSWORD = 20;
 
-    @NotEmpty
-    @Email
-    @Length(max = MAX_LENGTH_EMAIL)
+	@NotNull
+	@Email
+	@Length(max = MAX_LENGTH_EMAIL)
 	private String email;
 
-    @NotEmpty
-    @Length(min = MIN_LENGTH_EMAIL, max = MAX_LENGTH_PASSWORD)
+	@NotNull
+	@Length(min = MIN_LENGTH_PASSWORD, max = MAX_LENGTH_PASSWORD)
 	private String password;
 	private ZonedDateTime creationTime;
 	private List<Idea> ideas;
@@ -43,11 +43,11 @@ public class UserResource extends ResourceSupport {
 		this.email = email;
 	}
 
-    public String getPassword() {
+	public String getPassword() {
 		return password;
 	}
 
-    public void setPassword(String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 

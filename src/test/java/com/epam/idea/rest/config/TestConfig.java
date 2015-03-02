@@ -1,5 +1,6 @@
 package com.epam.idea.rest.config;
 
+import com.epam.idea.core.repository.UserRepository;
 import com.epam.idea.core.service.CommentService;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.RoleService;
@@ -13,27 +14,32 @@ import org.springframework.context.annotation.Configuration;
 public class TestConfig {
 
 	@Bean
-	public UserService userService() {
+	public UserService userServiceMock() {
 		return Mockito.mock(UserService.class);
 	}
 
 	@Bean
-	public TagService tagService() {
+	public TagService tagServiceMock() {
 		return Mockito.mock(TagService.class);
 	}
 
 	@Bean
-	public RoleService roleService() {
+	public RoleService roleServiceMock() {
 		return Mockito.mock(RoleService.class);
 	}
 
 	@Bean
-	public IdeaService ideaService() {
+	public IdeaService ideaServiceMock() {
 		return Mockito.mock(IdeaService.class);
 	}
 
 	@Bean
-	public CommentService commentService() {
+	public CommentService commentServiceMock() {
 		return Mockito.mock(CommentService.class);
+	}
+
+	@Bean
+	public UserRepository userRepositoryMock() {
+		return Mockito.mock(UserRepository.class);
 	}
 }

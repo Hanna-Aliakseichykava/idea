@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
 	public List<User> findAll() {
 		List<User> userList = userRepository.findAll();
 		userList.forEach(user -> {
-			//Hibernate.initialize(user.getIdeas());
+			Hibernate.initialize(user.getIdeas());
 			Hibernate.initialize(user.getComments());
 			Hibernate.initialize(user.getRoles());
 		});
@@ -46,19 +46,17 @@ public class UserServiceImpl implements UserService {
 		return userRepository.save(persisted);
 	}
 
-    @Override
-    public User deleteById(final long userId) {
-        User deleted = findOne(userId);
-        userRepository.delete(deleted);
-        return deleted;
-    }
+	@Override
+	public User deleteById(final long userId) {
+		User deleted = findOne(userId);
+		userRepository.delete(deleted);
+		return deleted;
+	}
 
-    @Override
-    public User update(final long userId, final User updated) {
-        User user = findOne(userId);
-
-        return null;
-    }
-
-
+	@Override
+	public User update(final long userId, final User source) {
+		User target = findOne(userId);
+		target.updateWith(source);
+		return target;
+	}
 }

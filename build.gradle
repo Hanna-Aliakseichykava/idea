@@ -47,8 +47,6 @@ dependencies {
     // JPA Provider (Hibernate)
     compile 'org.hibernate:hibernate-core'
     compile 'org.hibernate:hibernate-validator'
-    compile 'javax.el:javax.el-api'
-    compile 'org.glassfish:javax.el'
 
     // Database (H2)
     compile 'com.h2database:h2'
@@ -76,6 +74,11 @@ dependencies {
     // Adds a simple way to extract parts of a given document.
     testCompile "com.jayway.jsonpath:json-path:$jsonPathVesrion"
     testCompile "com.jayway.jsonpath:json-path-assert:$jsonPathVesrion"
+
+    //Hibernate Validator requires an implementation of the Unified Expression Language for
+    //evaluating dynamic expressions in constraint violation messages.
+    testCompile 'javax.el:javax.el-api'
+    testCompile 'org.glassfish:javax.el'
 
     providedCompile 'javax.servlet:javax.servlet-api'
 }
