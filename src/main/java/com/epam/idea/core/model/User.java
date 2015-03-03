@@ -23,6 +23,11 @@ import java.util.List;
 @Table(name = "USER")
 public class User implements Serializable {
 
+	public static final int MIN_LENGTH_EMAIL = 3;
+	public static final int MAX_LENGTH_EMAIL = 20;
+	public static final int MIN_LENGTH_PASSWORD = 6;
+	public static final int MAX_LENGTH_PASSWORD = 20;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
@@ -78,7 +83,7 @@ public class User implements Serializable {
 				.withComments(user.comments)
 				.withRoles(user.roles);
 	}
-	
+
 	public void updateWith(final User source) {
 		this.email = source.email;
 		this.password = source.password;

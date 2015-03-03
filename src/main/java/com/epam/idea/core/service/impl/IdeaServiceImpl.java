@@ -19,7 +19,7 @@ public class IdeaServiceImpl implements IdeaService {
 	private IdeaRepository ideaRepository;
 
 	@Override
-	public void delete(Idea deleted) {
+	public void delete(final Idea deleted) {
 		ideaRepository.delete(deleted);
 	}
 
@@ -36,12 +36,26 @@ public class IdeaServiceImpl implements IdeaService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public Idea findOne(Long ideaId) {
+	public Idea findOne(final Long ideaId) {
 		return ideaRepository.findOne(ideaId).orElseThrow(() -> new IdeaNotFoundException(ideaId));
 	}
 
 	@Override
-	public Idea save(Idea persisted) {
+	public Idea save(final Idea persisted) {
 		return ideaRepository.save(persisted);
+	}
+
+	@Override
+	public Idea deleteById(final long ideaId) {
+		Idea deleted = findOne(ideaId);
+		ideaRepository.delete(deleted);
+		return deleted;
+	}
+
+	@Override
+	public Idea update(final long ideaId, final Idea source) {
+		Idea target = findOne(ideaId);
+		target.updateWith(source);
+		return target;
 	}
 }

@@ -16,7 +16,7 @@ public class TestIdeaBuilder {
 	public static final String DEFAULT_TITLE = "Bar";
 	public static final String DEFAULT_DESCRIPTION = "Lorem ipsum";
 	public static final int DEFAULT_RATING = 5;
-	public static final long DEFAULT_ID = 1L;
+	public static final long DEFAULT_IDEA_ID = 1L;
 	public static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.of(2014, 2, 12, 10, 0, 0, 0, ZoneOffset.UTC);
 	public static final ZonedDateTime DEFAULT_MODIFICATION_TIME = ZonedDateTime.of(2014, 10, 5, 0, 0, 0, 0, ZoneOffset.UTC);
 
@@ -28,13 +28,13 @@ public class TestIdeaBuilder {
 	private List<Tag> tags = new ArrayList<>(1);
 	private List<Comment> comments = new ArrayList<>(1);
 
-	private TestIdeaBuilder() {
+	public TestIdeaBuilder() {
 		this.ideaBuilder = Idea.getBuilder();
 	}
 
 	public static TestIdeaBuilder anIdea() {
 		return new TestIdeaBuilder()
-				.withId(DEFAULT_ID)
+				.withId(DEFAULT_IDEA_ID)
 				.withTitle(DEFAULT_TITLE)
 				.withDescription(DEFAULT_DESCRIPTION)
 				.withRating(DEFAULT_RATING)

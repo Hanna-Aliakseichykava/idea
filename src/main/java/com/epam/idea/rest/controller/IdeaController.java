@@ -10,9 +10,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -24,17 +26,31 @@ public class IdeaController {
 
 	@RequestMapping(value = "/{ideaId}", method = RequestMethod.GET)
 	public HttpEntity<IdeaResource> show(@PathVariable final long ideaId) {
-		Idea idea = ideaService.findOne(ideaId);
-		IdeaResource ideaResource = new IdeaResourceAsm().toResource(idea);
-		return new ResponseEntity<>(ideaResource, HttpStatus.OK);
+		Idea foundIdea = ideaService.findOne(ideaId);
+		return new ResponseEntity<>(new IdeaResourceAsm().toResource(foundIdea), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<List<IdeaResource>> showAll() {
-		List<Idea> ideas = ideaService.findAll();
-		List<IdeaResource> ideaResources = new IdeaResourceAsm().toResources(ideas);
-		return new ResponseEntity<>(ideaResources, HttpStatus.OK);
+		List<Idea> foundIdeas = ideaService.findAll();
+		return new ResponseEntity<>(new IdeaResourceAsm().toResources(foundIdeas), HttpStatus.OK);
 	}
 
-	@RequestMapping
+	@RequestMapping(method = RequestMethod.POST)
+	public HttpEntity<IdeaResource> create(@Valid @RequestBody final IdeaResource ideaRes) {
+		Idea createdIdea = ideaService.save(ideaRes.toIdea());
+		return new ResponseEntity<>(new IdeaResourceAsm().toResource(createdIdea), HttpStatus.CREATED);
+	}
+
+	@RequestMapping(value = "/{ideaId}", method = RequestMethod.DELETE)
+	public HttpEntity<IdeaResource> delete(@PathVariable final long ideaId) {
+		ideaService.deleteById(ideaId);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+
+	@RequestMapping(value = "/{ideaId}", method = RequestMethod.PUT)
+	public HttpEntity<IdeaResource> update(@Valid @RequestBody final IdeaResource ideaResource, @PathVariable final long ideaId) {
+		Idea updatedIdea = ideaService.update(ideaId, ideaResource.toIdea());
+		return new ResponseEntity<>(new IdeaResourceAsm().toResource(updatedIdea), HttpStatus.OK);
+	}
 }

@@ -4,10 +4,8 @@ import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.model.User;
-import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.hateoas.ResourceSupport;
 
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -15,16 +13,10 @@ import java.util.List;
 
 public class IdeaResource extends ResourceSupport {
 
-	public static final int MAX_LENGTH_TITLE = 150;
-	public static final int MAX_LENGTH_DESCRIPTION = 500;
-
-	@NotNull
-	@NotEmpty
-	@Size(max = MAX_LENGTH_TITLE)
+	@Size(min = Idea.MIN_LENGTH_TITLE, max = Idea.MAX_LENGTH_TITLE)
 	private String title;
-	
-	@NotNull
-	@Size(max = MAX_LENGTH_DESCRIPTION)
+
+	@Size(max = Idea.MAX_LENGTH_DESCRIPTION)
 	private String description;
 	private ZonedDateTime creationTime;
 	private ZonedDateTime modificationTime;
@@ -35,6 +27,17 @@ public class IdeaResource extends ResourceSupport {
 
 	public IdeaResource() {
 		//empty
+	}
+
+	public IdeaResource(String title, String description, ZonedDateTime creationTime, ZonedDateTime modificationTime, int rating, User author, List<Tag> relatedTags, List<Comment> comments) {
+		this.title = title;
+		this.description = description;
+		this.creationTime = creationTime;
+		this.modificationTime = modificationTime;
+		this.rating = rating;
+		this.author = author;
+		this.relatedTags = relatedTags;
+		this.comments = comments;
 	}
 
 	public String getTitle() {

@@ -17,7 +17,7 @@ public class TestUserBuilder {
 
 	public static final String DEFAULT_EMAIL = "test@email.com";
 	public static final String DEFAULT_PASSWORD = "password";
-	public static final long DEFAULT_ID = 1L;
+	public static final long DEFAULT_USER_ID = 1L;
 	public static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.of(2015, 1, 12, 0, 0, 0, 0, ZoneOffset.UTC);
 
 	private User.Builder userBuilder;
@@ -33,7 +33,7 @@ public class TestUserBuilder {
 
 	private static TestUserBuilder aDefaultUser() {
 		return new TestUserBuilder()
-				.withId(DEFAULT_ID)
+				.withId(DEFAULT_USER_ID)
 				.withEmail(DEFAULT_EMAIL)
 				.withPassword(DEFAULT_PASSWORD)
 				.withCreationTime(DEFAULT_CREATION_TIME);

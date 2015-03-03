@@ -5,31 +5,25 @@ import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Role;
 import com.epam.idea.core.model.User;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
 import org.springframework.hateoas.ResourceSupport;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserResource extends ResourceSupport {
 
-	public static final int MAX_LENGTH_EMAIL = 20;
-	public static final int MIN_LENGTH_PASSWORD = 6;
-	public static final int MAX_LENGTH_PASSWORD = 20;
-
-	@NotNull
 	@Email
-	@Length(max = MAX_LENGTH_EMAIL)
+	@Size(min = User.MIN_LENGTH_EMAIL, max = User.MAX_LENGTH_EMAIL)
 	private String email;
 
-	@NotNull
-	@Length(min = MIN_LENGTH_PASSWORD, max = MAX_LENGTH_PASSWORD)
+	@Size(min = User.MIN_LENGTH_PASSWORD, max = User.MAX_LENGTH_PASSWORD)
 	private String password;
 	private ZonedDateTime creationTime;
-	private List<Idea> ideas;
-	private List<Comment> comments;
-	private List<Role> roles;
+	private List<Idea> ideas = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
+	private List<Role> roles = new ArrayList<>();
 
 	public UserResource() {
 		//empty
