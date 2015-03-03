@@ -19,11 +19,15 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.epam.idea.core.model.builders.TestIdeaBuilder.DEFAULT_DESCRIPTION;
 import static com.epam.idea.core.model.builders.TestIdeaBuilder.DEFAULT_ID;
 import static com.epam.idea.core.model.builders.TestIdeaBuilder.DEFAULT_RATING;
-import static com.epam.idea.core.service.exception.IdeaNotFoundException.ERROR_MSG_IDEA_NOT_FOUND;
+import static com.epam.idea.core.model.builders.TestIdeaBuilder.DEFAULT_TITLE;
+import static com.epam.idea.core.service.exception.IdeaNotFoundException.ERROR_MSG_PATTERN_IDEA_NOT_FOUND;
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.controller.RestErrorHandler.IDEA_NOT_FOUND_LOGREF;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -69,7 +73,7 @@ public class IdeaControllerTest {
 				.andExpect(jsonPath("$.rating").value(is(DEFAULT_RATING)))
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/ideas/1")));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/ideas/1")));
 
 		verify(ideaServiceMock, times(1)).findOne(DEFAULT_ID);
 		verifyNoMoreInteractions(ideaServiceMock);
@@ -77,7 +81,7 @@ public class IdeaControllerTest {
 
 	@Test
 	public void shouldReturnErrorWithHttpStatus404WhenUserNotFound() throws Exception {
-		String expectedErrorMsg = String.format(ERROR_MSG_IDEA_NOT_FOUND, DEFAULT_ID);
+		String expectedErrorMsg = String.format(ERROR_MSG_PATTERN_IDEA_NOT_FOUND, DEFAULT_ID);
 		when(ideaServiceMock.findOne(DEFAULT_ID)).thenThrow(new IdeaNotFoundException(DEFAULT_ID));
 
 		mockMvc.perform(get("/api/v1/ideas/{ideaId}", DEFAULT_ID)
@@ -89,6 +93,27 @@ public class IdeaControllerTest {
 				.andExpect(jsonPath("$[0].links", empty()));
 		
 		verify(ideaServiceMock, times(1)).findOne(DEFAULT_ID);
+		verifyNoMoreInteractions(ideaServiceMock);
+	}
+
+	@Test
+	public void shouldReturnAllFoundIdeas() throws Exception {
+		Idea idea = TestIdeaBuilder.anIdea().build();
+		when(ideaServiceMock.findAll()).thenReturn(asList(idea));
+
+		mockMvc.perform(get("/api/v1/ideas")
+				.accept(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].title").value(is(DEFAULT_TITLE)))
+				.andExpect(jsonPath("$[0].description").value(is(DEFAULT_DESCRIPTION)))
+				.andExpect(jsonPath("$[0].rating").value(is(DEFAULT_RATING)))
+				.andExpect(jsonPath("$[0].links", hasSize(1)))
+				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/ideas/1")));
+
+		verify(ideaServiceMock, times(1)).findAll();
 		verifyNoMoreInteractions(ideaServiceMock);
 	}
 }

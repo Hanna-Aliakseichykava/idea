@@ -5,7 +5,7 @@ import java.util.Optional;
 
 public enum Authority {
 
-	ADMIN1(-1), ADMIN(1), USER(2);
+	ADMIN(1), USER(2);
 
 	private final int id;
 

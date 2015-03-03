@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 		List<User> userList = userRepository.findAll();
 		userList.forEach(user -> {
 			Hibernate.initialize(user.getIdeas());
-			Hibernate.initialize(user.getComments());
+			//Hibernate.initialize(user.getComments());
 			Hibernate.initialize(user.getRoles());
 		});
 		return userList;

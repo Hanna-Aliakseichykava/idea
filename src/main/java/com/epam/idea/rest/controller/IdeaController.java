@@ -35,4 +35,6 @@ public class IdeaController {
 		List<IdeaResource> ideaResources = new IdeaResourceAsm().toResources(ideas);
 		return new ResponseEntity<>(ideaResources, HttpStatus.OK);
 	}
+
+	@RequestMapping
 }

@@ -35,6 +35,7 @@ import static com.epam.idea.rest.resource.UserResource.MAX_LENGTH_PASSWORD;
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
@@ -100,7 +101,8 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$[1].roles", hasSize(1)))
 				.andExpect(jsonPath("$[1].roles[0].name").value(is("ADMIN")))
 				.andExpect(jsonPath("$[1].links", hasSize(1)))
-				.andExpect(jsonPath("$[1].links[0].href").value(is("http://localhost/api/v1/users/1")));
+				.andExpect(jsonPath("$[1].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[1].links[0].href").value(containsString("/api/v1/users/1")));
 
 		verify(userServiceMock, times(1)).findAll();
 		verifyNoMoreInteractions(userServiceMock);
@@ -121,7 +123,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.roles[0].name").value(is("USER")))
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/users/1")));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/1")));
 
 		verify(userServiceMock, times(1)).findOne(1L);
 		verifyNoMoreInteractions(userServiceMock);
@@ -194,7 +196,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.password").doesNotExist())
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/users/1")));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/1")));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 		verify(userServiceMock, times(1)).save(userCaptor.capture());
@@ -264,7 +266,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.password").doesNotExist())
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(is("http://localhost/api/v1/users/1")));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/1")));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
 		verify(userServiceMock, times(1)).update(anyLong(), userCaptor.capture());
