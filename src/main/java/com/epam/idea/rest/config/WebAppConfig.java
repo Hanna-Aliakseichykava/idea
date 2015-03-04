@@ -1,4 +1,4 @@
-package com.epam.idea.rest.config.servlet;
+package com.epam.idea.rest.config;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;

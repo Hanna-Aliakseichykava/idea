@@ -5,7 +5,7 @@ import com.epam.idea.core.model.builders.TestUserBuilder;
 import com.epam.idea.core.service.UserService;
 import com.epam.idea.core.service.exception.UserNotFoundException;
 import com.epam.idea.rest.config.TestConfig;
-import com.epam.idea.rest.config.servlet.WebAppConfig;
+import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.resource.UserResource;
 import com.epam.idea.rest.resource.builders.TestUserResourceBuilder;
 import org.junit.Before;

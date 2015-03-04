@@ -34,6 +34,8 @@ ext {
     sl4jVersion = '1.7.10'
     assertJVersion = '1.7.1'
     mockitoVersion = '1.10.19'
+    springTestDbUnitVersion = '1.2.1'
+    dbUnitVersion = '2.5.0'
 }
 
 dependencies {
@@ -70,6 +72,8 @@ dependencies {
     testCompile 'org.springframework:spring-test'
     testCompile "org.mockito:mockito-all:$mockitoVersion"
     testCompile "org.assertj:assertj-core:$assertJVersion"
+    testCompile "com.github.springtestdbunit:spring-test-dbunit:$springTestDbUnitVersion"
+    testCompile "org.dbunit:dbunit:$dbUnitVersion"
 
     // Adds a simple way to extract parts of a given document.
     testCompile "com.jayway.jsonpath:json-path:$jsonPathVesrion"
@@ -82,6 +86,38 @@ dependencies {
 
     providedCompile 'javax.servlet:javax.servlet-api'
 }
+
+test {
+    reports.html.destination = file("$reports.html.destination/unit")
+    reports.junitXml.destination = file("$reports.junitXml.destination/unit")
+}
+
+//---------------------------Integration tests setup-----------------------------------------
+
+sourceSets {
+    integrationTest {
+        java {
+            srcDir 'src/integration-test/java'
+        }
+        resources {
+            srcDir 'src/integration-test/resources'
+        }
+        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath = output + compileClasspath
+    }
+}
+
+task integrationTest(type: Test) {
+    description = 'Runs the integration tests.'
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    reports.html.destination = file("$reports.html.destination/integration")
+    reports.junitXml.destination = file("$reports.junitXml.destination/integration")
+}
+
+check.dependsOn integrationTest
+
+//---------------------------Gradle wrapper--------------------------------------------------
 
 // The Gradle Wrapper is the preferred way of starting a Gradle build
 // Run the following command to download and initialize the wrapper scripts: gradle wrapper

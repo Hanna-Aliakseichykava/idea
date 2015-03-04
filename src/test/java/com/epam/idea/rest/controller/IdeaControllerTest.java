@@ -5,7 +5,7 @@ import com.epam.idea.core.model.builders.TestIdeaBuilder;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.exception.IdeaNotFoundException;
 import com.epam.idea.rest.config.TestConfig;
-import com.epam.idea.rest.config.servlet.WebAppConfig;
+import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.builders.TestIdeaResourceBuilder;
 import org.junit.Before;
