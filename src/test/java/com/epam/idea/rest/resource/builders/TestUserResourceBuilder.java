@@ -1,26 +1,29 @@
 package com.epam.idea.rest.resource.builders;
 
-import com.epam.idea.core.model.Comment;
-import com.epam.idea.core.model.Idea;
-import com.epam.idea.core.model.Role;
+import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.UserResource;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TestUserResourceBuilder {
+	private String username;
 	private String email;
 	private String password;
 	private ZonedDateTime creationTime;
-	private List<Idea> ideas;
-	private List<Comment> comments;
-	private List<Role> roles;
+	private List<IdeaResource> ideas = new ArrayList<>();
 
 	private TestUserResourceBuilder() {
 	}
 
 	public static TestUserResourceBuilder aUserResource() {
 		return new TestUserResourceBuilder();
+	}
+
+	public TestUserResourceBuilder withUsername(final String username) {
+		this.username = username;
+		return this;
 	}
 
 	public TestUserResourceBuilder withEmail(final String email) {
@@ -38,39 +41,27 @@ public class TestUserResourceBuilder {
 		return this;
 	}
 
-	public TestUserResourceBuilder withIdeas(final List<Idea> ideas) {
+	public TestUserResourceBuilder withIdeas(final List<IdeaResource> ideas) {
 		this.ideas = ideas;
-		return this;
-	}
-
-	public TestUserResourceBuilder withComments(final List<Comment> comments) {
-		this.comments = comments;
-		return this;
-	}
-
-	public TestUserResourceBuilder withRoles(final List<Role> roles) {
-		this.roles = roles;
 		return this;
 	}
 
 	public TestUserResourceBuilder but() {
 		return aUserResource()
+				.withUsername(username)
 				.withEmail(email)
 				.withPassword(password)
 				.withCreationTime(creationTime)
-				.withIdeas(ideas)
-				.withComments(comments)
-				.withRoles(roles);
+				.withIdeas(ideas);
 	}
 
 	public UserResource build() {
 		UserResource userResource = new UserResource();
+		userResource.setUsername(username);
 		userResource.setEmail(email);
 		userResource.setPassword(password);
 		userResource.setCreationTime(creationTime);
 		userResource.setIdeas(ideas);
-		userResource.setComments(comments);
-		userResource.setRoles(roles);
 		return userResource;
 	}
 }

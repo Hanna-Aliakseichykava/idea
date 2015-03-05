@@ -24,7 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static com.epam.idea.core.model.User.MAX_LENGTH_EMAIL;
 import static com.epam.idea.core.model.User.MAX_LENGTH_PASSWORD;
-import static com.epam.idea.core.model.builders.TestUserBuilder.DEFAULT_EMAIL;
+import static com.epam.idea.core.model.User.MAX_LENGTH_USERNAME;
 import static com.epam.idea.core.model.builders.TestUserBuilder.DEFAULT_USER_ID;
 import static com.epam.idea.core.model.builders.TestUserBuilder.aUser;
 import static com.epam.idea.core.model.builders.TestUserBuilder.anAdmin;
@@ -71,9 +71,6 @@ public class UserControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		//We have to reset our mock between tests because the mock objects
-		//are managed by the Spring container. If we would not reset them,
-		//stubbing and verified behavior would "leak" from one test to another.
 		Mockito.reset(userServiceMock);
 
 		mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
@@ -91,17 +88,15 @@ public class UserControllerTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(2)))
-				.andExpect(jsonPath("$[0].email").value(is(DEFAULT_EMAIL)))
+				.andExpect(jsonPath("$[0].username").value(is(first.getUsername())))
+				.andExpect(jsonPath("$[0].email").value(is(first.getEmail())))
 				.andExpect(jsonPath("$[0].password").doesNotExist())
-				.andExpect(jsonPath("$[0].roles", hasSize(1)))
-				.andExpect(jsonPath("$[0].roles[0].name").value(is(first.getRoles().get(0).getName().toString())))
 				.andExpect(jsonPath("$[0].links", hasSize(1)))
 				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$[0].links[0].href").value(is("http://localhost/api/v1/users/" + first.getId())))
-				.andExpect(jsonPath("$[1].email").value(is(DEFAULT_EMAIL)))
+				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/users/" + first.getId())))
+				.andExpect(jsonPath("$[1].username").value(is(second.getUsername())))
+				.andExpect(jsonPath("$[1].email").value(is(second.getEmail())))
 				.andExpect(jsonPath("$[1].password").doesNotExist())
-				.andExpect(jsonPath("$[1].roles", hasSize(1)))
-				.andExpect(jsonPath("$[1].roles[0].name").value(is(second.getRoles().get(0).getName().toString())))
 				.andExpect(jsonPath("$[1].links", hasSize(1)))
 				.andExpect(jsonPath("$[1].links[0].rel").value(is(Link.REL_SELF)))
 				.andExpect(jsonPath("$[1].links[0].href").value(containsString("/api/v1/users/" + second.getId())));
@@ -119,10 +114,9 @@ public class UserControllerTest {
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.username").value(is(user.getUsername())))
 				.andExpect(jsonPath("$.email").value(is(user.getEmail())))
 				.andExpect(jsonPath("$.password").doesNotExist())
-				.andExpect(jsonPath("$.roles", hasSize(1)))
-				.andExpect(jsonPath("$.roles[0].name").value(is(user.getRoles().get(0).getName().toString())))
 				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
 				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/" + user.getId())));
@@ -149,10 +143,12 @@ public class UserControllerTest {
 
 	@Test
 	public void shouldReturnValidationErrorsForTooLongEmailAndPassword() throws Exception {
+		String invalidUsername = createStringWithLength(MAX_LENGTH_USERNAME + 1);
 		String invalidEmail = createEmailWithLength(MAX_LENGTH_EMAIL + 1);
 		String invalidPassword = createStringWithLength(MAX_LENGTH_PASSWORD + 1);
 
 		UserResource userResource = TestUserResourceBuilder.aUserResource()
+				.withUsername(invalidUsername)
 				.withEmail(invalidEmail)
 				.withPassword(invalidPassword)
 				.build();
@@ -163,14 +159,15 @@ public class UserControllerTest {
 				.content(convertObjectToJsonBytes(userResource)))
 				.andExpect(status().isBadRequest())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$", hasSize(2)))
+				.andExpect(jsonPath("$", hasSize(3)))
 
 						//Spring MVC does not guarantee the ordering of the field errors,
 						//i.e. the field errors are returned in random order.
-				.andExpect(jsonPath("$[*].logref").value(containsInAnyOrder("password", "email")))
+				.andExpect(jsonPath("$[*].logref").value(containsInAnyOrder("password", "email", "username")))
 				.andExpect(jsonPath("$[*].message").value(containsInAnyOrder(
 						String.format("size must be between %s and %s", User.MIN_LENGTH_EMAIL, User.MAX_LENGTH_EMAIL),
-						String.format("size must be between %s and %s", User.MIN_LENGTH_PASSWORD, User.MAX_LENGTH_PASSWORD)
+						String.format("size must be between %s and %s", User.MIN_LENGTH_PASSWORD, User.MAX_LENGTH_PASSWORD),
+						String.format("size must be between %s and %s", User.MIN_LENGTH_USERNAME, User.MAX_LENGTH_USERNAME)
 				)));
 
 		verifyZeroInteractions(userServiceMock);
@@ -178,14 +175,17 @@ public class UserControllerTest {
 
 	@Test
 	public void shouldCreateUserAndReturnItWithHttpCode201() throws Exception {
+		String username = "username";
 		String email = "email@test.com";
 		String password = "password";
 		UserResource userResource = TestUserResourceBuilder.aUserResource()
+				.withUsername(username)
 				.withEmail(email)
 				.withPassword(password)
 				.build();
 		User saved = new TestUserBuilder()
 				.withId(DEFAULT_USER_ID)
+				.withUsername(username)
 				.withEmail(email)
 				.withPassword(password)
 				.build();
@@ -198,6 +198,7 @@ public class UserControllerTest {
 				.content(convertObjectToJsonBytes(userResource)))
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.username").value(is(saved.getUsername())))
 				.andExpect(jsonPath("$.email").value(is(saved.getEmail())))
 				.andExpect(jsonPath("$.password").doesNotExist())
 				.andExpect(jsonPath("$.links", hasSize(1)))
@@ -209,6 +210,7 @@ public class UserControllerTest {
 		verifyNoMoreInteractions(userServiceMock);
 
 		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getUsername()).isEqualTo(userResource.getUsername());
 		assertThat(userArgument.getEmail()).isEqualTo(userResource.getEmail());
 		assertThat(userArgument.getPassword()).isEqualTo(userResource.getPassword());
 	}
@@ -251,14 +253,17 @@ public class UserControllerTest {
 	@Test
 	public void shouldUpdateUserAndReturnItWithHttpCode200() throws Exception {
 		long userId = 2L;
+		String newUsername = "new_username";
 		String newEmail = "new_email@test.com";
 		String newPassword = "new_password";
 		UserResource source = TestUserResourceBuilder.aUserResource()
+				.withUsername(newUsername)
 				.withEmail(newEmail)
 				.withPassword(newPassword)
 				.build();
 		User updated = new TestUserBuilder()
 				.withId(userId)
+				.withUsername(newUsername)
 				.withEmail(newEmail)
 				.withPassword(newPassword)
 				.build();
@@ -271,6 +276,7 @@ public class UserControllerTest {
 				.content(convertObjectToJsonBytes(source)))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$.username").value(is(updated.getUsername())))
 				.andExpect(jsonPath("$.email").value(is(updated.getEmail())))
 				.andExpect(jsonPath("$.password").doesNotExist())
 				.andExpect(jsonPath("$.links", hasSize(1)))
@@ -282,6 +288,7 @@ public class UserControllerTest {
 		verifyNoMoreInteractions(userServiceMock);
 
 		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getUsername()).isEqualTo(source.getUsername());
 		assertThat(userArgument.getEmail()).isEqualTo(source.getEmail());
 		assertThat(userArgument.getPassword()).isEqualTo(source.getPassword());
 	}
@@ -290,6 +297,7 @@ public class UserControllerTest {
 	public void shouldReturnErrorWithHttpStatus404WhenUpdateUserWhichDoesNotExist() throws Exception {
 		long userId = 3L;
 		UserResource source = TestUserResourceBuilder.aUserResource()
+				.withUsername("new_username")
 				.withEmail("new_email@test.com")
 				.withPassword("new_password")
 				.build();
@@ -312,6 +320,7 @@ public class UserControllerTest {
 		verifyNoMoreInteractions(userServiceMock);
 
 		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getUsername()).isEqualTo(source.getUsername());
 		assertThat(userArgument.getEmail()).isEqualTo(source.getEmail());
 		assertThat(userArgument.getPassword()).isEqualTo(source.getPassword());
 	}

@@ -15,12 +15,14 @@ import java.util.List;
 
 public class TestUserBuilder {
 
+	public static final String DEFAULT_USERNAME = "Super user";
 	public static final String DEFAULT_EMAIL = "test@email.com";
 	public static final String DEFAULT_PASSWORD = "password";
 	public static final long DEFAULT_USER_ID = 1L;
 	public static final ZonedDateTime DEFAULT_CREATION_TIME = ZonedDateTime.of(2015, 1, 12, 0, 0, 0, 0, ZoneOffset.UTC);
 
 	private User.Builder userBuilder;
+	private String username;
 	private String email;
 	private String password;
 	private List<Idea> ideas = new ArrayList<>(1);
@@ -34,6 +36,7 @@ public class TestUserBuilder {
 	private static TestUserBuilder aDefaultUser() {
 		return new TestUserBuilder()
 				.withId(DEFAULT_USER_ID)
+				.withUsername(DEFAULT_USERNAME)
 				.withEmail(DEFAULT_EMAIL)
 				.withPassword(DEFAULT_PASSWORD)
 				.withCreationTime(DEFAULT_CREATION_TIME);
@@ -41,7 +44,7 @@ public class TestUserBuilder {
 
 	public static TestUserBuilder aUser() {
 		return aDefaultUser()
-                .inUserRole();
+				.inUserRole();
 	}
 
 	public static TestUserBuilder anAdmin() {
@@ -51,6 +54,11 @@ public class TestUserBuilder {
 
 	public TestUserBuilder withId(final long id) {
 		ReflectionTestUtils.setField(userBuilder, "id", id);
+		return this;
+	}
+
+	public TestUserBuilder withUsername(final String username) {
+		this.username = username;
 		return this;
 	}
 
@@ -115,6 +123,7 @@ public class TestUserBuilder {
 
 	public TestUserBuilder but() {
 		return aDefaultUser()
+				.withUsername(username)
 				.withEmail(email)
 				.withPassword(password)
 				.withIdeas(ideas)
@@ -124,6 +133,7 @@ public class TestUserBuilder {
 
 	public User build() {
 		return userBuilder
+				.withUsername(username)
 				.withEmail(email)
 				.withPassword(password)
 				.withComments(comments)

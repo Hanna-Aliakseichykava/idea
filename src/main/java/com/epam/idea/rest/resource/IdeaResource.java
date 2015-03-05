@@ -1,15 +1,13 @@
 package com.epam.idea.rest.resource;
 
-import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
-import com.epam.idea.core.model.Tag;
-import com.epam.idea.core.model.User;
 import org.springframework.hateoas.ResourceSupport;
 
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class IdeaResource extends ResourceSupport {
 
@@ -21,23 +19,11 @@ public class IdeaResource extends ResourceSupport {
 	private ZonedDateTime creationTime;
 	private ZonedDateTime modificationTime;
 	private int rating;
-	private User author;
-	private List<Tag> relatedTags = new ArrayList<>();
-	private List<Comment> comments = new ArrayList<>();
+	private UserResource author;
+	private List<TagResource> tags = new ArrayList<>();
 
 	public IdeaResource() {
 		//empty
-	}
-
-	public IdeaResource(String title, String description, ZonedDateTime creationTime, ZonedDateTime modificationTime, int rating, User author, List<Tag> relatedTags, List<Comment> comments) {
-		this.title = title;
-		this.description = description;
-		this.creationTime = creationTime;
-		this.modificationTime = modificationTime;
-		this.rating = rating;
-		this.author = author;
-		this.relatedTags = relatedTags;
-		this.comments = comments;
 	}
 
 	public String getTitle() {
@@ -80,38 +66,33 @@ public class IdeaResource extends ResourceSupport {
 		this.rating = rating;
 	}
 
-	public User getAuthor() {
+	public UserResource getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(User author) {
+	public void setAuthor(UserResource author) {
 		this.author = author;
 	}
 
-	public List<Tag> getRelatedTags() {
-		return relatedTags;
+	public List<TagResource> getTags() {
+		return tags;
 	}
 
-	public void setRelatedTags(List<Tag> relatedTags) {
-		this.relatedTags = relatedTags;
-	}
-
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
+	public void setTags(List<TagResource> tags) {
+		this.tags = tags;
 	}
 	
 	public Idea toIdea() {
-		return Idea.getBuilder()
-				.withAuthor(author)
-				.withComments(comments)
-				.withDescription(description)
-				.withRating(rating)
-				.withTags(relatedTags)
-				.withTitle(title)
-				.build();
+		final Idea.Builder idea = Idea.getBuilder();
+		if (author != null) {
+			idea.withAuthor(author.toUser());
+		}
+		idea.withDescription(description);
+		idea.withRating(rating);
+		idea.withTags(tags.parallelStream()
+				.map(TagResource::toTag)
+				.collect(Collectors.toList()));
+		idea.withTitle(title);
+		return idea.build();
 	}
 }

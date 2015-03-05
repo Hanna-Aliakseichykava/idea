@@ -15,7 +15,6 @@ targetCompatibility = 1.8
 httpPort = 9090
 war.archiveName = 'idea.war'
 
-
 repositories {
     jcenter()
     maven { url 'http://repo.spring.io/libs-snapshot' }
@@ -96,12 +95,8 @@ test {
 
 sourceSets {
     integrationTest {
-        java {
-            srcDir 'src/integration-test/java'
-        }
-        resources {
-            srcDir 'src/integration-test/resources'
-        }
+        java.srcDir file('src/integration-test/java')
+        resources.srcDir file('src/integration-test/resources')
         compileClasspath = sourceSets.main.output + configurations.testRuntime
         runtimeClasspath = output + compileClasspath
     }

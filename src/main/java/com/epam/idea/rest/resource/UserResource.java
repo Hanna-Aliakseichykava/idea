@@ -1,8 +1,5 @@
 package com.epam.idea.rest.resource;
 
-import com.epam.idea.core.model.Comment;
-import com.epam.idea.core.model.Idea;
-import com.epam.idea.core.model.Role;
 import com.epam.idea.core.model.User;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.hateoas.ResourceSupport;
@@ -11,8 +8,12 @@ import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class UserResource extends ResourceSupport {
+
+	@Size(min = User.MIN_LENGTH_USERNAME, max = User.MAX_LENGTH_USERNAME)
+	private String username;
 
 	@Email
 	@Size(min = User.MIN_LENGTH_EMAIL, max = User.MAX_LENGTH_EMAIL)
@@ -21,19 +22,25 @@ public class UserResource extends ResourceSupport {
 	@Size(min = User.MIN_LENGTH_PASSWORD, max = User.MAX_LENGTH_PASSWORD)
 	private String password;
 	private ZonedDateTime creationTime;
-	private List<Idea> ideas = new ArrayList<>();
-	private List<Comment> comments = new ArrayList<>();
-	private List<Role> roles = new ArrayList<>();
+	private List<IdeaResource> ideas = new ArrayList<>();
 
 	public UserResource() {
 		//empty
+	}
+
+	public void setUsername(final String username) {
+		this.username = username;
+	}
+
+	public String getUsername() {
+		return username;
 	}
 
 	public String getEmail() {
 		return email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -41,7 +48,7 @@ public class UserResource extends ResourceSupport {
 		return password;
 	}
 
-	public void setPassword(String password) {
+	public void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -49,41 +56,26 @@ public class UserResource extends ResourceSupport {
 		return creationTime;
 	}
 
-	public void setCreationTime(ZonedDateTime creationTime) {
+	public void setCreationTime(final ZonedDateTime creationTime) {
 		this.creationTime = creationTime;
 	}
 
-	public List<Idea> getIdeas() {
+	public List<IdeaResource> getIdeas() {
 		return ideas;
 	}
 
-	public void setIdeas(List<Idea> ideas) {
+	public void setIdeas(final List<IdeaResource> ideas) {
 		this.ideas = ideas;
 	}
 
-	public List<Comment> getComments() {
-		return comments;
-	}
-
-	public void setComments(List<Comment> comments) {
-		this.comments = comments;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
-	}
-
-	public void setRoles(List<Role> roles) {
-		this.roles = roles;
-	}
-
 	public User toUser() {
-		return User.getBuilder()
-				.withEmail(email)
-				.withPassword(password)
-				.withComments(comments)
-				.withIdeas(ideas)
-				.withRoles(roles)
-				.build();
+		User.Builder user = User.getBuilder();
+		user.withUsername(username);
+		user.withEmail(email);
+		user.withPassword(password);
+		user.withIdeas(ideas.parallelStream()
+				.map(IdeaResource::toIdea)
+				.collect(Collectors.toList()));
+		return user.build();
 	}
 }

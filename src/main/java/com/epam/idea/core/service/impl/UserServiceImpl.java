@@ -27,11 +27,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(readOnly = true)
 	public List<User> findAll() {
 		List<User> userList = userRepository.findAll();
-		userList.forEach(user -> {
-			Hibernate.initialize(user.getIdeas());
-			//Hibernate.initialize(user.getComments());
-			Hibernate.initialize(user.getRoles());
-		});
+		userList.forEach(user -> Hibernate.initialize(user.getIdeas()));
 		return userList;
 	}
 
