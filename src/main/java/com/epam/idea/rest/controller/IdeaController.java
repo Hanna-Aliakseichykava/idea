@@ -39,7 +39,8 @@ public class IdeaController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	public HttpEntity<IdeaResource> create(@Valid @RequestBody final IdeaResource ideaRes) {
-		Idea createdIdea = ideaService.save(ideaRes.toIdea());
+		Idea idea = ideaRes.toIdea();
+		Idea createdIdea = ideaService.save(idea);
 		return new ResponseEntity<>(new IdeaResourceAsm().toResource(createdIdea), HttpStatus.CREATED);
 	}
 

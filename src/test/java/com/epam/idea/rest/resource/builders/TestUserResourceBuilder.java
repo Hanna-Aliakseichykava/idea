@@ -1,18 +1,14 @@
 package com.epam.idea.rest.resource.builders;
 
-import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.UserResource;
 
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestUserResourceBuilder {
 	private String username;
 	private String email;
 	private String password;
 	private ZonedDateTime creationTime;
-	private List<IdeaResource> ideas = new ArrayList<>();
 
 	private TestUserResourceBuilder() {
 	}
@@ -41,18 +37,12 @@ public class TestUserResourceBuilder {
 		return this;
 	}
 
-	public TestUserResourceBuilder withIdeas(final List<IdeaResource> ideas) {
-		this.ideas = ideas;
-		return this;
-	}
-
 	public TestUserResourceBuilder but() {
 		return aUserResource()
 				.withUsername(username)
 				.withEmail(email)
 				.withPassword(password)
-				.withCreationTime(creationTime)
-				.withIdeas(ideas);
+				.withCreationTime(creationTime);
 	}
 
 	public UserResource build() {
@@ -61,7 +51,6 @@ public class TestUserResourceBuilder {
 		userResource.setEmail(email);
 		userResource.setPassword(password);
 		userResource.setCreationTime(creationTime);
-		userResource.setIdeas(ideas);
 		return userResource;
 	}
 }

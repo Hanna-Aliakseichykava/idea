@@ -25,7 +25,7 @@ public class IdeaResourceAsm extends ResourceAssemblerSupport<Idea, IdeaResource
 	@Override
 	public IdeaResource toResource(final Idea original) {
 		requireNonNull(original);
-		IdeaResource ideaResource = new IdeaResource();
+		final IdeaResource ideaResource = new IdeaResource();
 		ideaResource.setTitle(original.getTitle());
 		ideaResource.setDescription(original.getDescription());
 		ideaResource.setCreationTime(original.getCreationTime());

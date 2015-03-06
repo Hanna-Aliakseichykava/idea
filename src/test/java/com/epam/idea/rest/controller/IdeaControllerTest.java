@@ -135,10 +135,11 @@ public class IdeaControllerTest {
 		int rating = 3;
 		String title = "title";
 		String description = "description";
-		IdeaResource ideaResForCreation = new IdeaResource();
-		ideaResForCreation.setTitle(title);
-		ideaResForCreation.setDescription(description);
-		ideaResForCreation.setRating(rating);
+		IdeaResource ideaResource = TestIdeaResourceBuilder.anIdeaResource()
+				.withTitle(title)
+				.withDescription(description)
+				.withRating(rating)
+				.build();
 		Idea createdIdea = new TestIdeaBuilder()
 				.withId(ideaId)
 				.withTitle(title)
@@ -150,7 +151,7 @@ public class IdeaControllerTest {
 		mockMvc.perform(post("/api/v1/ideas")
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
-				.content(convertObjectToJsonBytes(ideaResForCreation)))
+				.content(convertObjectToJsonBytes(ideaResource)))
 				.andDo(print())
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
@@ -165,9 +166,9 @@ public class IdeaControllerTest {
 		verifyNoMoreInteractions(ideaServiceMock);
 
 		Idea ideaArgument = userCaptor.getValue();
-		assertThat(ideaArgument.getTitle()).isEqualTo(ideaResForCreation.getTitle());
-		assertThat(ideaArgument.getDescription()).isEqualTo(ideaResForCreation.getDescription());
-		assertThat(ideaArgument.getRating()).isEqualTo(ideaResForCreation.getRating());
+		assertThat(ideaArgument.getTitle()).isEqualTo(ideaResource.getTitle());
+		assertThat(ideaArgument.getDescription()).isEqualTo(ideaResource.getDescription());
+		assertThat(ideaArgument.getRating()).isEqualTo(ideaResource.getRating());
 	}
 
 	@Test

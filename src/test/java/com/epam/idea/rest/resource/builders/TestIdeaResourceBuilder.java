@@ -1,22 +1,21 @@
 package com.epam.idea.rest.resource.builders;
 
-import com.epam.idea.core.model.User;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.TagResource;
-import com.epam.idea.rest.resource.asm.UserResourceAsm;
+import com.epam.idea.rest.resource.UserResource;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TestIdeaResourceBuilder {
-	
+
 	private String title;
 	private String description;
 	private ZonedDateTime creationTime;
 	private ZonedDateTime modificationTime;
 	private int rating;
-	private User author;
+	private UserResource author;
 	private List<TagResource> tags = new ArrayList<>();
 
 	private TestIdeaResourceBuilder() {
@@ -51,7 +50,7 @@ public class TestIdeaResourceBuilder {
 		return this;
 	}
 
-	public TestIdeaResourceBuilder withAuthor(final User author) {
+	public TestIdeaResourceBuilder withAuthor(final UserResource author) {
 		this.author = author;
 		return this;
 	}
@@ -80,7 +79,7 @@ public class TestIdeaResourceBuilder {
 		ideaResource.setModificationTime(modificationTime);
 		ideaResource.setRating(rating);
 		if (author != null) {
-			ideaResource.setAuthor(new UserResourceAsm().toResource(author));
+			ideaResource.setAuthor(author);
 		}
 		ideaResource.setTags(tags);
 		return ideaResource;

@@ -14,7 +14,7 @@ import org.springframework.core.env.Environment;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Profile(DatabaseConfigProfile.DEV)
+@Profile(DatabaseConfigProfile.INTEGRATION_TEST)
 @Configuration
 @PropertySource("classpath:/db/development.properties")
 public class DevDatabaseConfig implements DatabaseConfig {

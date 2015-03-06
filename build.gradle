@@ -91,13 +91,13 @@ test {
     reports.junitXml.destination = file("$reports.junitXml.destination/unit")
 }
 
-//---------------------------Integration tests setup-----------------------------------------
+//---------------------------Integration tests setup-----------------------------------------//
 
 sourceSets {
     integrationTest {
         java.srcDir file('src/integration-test/java')
         resources.srcDir file('src/integration-test/resources')
-        compileClasspath = sourceSets.main.output + configurations.testRuntime
+        compileClasspath = sourceSets.main.output + configurations.testRuntime + sourceSets.test.output
         runtimeClasspath = output + compileClasspath
     }
 }
@@ -112,7 +112,7 @@ task integrationTest(type: Test) {
 
 check.dependsOn integrationTest
 
-//---------------------------Gradle wrapper--------------------------------------------------
+//---------------------------Gradle wrapper--------------------------------------------------//
 
 // The Gradle Wrapper is the preferred way of starting a Gradle build
 // Run the following command to download and initialize the wrapper scripts: gradle wrapper
