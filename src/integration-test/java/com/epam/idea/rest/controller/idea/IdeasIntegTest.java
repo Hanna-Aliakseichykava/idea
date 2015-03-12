@@ -77,7 +77,7 @@ public class IdeasIntegTest {
 	}
 
 	@Test
-	@DatabaseSetup("idea-entries.xml")
+	@DatabaseSetup("repository-idea-entries.xml")
 	public void shouldReturnInfoOfFoundIdeaAsJsonWithHttpCode200() throws Exception {
 		mockMvc.perform(get("/api/v1/ideas/{ideaId}", IDEA_ID)
 				.contentType(APPLICATION_JSON_UTF8)
@@ -106,7 +106,7 @@ public class IdeasIntegTest {
 	}
 
 	@Test
-	@DatabaseSetup("no-idea-entries.xml")
+	@DatabaseSetup("no-repository-idea-entries.xml")
 	public void shouldReturnErrorMessageAsJsonAndHttpStatus404WhenIdeaNotFound() throws Exception {
 		mockMvc.perform(get("/api/v1/ideas/{ideaId}", IDEA_ID)
 				.contentType(APPLICATION_JSON_UTF8)
@@ -121,7 +121,7 @@ public class IdeasIntegTest {
 	}
 
 	@Test
-	@DatabaseSetup("no-idea-entries.xml")
+	@DatabaseSetup("no-repository-idea-entries.xml")
 	@ExpectedDatabase(value = "create-idea-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldCreatedIdeaAsReturnItAsJsonWithHttpStatus201() throws Exception {
 		TagResource tag = TestTagResourceBuilder.aTagResource()

@@ -11,18 +11,24 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource> {
 
+	public static final String IDEAS_REL = "ideas";
+	public static final String COMMENTS_REL = "comments";
+
 	public UserResourceAsm() {
 		super(UserController.class, UserResource.class);
 	}
 
 	@Override
 	public UserResource toResource(final User original) {
-		requireNonNull(original);
+		requireNonNull(original, "User cannot be null");
 		final UserResource userResource = new UserResource();
+		userResource.setUserId(original.getId());
 		userResource.setUsername(original.getUsername());
 		userResource.setEmail(original.getEmail());
 		userResource.setCreationTime(original.getCreationTime());
-		userResource.add(linkTo(methodOn(UserController.class).show(original.getId())).withSelfRel());
+		userResource.add(linkTo(methodOn(UserController.class).getUser(original.getId())).withSelfRel());
+		userResource.add(linkTo(methodOn(UserController.class).getUserIdeas(original.getId())).withRel(IDEAS_REL));
+		userResource.add(linkTo(methodOn(UserController.class).getUserComments(original.getId())).withRel(COMMENTS_REL));
 		return userResource;
 	}
 }

@@ -1,13 +1,21 @@
 package com.epam.idea.rest.resource;
 
 import com.epam.idea.core.model.User;
+import com.epam.idea.rest.resource.support.JsonPropertyName;
+import com.epam.idea.rest.resource.support.View;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.hateoas.ResourceSupport;
 
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 import java.time.ZonedDateTime;
 
-public class  UserResource extends ResourceSupport {
+public class UserResource extends ResourceSupport {
+
+	@JsonProperty(JsonPropertyName.ID)
+	private long userId;
 
 	@Size(min = User.MIN_LENGTH_USERNAME, max = User.MAX_LENGTH_USERNAME)
 	private String username;
@@ -16,15 +24,27 @@ public class  UserResource extends ResourceSupport {
 	@Size(min = User.MIN_LENGTH_EMAIL, max = User.MAX_LENGTH_EMAIL)
 	private String email;
 
+	@JsonView(View.Admin.class)
+	@Transient
 	@Size(min = User.MIN_LENGTH_PASSWORD, max = User.MAX_LENGTH_PASSWORD)
 	private String password;
+
+	@JsonProperty(JsonPropertyName.CREATION_TIME)
 	private ZonedDateTime creationTime;
 
 	public UserResource() {
 		//empty
 	}
 
-	public void setUsername(final String username) {
+	public long getUserId() {
+		return userId;
+	}
+
+	public void setUserId(long userId) {
+		this.userId = userId;
+	}
+
+	public void setUsername(String username) {
 		this.username = username;
 	}
 
@@ -36,7 +56,7 @@ public class  UserResource extends ResourceSupport {
 		return email;
 	}
 
-	public void setEmail(final String email) {
+	public void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -44,7 +64,7 @@ public class  UserResource extends ResourceSupport {
 		return password;
 	}
 
-	public void setPassword(final String password) {
+	public void setPassword(String password) {
 		this.password = password;
 	}
 
@@ -52,15 +72,15 @@ public class  UserResource extends ResourceSupport {
 		return creationTime;
 	}
 
-	public void setCreationTime(final ZonedDateTime creationTime) {
+	public void setCreationTime(ZonedDateTime creationTime) {
 		this.creationTime = creationTime;
 	}
 
 	public User toUser() {
-		User.Builder user = User.getBuilder();
-		user.withUsername(username);
-		user.withEmail(email);
-		user.withPassword(password);
-		return user.build();
+		final User user = new User();
+		user.setUsername(username);
+		user.setEmail(email);
+		user.setPassword(password);
+		return user;
 	}
 }

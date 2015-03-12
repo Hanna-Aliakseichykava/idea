@@ -62,34 +62,9 @@ public class User implements Serializable {
 	private List<Role> roles;
 
 	public User() {
-		//empty
-	}
-
-	private User(final Builder builder) {
-		this.id = builder.id;
-		this.username = builder.username;
-		this.email = builder.email;
-		this.password = builder.password;
-		this.creationTime = builder.creationTime;
-		this.ideas = builder.ideas;
-		this.comments = builder.comments;
-		this.roles = builder.roles;
-	}
-
-	public static Builder getBuilder() {
-		return new Builder();
-	}
-
-	public static Builder getBuilderFrom(final User user) {
-		return new Builder()
-				.withId(user.id)
-				.withUsername(user.username)
-				.withEmail(user.email)
-				.withPassword(user.password)
-				.withCreationTime(user.creationTime)
-				.withIdeas(user.ideas)
-				.withComments(user.comments)
-				.withRoles(user.roles);
+		this.ideas = new ArrayList<>();
+		this.comments = new ArrayList<>();
+		this.roles = new ArrayList<>();
 	}
 
 	public void updateWith(final User source) {
@@ -106,12 +81,24 @@ public class User implements Serializable {
 		return username;
 	}
 
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getEmail() {
 		return email;
 	}
 
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
 	public String getPassword() {
 		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public ZonedDateTime getCreationTime() {
@@ -122,12 +109,36 @@ public class User implements Serializable {
 		return ideas;
 	}
 
+	public void setIdeas(List<Idea> ideas) {
+		this.ideas = ideas;
+	}
+
+	public void addIdea(Idea idea) {
+		this.ideas.add(idea);
+	}
+
 	public List<Comment> getComments() {
 		return comments;
 	}
 
+	public void setComments(List<Comment> comments) {
+		this.comments = comments;
+	}
+
+	public void addComment(Comment comment) {
+		this.comments.add(comment);
+	}
+
 	public List<Role> getRoles() {
 		return roles;
+	}
+
+	public void setRoles(List<Role> roles) {
+		this.roles = roles;
+	}
+
+	public void addRole(Role role) {
+		this.roles.add(role);
 	}
 
 	@PrePersist
@@ -135,76 +146,6 @@ public class User implements Serializable {
 		this.creationTime = ZonedDateTime.now();
 	}
 
-	public static class Builder {
-		private long id;
-		private String username;
-		private String email;
-		private String password;
-		private ZonedDateTime creationTime;
-		private List<Idea> ideas = new ArrayList<>();
-		private List<Comment> comments = new ArrayList<>();
-		private List<Role> roles = new ArrayList<>();
-
-		private Builder withId(final long id) {
-			this.id = id;
-			return this;
-		}
-
-		public Builder withUsername(final String username) {
-			this.username = username;
-			return this;
-		}
-
-
-		public Builder withEmail(final String email) {
-			this.email = email;
-			return this;
-		}
-
-		public Builder withPassword(final String password) {
-			this.password = password;
-			return this;
-		}
-
-		private Builder withCreationTime(final ZonedDateTime creationTime) {
-			this.creationTime = creationTime;
-			return this;
-		}
-
-		public Builder withIdeas(final List<Idea> ideas) {
-			this.ideas = ideas;
-			return this;
-		}
-
-		public Builder addIdea(final Idea idea) {
-			this.ideas.add(idea);
-			return this;
-		}
-
-		public Builder withComments(final List<Comment> comments) {
-			this.comments = comments;
-			return this;
-		}
-
-		public Builder addComment(final Comment comment) {
-			this.comments.add(comment);
-			return this;
-		}
-
-		public Builder withRoles(final List<Role> roles) {
-			this.roles = roles;
-			return this;
-		}
-
-		public Builder addRole(final Role role) {
-			this.roles.add(role);
-			return this;
-		}
-
-		public User build() {
-			return new User(this);
-		}
-	}
 
 	@Override
 	public String toString() {

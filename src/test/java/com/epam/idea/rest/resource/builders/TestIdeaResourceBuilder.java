@@ -78,9 +78,9 @@ public class TestIdeaResourceBuilder {
 		ideaResource.setCreationTime(creationTime);
 		ideaResource.setModificationTime(modificationTime);
 		ideaResource.setRating(rating);
-		if (author != null) {
-			ideaResource.setAuthor(author);
-		}
+//		if (author != null) {
+//			ideaResource.setAuthor(author);
+//		}
 		ideaResource.setTags(tags);
 		return ideaResource;
 	}

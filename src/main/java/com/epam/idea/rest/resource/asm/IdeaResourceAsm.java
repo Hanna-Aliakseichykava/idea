@@ -1,13 +1,14 @@
 package com.epam.idea.rest.resource.asm;
 
 import com.epam.idea.core.model.Idea;
-import com.epam.idea.core.model.User;
 import com.epam.idea.rest.controller.IdeaController;
+import com.epam.idea.rest.controller.UserController;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.TagResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
@@ -18,14 +19,17 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 public class IdeaResourceAsm extends ResourceAssemblerSupport<Idea, IdeaResource> {
 
+	public static final String REL_AUTHOR = "author";
+
 	public IdeaResourceAsm() {
 		super(IdeaController.class, IdeaResource.class);
 	}
 
 	@Override
 	public IdeaResource toResource(final Idea original) {
-		requireNonNull(original);
+		requireNonNull(original, "Idea cannot be null");
 		final IdeaResource ideaResource = new IdeaResource();
+		ideaResource.setIdeaId(original.getId());
 		ideaResource.setTitle(original.getTitle());
 		ideaResource.setDescription(original.getDescription());
 		ideaResource.setCreationTime(original.getCreationTime());
@@ -39,11 +43,10 @@ public class IdeaResourceAsm extends ResourceAssemblerSupport<Idea, IdeaResource
 		} else {
 			ideaResource.setTags(emptyList());
 		}
-		final User author = original.getAuthor();
-		if (author != null && isInitialized(author)) {
-			ideaResource.setAuthor(new UserResourceAsm().toResource(author));
-		}
 		ideaResource.add(linkTo(methodOn(IdeaController.class).show(original.getId())).withSelfRel());
+		Optional.ofNullable(original.getAuthor()).ifPresent(author ->
+				ideaResource.add(linkTo(methodOn(UserController.class).getUser(author.getId())).withRel(REL_AUTHOR)));
+		//todo add link to comments
 		return ideaResource;
 	}
 }

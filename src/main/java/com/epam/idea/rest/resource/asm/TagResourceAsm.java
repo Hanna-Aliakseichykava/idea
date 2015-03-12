@@ -15,8 +15,9 @@ public class TagResourceAsm extends ResourceAssemblerSupport<Tag, TagResource> {
 
 	@Override
 	public TagResource toResource(final Tag original) {
-		requireNonNull(original);
+		requireNonNull(original, "Tag cannot be null");
 		final TagResource tagResource = new TagResource();
+		tagResource.setTagId(original.getId());
 		tagResource.setName(original.getName());
 		//todo add self link
 		return tagResource;

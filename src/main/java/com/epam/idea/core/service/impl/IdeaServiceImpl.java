@@ -53,7 +53,7 @@ public class IdeaServiceImpl implements IdeaService {
 	@Override
 	public Idea save(final Idea persisted) {
 		User author = persisted.getAuthor();
-		userRepository.
+		//userRepository.
 //		List<Tag> collect = persisted.getTags().parallelStream()
 //				.map(TagResource::toTag)
 //				.collect(Collectors.toList());
@@ -73,5 +73,21 @@ public class IdeaServiceImpl implements IdeaService {
 		Idea target = findOne(ideaId);
 		target.updateWith(source);
 		return target;
+	}
+
+	@Override
+	public List<Idea> findIdeasByUserId(final long userId) {
+		return ideaRepository.findByUserId(userId);
+	}
+
+	@Override
+	public Idea saveForUser(final long userId, final Idea idea) {
+		Optional<User> userOptional = userRepository.findOne(userId);
+		User user = userOptional.get();
+		List<Idea> ideas = user.getIdeas();
+		ideas.add(idea);
+		idea.setAuthor(user);
+		Idea savedIdea = ideaRepository.save(idea);
+		return savedIdea;
 	}
 }
