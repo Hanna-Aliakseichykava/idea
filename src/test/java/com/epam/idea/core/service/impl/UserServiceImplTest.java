@@ -63,30 +63,31 @@ public class UserServiceImplTest {
 	public void shouldReturnFoundUser() throws Exception {
 		//Given:
 		User found = TestUserBuilder.aUser().build();
-		when(userRepositoryMock.findOne(eq(1L))).thenReturn(Optional.of(found));
+		when(userRepositoryMock.findOne(eq(found.getId()))).thenReturn(Optional.of(found));
 
 		//When:
-		User actual = sut.findOne(1L);
+		User actual = sut.findOne(found.getId());
 
 		//Then:
 		assertThat(actual).isEqualTo(found);
-		verify(userRepositoryMock, times(1)).findOne(1L);
+		verify(userRepositoryMock, times(1)).findOne(found.getId());
 		verifyNoMoreInteractions(userRepositoryMock);
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenTryFindUserWhichDoesNotExist() throws Exception {
 		//Given:
-		when(userRepositoryMock.findOne(eq(1L))).thenReturn(Optional.empty());
+		long fakeUserId = 4L;
+		when(userRepositoryMock.findOne(eq(fakeUserId))).thenReturn(Optional.empty());
 
 		//When:
 		try {
-			sut.findOne(1L);
+			sut.findOne(fakeUserId);
 			fail("UserNotFoundException expected because we try to find the user which does not exist");
 		} catch (UserNotFoundException e) {
 
 			//Then:
-			verify(userRepositoryMock, times(1)).findOne(1L);
+			verify(userRepositoryMock, times(1)).findOne(fakeUserId);
 			verifyNoMoreInteractions(userRepositoryMock);
 		}
 	}
@@ -94,33 +95,34 @@ public class UserServiceImplTest {
 	@Test
 	public void shouldDeleteUserAndReturnIt() throws Exception {
 		//Given:
-		User user = TestUserBuilder.aUser().build();
-		when(userRepositoryMock.findOne(anyLong())).thenReturn(Optional.of(user));
+		User deletedUser = TestUserBuilder.aUser().build();
+		when(userRepositoryMock.findOne(anyLong())).thenReturn(Optional.of(deletedUser));
 
 		//When:
-		User deleted = sut.deleteById(1L);
+		User actual = sut.deleteById(deletedUser.getId());
 
 		//Then:
-		assertThat(deleted).isEqualTo(user);
+		assertThat(actual).isEqualTo(deletedUser);
 
-		verify(userRepositoryMock, times(1)).findOne(1L);
-		verify(userRepositoryMock, times(1)).delete(user);
+		verify(userRepositoryMock, times(1)).findOne(deletedUser.getId());
+		verify(userRepositoryMock, times(1)).delete(deletedUser);
 		verifyNoMoreInteractions(userRepositoryMock);
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenTryDeleteUserWhichDoesNotExist() throws Exception {
 		//Given:
-		when(userRepositoryMock.findOne(eq(1L))).thenReturn(Optional.empty());
+		long fakeUserId = 2L;
+		when(userRepositoryMock.findOne(eq(fakeUserId))).thenReturn(Optional.empty());
 
 		//When:
 		try {
-			sut.deleteById(1L);
+			sut.deleteById(fakeUserId);
 			fail("UserNotFoundException expected because we try to delete the user which does not exist");
 		} catch (UserNotFoundException e) {
 
 			//Then:
-			verify(userRepositoryMock, times(1)).findOne(1L);
+			verify(userRepositoryMock, times(1)).findOne(fakeUserId);
 			verifyNoMoreInteractions(userRepositoryMock);
 		}
 	}
@@ -128,49 +130,52 @@ public class UserServiceImplTest {
 	@Test
 	public void shouldUpdateUserAndReturnIt() throws Exception {
 		//Given:
-		User newUser = new TestUserBuilder()
+		User source = new TestUserBuilder()
 				.withEmail("new_email@test.com")
 				.withPassword("new_password")
 				.build();
 		User target = new TestUserBuilder()
+				.withId(1L)
 				.withEmail("email@test.com")
 				.withPassword("password")
 				.build();
-		when(userRepositoryMock.findOne(eq(1L))).thenReturn(Optional.of(target));
+		when(userRepositoryMock.findOne(eq(target.getId()))).thenReturn(Optional.of(target));
 
 		//When:
-		User actual = sut.update(1L, newUser);
+		User actual = sut.update(target.getId(), source);
 
 		//Then:
-		assertThat(actual.getEmail()).isEqualTo(newUser.getEmail());
-		assertThat(actual.getPassword()).isEqualTo(newUser.getPassword());
-		verify(userRepositoryMock, times(1)).findOne(1L);
+		assertThat(actual.getId()).isEqualTo(target.getId());
+		assertThat(actual.getEmail()).isEqualTo(source.getEmail());
+		assertThat(actual.getPassword()).isEqualTo(source.getPassword());
+		verify(userRepositoryMock, times(1)).findOne(target.getId());
 		verifyNoMoreInteractions(userRepositoryMock);
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenTryUpdateUserWhichDoesNotExist() throws Exception {
 		//Given:
+		long fakeUserId = 3L;
 		User newUser = new TestUserBuilder()
 				.withEmail("new_email@test.com")
 				.withPassword("new_password")
 				.build();
-		when(userRepositoryMock.findOne(eq(1L))).thenReturn(Optional.empty());
+		when(userRepositoryMock.findOne(eq(fakeUserId))).thenReturn(Optional.empty());
 
 		//When
 		try {
-			sut.update(1L, newUser);
+			sut.update(fakeUserId, newUser);
 			fail("UserNotFoundException expected because we try to update the user which does not exist");
 		} catch (UserNotFoundException ex) {
 
 			//Then:
-			verify(userRepositoryMock, times(1)).findOne(1L);
+			verify(userRepositoryMock, times(1)).findOne(fakeUserId);
 			verifyNoMoreInteractions(userRepositoryMock);
 		}
 	}
 
 	@Test
-	public void shouldReturnListOfUsers() throws Exception {
+	public void shouldReturnListOfAllUsers() throws Exception {
 		//Given:
 		List<User> users = asList(TestUserBuilder.aUser().build(), TestUserBuilder.anAdmin().build());
 		when(userRepositoryMock.findAll()).thenReturn(users);

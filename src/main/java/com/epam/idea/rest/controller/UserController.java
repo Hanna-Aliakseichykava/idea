@@ -33,28 +33,24 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<List<UserResource>> showAll() {
 		List<User> userList = userService.findAll();
-		List<UserResource> userResources = new UserResourceAsm().toResources(userList);
-		return new ResponseEntity<>(userResources, HttpStatus.OK);
+		return new ResponseEntity<>(new UserResourceAsm().toResources(userList), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.GET)
-	public HttpEntity<UserResource> show(@PathVariable long userId) {
+	public HttpEntity<UserResource> show(@PathVariable final long userId) {
 		User user = userService.findOne(userId);
-		UserResource res = new UserResourceAsm().toResource(user);
-		return new ResponseEntity<>(res, HttpStatus.OK);
+		return new ResponseEntity<>(new UserResourceAsm().toResource(user), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.PUT)
-	public HttpEntity<UserResource> update(@Valid @RequestBody final UserResource userRes, @PathVariable long userId) {
+	public HttpEntity<UserResource> update(@Valid @RequestBody final UserResource userRes, @PathVariable final long userId) {
 		User updated = userService.update(userId, userRes.toUser());
-		UserResource updatedRes = new UserResourceAsm().toResource(updated);
-		return new ResponseEntity<>(updatedRes, HttpStatus.OK);
+		return new ResponseEntity<>(new UserResourceAsm().toResource(updated), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{userId}", method = RequestMethod.DELETE)
-	public HttpEntity<UserResource> delete(@PathVariable long userId) {
-		User user = userService.deleteById(userId);
-		UserResource res = new UserResourceAsm().toResource(user);
-		return new ResponseEntity<>(res, HttpStatus.OK);
+	public HttpEntity<UserResource> delete(@PathVariable final long userId) {
+		userService.deleteById(userId);
+		return new ResponseEntity<>(HttpStatus.OK);
 	}
 }

@@ -1,6 +1,7 @@
 package com.epam.idea.core.model;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public enum Authority {
 
@@ -16,9 +17,9 @@ public enum Authority {
 		return id;
 	}
 
-	public static Authority getById(int id) {
+	public static Optional<Authority> getById(final int id) {
 		return Arrays.stream(values())
 				.filter(v -> v.getId() == id)
-				.findAny().orElse(null);
+				.findAny();
 	}
 }

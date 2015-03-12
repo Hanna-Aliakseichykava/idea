@@ -26,6 +26,10 @@ import java.util.List;
 @Table(name = "IDEA")
 public class Idea implements Serializable {
 
+	public static final int MIN_LENGTH_TITLE = 1;
+	public static final int MAX_LENGTH_TITLE = 150;
+	public static final int MAX_LENGTH_DESCRIPTION = 500;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "ID")
@@ -66,15 +70,15 @@ public class Idea implements Serializable {
 	}
 
 	private Idea(final Builder builder) {
-		this.id =               builder.id;
-		this.title =            builder.title;
-		this.description =      builder.description;
-		this.creationTime =     builder.creationTime;
+		this.id = builder.id;
+		this.title = builder.title;
+		this.description = builder.description;
+		this.creationTime = builder.creationTime;
 		this.modificationTime = builder.modificationTime;
-		this.rating =           builder.rating;
-		this.author =           builder.author;
-		this.relatedTags =      builder.relatedTags;
-		this.comments =         builder.comments;
+		this.rating = builder.rating;
+		this.author = builder.author;
+		this.relatedTags = builder.relatedTags;
+		this.comments = builder.comments;
 	}
 
 	public static Builder getBuilder() {
@@ -92,6 +96,11 @@ public class Idea implements Serializable {
 				.withAuthor(idea.author)
 				.withTags(idea.relatedTags)
 				.withComments(idea.comments);
+	}
+
+	public void updateWith(final Idea source) {
+		this.title = source.title;
+		this.description = source.description;
 	}
 
 	public long getId() {

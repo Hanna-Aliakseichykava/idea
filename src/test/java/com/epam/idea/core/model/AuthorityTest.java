@@ -2,6 +2,8 @@ package com.epam.idea.core.model;
 
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 
@@ -10,24 +12,24 @@ public class AuthorityTest {
 	@Test
 	public void shouldReturnAdmin() throws Exception {
 		// Given:
-		int adminId = 1;
+		int adminId = Authority.ADMIN.getId();
 
 		//When:
-		Authority actual = Authority.getById(adminId);
+		Optional<Authority> actual = Authority.getById(adminId);
 
 		//Then:
-		assertThat(actual).isEqualTo(Authority.ADMIN);
+		assertThat(actual.get()).isEqualTo(Authority.ADMIN);
 	}
 
 	@Test
-	public void shouldReturnNullWhenThereAreNoAuthorityWithTheGivenId() throws Exception {
+	public void shouldReturnEmptyOptionalWhenThereAreNoAuthorityWithTheGivenId() throws Exception {
 		//Given:
-		int invalidId = -2;
-		
+		int invalidId = Authority.values()[0].getId() - 1;
+
 		//When:
-		Authority actual = Authority.getById(invalidId);
+		Optional<Authority> actual = Authority.getById(invalidId);
 		
 		//Then:
-		assertThat(actual).isNull();
+		assertThat(actual.isPresent()).isFalse();
 	}
 }
