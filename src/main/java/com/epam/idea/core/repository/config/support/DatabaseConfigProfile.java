@@ -5,5 +5,6 @@ package com.epam.idea.core.repository.config.support;
  */
 public final class DatabaseConfigProfile {
 	public static final String INTEGRATION_TEST = "Integration test";
+	public static final String DEV = "Development";
 	public static final String PROD = "Production";
 }

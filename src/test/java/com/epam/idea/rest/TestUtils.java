@@ -26,7 +26,7 @@ public class TestUtils {
 			Arrays.fill(array, CHARACTER);
 			return new String(array);
 		}
-		return "";
+		return EMPTY;
 	}
 
 	public static String createEmailWithLength(int length) {
@@ -37,7 +37,7 @@ public class TestUtils {
 			}
 			return builder.toString() + EMAIL_SUFFIX;
 		}
-		return "";
+		return EMPTY;
 	}
 
 	public static byte[] convertObjectToJsonBytes(Object object) throws IOException {

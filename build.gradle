@@ -36,6 +36,7 @@ ext {
     springTestDbUnitVersion = '1.2.1'
     dbUnitVersion = '2.5.0'
     guavaCollectionsVersion = 'r03'
+    mySqlDriverVersion = '5.1.34'
 }
 
 dependencies {
@@ -56,6 +57,10 @@ dependencies {
 
     // DataSource (HikariCP)
     compile "com.zaxxer:HikariCP:$hikariVersion"
+
+    // MySql driver
+    compile "mysql:mysql-connector-java:$mySqlDriverVersion"
+
 
     // Adds support for Java 8 dates
     compile "org.jadira.usertype:usertype.extended:$jadiraVersion"

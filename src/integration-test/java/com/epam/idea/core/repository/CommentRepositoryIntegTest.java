@@ -41,7 +41,7 @@ public class CommentRepositoryIntegTest {
 		long userID = 1L;
 
 		// When:
-		List<Comment> comments = commentRepository.findCommentsByUserId(userID);
+		List<Comment> comments = commentRepository.findByUserId(userID);
 
 		// Then:
 		assertThat(comments).hasSize(1);

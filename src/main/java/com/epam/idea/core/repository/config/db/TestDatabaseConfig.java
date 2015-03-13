@@ -14,10 +14,10 @@ import org.springframework.core.env.Environment;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-@Profile(DatabaseConfigProfile.PROD)
+@Profile(DatabaseConfigProfile.INTEGRATION_TEST)
 @Configuration
-@PropertySource("classpath:/db/production.properties")
-public class ProdDatabaseConfig implements DatabaseConfig {
+@PropertySource("classpath:/db/test.properties")
+public class TestDatabaseConfig implements DatabaseConfig {
 
 	@Autowired
 	private Environment env;
@@ -25,16 +25,11 @@ public class ProdDatabaseConfig implements DatabaseConfig {
 	@Override
 	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
-		HikariConfig dataSourceConfig = new HikariConfig();
-		dataSourceConfig.setDataSourceClassName(env.getRequiredProperty("dataSourceClassName"));
-		dataSourceConfig.setDriverClassName(env.getRequiredProperty("dataSource.driver"));
-		dataSourceConfig.setJdbcUrl(env.getRequiredProperty("dataSource.url"));
-		dataSourceConfig.setUsername(env.getRequiredProperty("dataSource.username"));
-		dataSourceConfig.setPassword(env.getRequiredProperty("dataSource.password"));
-		dataSourceConfig.addDataSourceProperty("cachePrepStmts", env.getRequiredProperty("dataSource.cachePrepStmts"));
-		dataSourceConfig.addDataSourceProperty("prepStmtCacheSize", env.getRequiredProperty("dataSource.prepStmtCacheSize"));
-		dataSourceConfig.addDataSourceProperty("prepStmtCacheSqlLimit", env.getRequiredProperty("dataSource.prepStmtCacheSqlLimit"));
-		dataSourceConfig.addDataSourceProperty("useServerPrepStmts", env.getRequiredProperty("dataSource.useServerPrepStmts"));
+		final HikariConfig dataSourceConfig = new HikariConfig();
+		dataSourceConfig.setDriverClassName(env.getRequiredProperty("database.driver"));
+		dataSourceConfig.setJdbcUrl(env.getRequiredProperty("database.url"));
+		dataSourceConfig.setUsername(env.getRequiredProperty("database.username"));
+		dataSourceConfig.setPassword(env.getRequiredProperty("database.password"));
 		return new HikariDataSource(dataSourceConfig);
 	}
 

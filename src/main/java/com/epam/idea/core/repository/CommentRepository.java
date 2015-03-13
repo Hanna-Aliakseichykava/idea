@@ -15,5 +15,5 @@ public interface CommentRepository extends BaseRepository<Comment, Long> {
 	 * @return All the comments of the user.
 	 */
 	@Query("select c from Comment c where c.author.id = ?1")
-	List<Comment> findCommentsByUserId(Long userId);
+	List<Comment> findByUserId(Long userId);
 }
