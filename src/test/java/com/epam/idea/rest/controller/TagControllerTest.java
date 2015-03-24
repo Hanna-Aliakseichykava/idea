@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = {TestConfig.class, WebAppConfig.class})
 @WebAppConfiguration
-public class TagControllerClass {
+public class TagControllerTest {
 
     @Autowired
     private TagService tagServiceMock;
