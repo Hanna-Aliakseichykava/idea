@@ -10,9 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-
-import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -21,12 +18,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Arrays;
 
+import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
+import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -58,7 +59,7 @@ public class TagControllerClass {
     @Test
     public void shouldReturnAllFoundTags() throws Exception {
         Tag foundTag = TestTagBuilder.aTag().build();
-        when(tagServiceMock.findAll()).thenReturn(Arrays.asList(foundTag));
+        when(tagServiceMock.findAll()).thenReturn(asList(foundTag));
         mockMvc.perform(get("/api/v1/tags")
                 .accept(APPLICATION_JSON_UTF8)).andDo(print())
                 .andExpect(status().isOk())
@@ -97,7 +98,6 @@ public class TagControllerClass {
                 .andExpect(jsonPath("$", hasSize(1)))
                 .andExpect(jsonPath("$[0].logref").value(is(RestErrorHandler.TAG_NOT_FOUND_LOGREF)))
                 .andExpect(jsonPath("$[0].message").value(is("Could not find tag")));
-        ;
         verify(tagServiceMock, times(1)).findOne(TestTagBuilder.DEFAULT_ID);
         verifyNoMoreInteractions(tagServiceMock);
     }
