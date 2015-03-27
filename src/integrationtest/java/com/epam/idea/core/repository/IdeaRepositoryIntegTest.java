@@ -1,6 +1,8 @@
 package com.epam.idea.core.repository;
 
-import com.epam.idea.core.model.Comment;
+import java.util.List;
+
+import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.repository.config.PersistenceConfig;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
@@ -15,41 +17,40 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 import org.springframework.test.context.transaction.TransactionalTestExecutionListener;
 
-import java.util.List;
-
-import static com.epam.idea.assertion.IdeaProjectAssertions.assertThatComment;
+import static com.epam.idea.assertion.IdeaProjectAssertions.assertThatIdea;
 import static com.epam.idea.assertion.IdeaProjectAssertions.assertThatUser;
-import static com.epam.idea.core.repository.config.support.DatabaseConfigProfile.INTEGRATION_TEST;
+import static com.epam.idea.core.repository.config.support.DatabaseConfigProfile.TEST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(INTEGRATION_TEST)
+@ActiveProfiles(TEST)
 @ContextConfiguration(classes = {PersistenceConfig.class})
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class})
-@DatabaseSetup("repository-comment-entries.xml")
-public class CommentRepositoryIntegTest {
+@DatabaseSetup("repository-idea-entries.xml")
+public class IdeaRepositoryIntegTest {
 
 	@Autowired
-	private CommentRepository commentRepository;
+	private IdeaRepository ideaRepository;
 
 	@Test
-	public void shouldFindAllCommentsByUserId() throws Exception {
+	public void shouldFindAllIdeasByUserId() throws Exception {
 		// Given:
 		long userID = 1L;
 
 		// When:
-		List<Comment> comments = commentRepository.findByUserId(userID);
+		List<Idea> ideas = ideaRepository.findByUserId(userID);
 
 		// Then:
-		assertThat(comments).hasSize(1);
-		assertThatComment(comments.get(0))
+		assertThat(ideas).hasSize(1);
+		assertThatIdea(ideas.get(0))
 				.hasId(1L)
-				.hasBody("Awesome")
+				.hasTitle("Test title")
+				.hasDescription("Test description")
 				.hasRating(5);
-		assertThatUser(comments.get(0).getAuthor())
+		assertThatUser(ideas.get(0).getAuthor())
 				.hasId(userID)
 				.hasUsername("Jack")
 				.hasEmail("Jack@test.com");

@@ -4,6 +4,7 @@ import java.util.Properties;
 import javax.sql.DataSource;
 
 import com.epam.idea.core.repository.config.support.DatabaseConfigProfile;
+import com.zaxxer.hikari.HikariDataSource;
 import org.hibernate.cfg.AvailableSettings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,24 +12,29 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
-import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
-@Profile(DatabaseConfigProfile.TEST)
+@Profile(DatabaseConfigProfile.PROD)
 @Configuration
-@PropertySource("classpath:/db/test.properties")
-public class TestDatabaseConfig implements DatabaseConfig {
+@PropertySource("classpath:/db/prod.properties")
+public class ProdDatabaseConfig implements DatabaseConfig {
 
 	@Autowired
 	private Environment env;
 
 	@Override
-	@Bean
+	@Bean(destroyMethod = "close")
 	public DataSource dataSource() {
-		return new EmbeddedDatabaseBuilder()
-				.setType(EmbeddedDatabaseType.H2)
-				.addScript(DatabaseConfig.SCHEMA_SCRIPT)
-				.build();
+		final HikariDataSource dataSource = new HikariDataSource();
+		dataSource.setDataSourceClassName(this.env.getRequiredProperty("dataSourceClassName"));
+		dataSource.addDataSourceProperty("url", this.env.getRequiredProperty("database.url"));
+		dataSource.addDataSourceProperty("user", this.env.getRequiredProperty("database.username"));
+		dataSource.addDataSourceProperty("password", this.env.getRequiredProperty("database.password"));
+		dataSource.addDataSourceProperty("cachePrepStmts", this.env.getRequiredProperty("database.cachePrepStmts"));
+		dataSource.addDataSourceProperty("prepStmtCacheSize", this.env.getRequiredProperty("database.prepStmtCacheSize"));
+		dataSource.addDataSourceProperty("prepStmtCacheSqlLimit", this.env.getRequiredProperty("database.prepStmtCacheSqlLimit"));
+		dataSource.addDataSourceProperty("useServerPrepStmts", this.env.getRequiredProperty("database.useServerPrepStmts"));
+		dataSource.setMaximumPoolSize(100);
+		return dataSource;
 	}
 
 	@Override

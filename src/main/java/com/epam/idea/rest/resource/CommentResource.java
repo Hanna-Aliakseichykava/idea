@@ -1,11 +1,11 @@
 package com.epam.idea.rest.resource;
 
+import java.time.ZonedDateTime;
+
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.rest.resource.support.JsonPropertyName;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.ResourceSupport;
-
-import java.time.ZonedDateTime;
 
 public class CommentResource extends ResourceSupport {
 

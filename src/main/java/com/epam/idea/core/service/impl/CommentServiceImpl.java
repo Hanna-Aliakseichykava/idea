@@ -1,5 +1,7 @@
 package com.epam.idea.core.service.impl;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.repository.CommentRepository;
 import com.epam.idea.core.service.CommentService;
@@ -7,8 +9,6 @@ import com.epam.idea.core.service.exception.CommentDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional

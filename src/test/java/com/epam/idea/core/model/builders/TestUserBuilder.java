@@ -1,5 +1,10 @@
 package com.epam.idea.core.model.builders;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.epam.idea.core.model.Authority;
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
@@ -7,11 +12,6 @@ import com.epam.idea.core.model.Role;
 import com.epam.idea.core.model.User;
 import com.google.common.collect.Lists;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class TestUserBuilder {

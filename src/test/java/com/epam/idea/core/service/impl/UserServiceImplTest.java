@@ -1,5 +1,8 @@
 package com.epam.idea.core.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.epam.idea.core.model.User;
 import com.epam.idea.core.model.builders.TestUserBuilder;
 import com.epam.idea.core.repository.UserRepository;
@@ -13,9 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.List;
-import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;

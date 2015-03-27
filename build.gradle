@@ -4,6 +4,9 @@ plugins {
 
 apply plugin: 'war'
 apply plugin: 'jetty'
+apply from: "$rootDir/gradle/jacoco.gradle"
+apply from: "$rootDir/gradle/pmd.gradle"
+apply from: "$rootDir/gradle/findbugs.gradle"
 
 group = 'com.epam.idea'
 version = '0.1-SNAPSHOT'
@@ -100,14 +103,19 @@ dependencies {
 test {
     reports.html.destination = file("$reports.html.destination/unit")
     reports.junitXml.destination = file("$reports.junitXml.destination/unit")
+
+    jacoco {
+        destinationFile = file("$buildDir/reports/jacoco/unit/jacocoUnit.exec")
+        classDumpFile = file("$buildDir/reports/jacoco/unit/classpathdumps")
+    }
 }
 
 //---------------------------Integration tests setup-----------------------------------------//
 
 sourceSets {
     integrationTest {
-        java.srcDir file('src/integration-test/java')
-        resources.srcDir file('src/integration-test/resources')
+        java.srcDir file('src/integrationtest/java')
+        resources.srcDir file('src/integrationtest/resources')
         compileClasspath = sourceSets.main.output + configurations.testRuntime + sourceSets.test.output
         runtimeClasspath = output + compileClasspath
     }
@@ -119,6 +127,11 @@ task integrationTest(type: Test) {
     classpath = sourceSets.integrationTest.runtimeClasspath
     reports.html.destination = file("$reports.html.destination/integration")
     reports.junitXml.destination = file("$reports.junitXml.destination/integration")
+
+    jacoco {
+        destinationFile = file("$buildDir/reports/jacoco/integration/jacocoIntegration.exec")
+        classDumpFile = file("$buildDir/reports/jacoco/integration/classpathdumps")
+    }
 }
 
 //check.dependsOn integrationTest

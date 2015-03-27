@@ -13,6 +13,7 @@ import com.github.springtestdbunit.annotation.DatabaseSetup;
 import com.github.springtestdbunit.annotation.ExpectedDatabase;
 import com.github.springtestdbunit.assertion.DatabaseAssertionMode;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,7 +30,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.epam.idea.core.repository.config.support.DatabaseConfigProfile.INTEGRATION_TEST;
+import static com.epam.idea.core.repository.config.support.DatabaseConfigProfile.TEST;
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.TestUtils.convertObjectToJsonBytes;
 import static com.epam.idea.rest.controller.RestErrorHandler.IDEA_NOT_FOUND_LOGREF;
@@ -57,13 +58,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles(INTEGRATION_TEST)
+@ActiveProfiles(TEST)
 @ContextConfiguration(classes = {RootConfig.class, WebAppConfig.class})
 @TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class })
 @WebAppConfiguration
+@Ignore
 public class IdeasIntegTest {
 
 	@Autowired

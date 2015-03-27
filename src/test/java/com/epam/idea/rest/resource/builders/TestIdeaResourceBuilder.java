@@ -1,12 +1,12 @@
 package com.epam.idea.rest.resource.builders;
 
-import com.epam.idea.rest.resource.IdeaResource;
-import com.epam.idea.rest.resource.TagResource;
-import com.epam.idea.rest.resource.UserResource;
-
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.epam.idea.rest.resource.IdeaResource;
+import com.epam.idea.rest.resource.TagResource;
+import com.epam.idea.rest.resource.UserResource;
 
 public class TestIdeaResourceBuilder {
 
