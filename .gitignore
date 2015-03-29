@@ -2,7 +2,6 @@
 .gradle
 build
 target
-classes
 out/
 
 # IDEA artifacts and output dirs
