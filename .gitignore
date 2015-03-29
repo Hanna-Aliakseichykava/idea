@@ -15,3 +15,7 @@ out/
 .classpath
 .project
 .settings/
+
+# Node artifacts
+src/main/webapp/app/node_modules
+src/main/webapp/app/vendor
