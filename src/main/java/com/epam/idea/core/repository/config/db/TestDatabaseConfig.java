@@ -35,7 +35,7 @@ public class TestDatabaseConfig implements DatabaseConfig {
 	@Autowired
 	private Environment env;
 
-	@Value(SCHEMA_SCRIPT_LOCATION)
+	@Value(TEST_SCHEMA_SCRIPT_LOCATION)
 	private Resource schemaScript;
 
 	@Override

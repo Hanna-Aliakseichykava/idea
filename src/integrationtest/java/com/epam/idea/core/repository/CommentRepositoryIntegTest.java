@@ -6,7 +6,6 @@ import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.repository.config.PersistenceConfig;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class})
-@DatabaseSetup("repository-comment-entries.xml")
-@Ignore
 public class CommentRepositoryIntegTest {
 
 	@Autowired
 	private CommentRepository commentRepository;
 
 	@Test
+	@DatabaseSetup(value = "repository-comment-entries.xml")
 	public void shouldFindAllCommentsByUserId() throws Exception {
 		// Given:
 		long userID = 1L;

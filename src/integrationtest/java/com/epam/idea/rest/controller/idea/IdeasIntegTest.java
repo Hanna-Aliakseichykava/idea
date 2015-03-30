@@ -1,5 +1,7 @@
 package com.epam.idea.rest.controller.idea;
 
+import java.util.Collections;
+
 import com.epam.idea.rest.config.RootConfig;
 import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.resource.IdeaResource;
@@ -42,14 +44,11 @@ import static com.epam.idea.rest.controller.idea.IdeaConstants.PASSWORD;
 import static com.epam.idea.rest.controller.idea.IdeaConstants.RATING;
 import static com.epam.idea.rest.controller.idea.IdeaConstants.TITLE;
 import static com.epam.idea.rest.controller.idea.IdeaConstants.USERNAME;
-import static com.epam.idea.rest.controller.idea.IdeaConstants.USER_ID;
-import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -65,7 +64,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class })
 @WebAppConfiguration
-@Ignore
 public class IdeasIntegTest {
 
 	@Autowired
@@ -79,7 +77,7 @@ public class IdeasIntegTest {
 	}
 
 	@Test
-	@DatabaseSetup("repository-idea-entries.xml")
+	@DatabaseSetup("idea-entries.xml")
 	public void shouldReturnInfoOfFoundIdeaAsJsonWithHttpCode200() throws Exception {
 		mockMvc.perform(get("/api/v1/ideas/{ideaId}", IDEA_ID)
 				.contentType(APPLICATION_JSON_UTF8)
@@ -89,26 +87,26 @@ public class IdeasIntegTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.title").value(is(TITLE)))
 				.andExpect(jsonPath("$.description").value(is(DESCRIPTION)))
-				.andExpect(jsonPath("$.creationTime", notNullValue()))
-				.andExpect(jsonPath("$.modificationTime", notNullValue()))
+				.andExpect(jsonPath("$.createdAt", notNullValue()))
+				.andExpect(jsonPath("$.lastModifiedAt", notNullValue()))
 				.andExpect(jsonPath("$.rating").value(is(RATING)))
-				.andExpect(jsonPath("$.author.username").value(is(USERNAME)))
-				.andExpect(jsonPath("$.author.email").value(is(EMAIL)))
-				.andExpect(jsonPath("$.author.password", nullValue()))
-				.andExpect(jsonPath("$.author.creationTime", notNullValue()))
-				.andExpect(jsonPath("$.author.links", hasSize(1)))
-				.andExpect(jsonPath("$.author.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.author.links[0].href").value(containsString("/api/v1/users/" + USER_ID)))
+//				.andExpect(jsonPath("$.author.username").value(is(USERNAME)))
+//				.andExpect(jsonPath("$.author.email").value(is(EMAIL)))
+//				.andExpect(jsonPath("$.author.password", nullValue()))
+//				.andExpect(jsonPath("$.author.creationTime", notNullValue()))
+//				.andExpect(jsonPath("$.author.links", hasSize(1)))
+//				.andExpect(jsonPath("$.author.links[0].rel").value(is(Link.REL_SELF)))
+//				.andExpect(jsonPath("$.author.links[0].href").value(containsString("/api/v1/users/" + USER_ID)))
 				.andExpect(jsonPath("$.tags", hasSize(1)))
 				.andExpect(jsonPath("$.tags[0].name").value(is(NAME)))
 				.andExpect(jsonPath("$.tags[0].links", empty()))
-				.andExpect(jsonPath("$.links", hasSize(1)))
+				.andExpect(jsonPath("$.links", hasSize(2)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
 				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/ideas/" + IDEA_ID)));
 	}
 
 	@Test
-	@DatabaseSetup("no-repository-idea-entries.xml")
+	@DatabaseSetup("no-idea-entries.xml")
 	public void shouldReturnErrorMessageAsJsonAndHttpStatus404WhenIdeaNotFound() throws Exception {
 		mockMvc.perform(get("/api/v1/ideas/{ideaId}", IDEA_ID)
 				.contentType(APPLICATION_JSON_UTF8)
@@ -122,8 +120,9 @@ public class IdeasIntegTest {
 				.andExpect(jsonPath("$[0].links", empty()));
 	}
 
+	@Ignore
 	@Test
-	@DatabaseSetup("no-repository-idea-entries.xml")
+	@DatabaseSetup("no-idea-entries.xml")
 	@ExpectedDatabase(value = "create-idea-expected.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldCreatedIdeaAsReturnItAsJsonWithHttpStatus201() throws Exception {
 		TagResource tag = TestTagResourceBuilder.aTagResource()
@@ -139,7 +138,7 @@ public class IdeasIntegTest {
 				.withDescription(DESCRIPTION)
 				.withRating(RATING)
 				.withAuthor(author)
-				.withRelatedTags(asList(tag))
+				.withRelatedTags(Collections.singletonList(tag))
 				.build();
 
 		mockMvc.perform(post("/api/v1/ideas")

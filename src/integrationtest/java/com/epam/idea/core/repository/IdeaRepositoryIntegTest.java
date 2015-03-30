@@ -29,13 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class})
-@DatabaseSetup("repository-idea-entries.xml")
 public class IdeaRepositoryIntegTest {
 
 	@Autowired
 	private IdeaRepository ideaRepository;
 
 	@Test
+	@DatabaseSetup(value = "repository-idea-entries.xml")
 	public void shouldFindAllIdeasByUserId() throws Exception {
 		// Given:
 		long userID = 1L;
