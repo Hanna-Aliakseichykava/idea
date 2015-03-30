@@ -101,6 +101,8 @@ dependencies {
 }
 
 test {
+    maxParallelForks = Runtime.runtime.availableProcessors()
+
     reports.html.destination = file("$reports.html.destination/unit")
     reports.junitXml.destination = file("$reports.junitXml.destination/unit")
 
