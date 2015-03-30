@@ -136,7 +136,7 @@ task integrationTest(type: Test) {
     }
 }
 
-//check.dependsOn integrationTest
+check.dependsOn integrationTest
 
 //---------------------------Gradle wrapper--------------------------------------------------//
 
