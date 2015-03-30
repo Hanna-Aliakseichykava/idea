@@ -6,6 +6,8 @@ import com.epam.idea.rest.resource.TagResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
 import static java.util.Objects.requireNonNull;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
+import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 public class TagResourceAsm extends ResourceAssemblerSupport<Tag, TagResource> {
 
@@ -19,7 +21,7 @@ public class TagResourceAsm extends ResourceAssemblerSupport<Tag, TagResource> {
 		final TagResource tagResource = new TagResource();
 		tagResource.setTagId(original.getId());
 		tagResource.setName(original.getName());
-		//todo add self link
+        tagResource.add(linkTo(methodOn(TagController.class).showTag(original.getId())).withSelfRel());
 		return tagResource;
 	}
 }
