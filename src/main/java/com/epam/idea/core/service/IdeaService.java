@@ -1,5 +1,7 @@
 package com.epam.idea.core.service;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Idea;
 
 public interface IdeaService extends BaseService<Idea, Long> {
@@ -22,4 +24,8 @@ public interface IdeaService extends BaseService<Idea, Long> {
 	 * @throws com.epam.idea.core.service.exception.IdeaNotFoundException If no idea was found with the given id.
 	 */
 	Idea update(long ideaId, Idea source);
+
+	List<Idea> findIdeasByUserId(long userId);
+
+	Idea saveForUser(long userId, Idea idea);
 }

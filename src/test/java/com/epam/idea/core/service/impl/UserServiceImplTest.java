@@ -1,5 +1,8 @@
 package com.epam.idea.core.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.epam.idea.core.model.User;
 import com.epam.idea.core.model.builders.TestUserBuilder;
 import com.epam.idea.core.repository.UserRepository;
@@ -13,9 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.List;
-import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,6 +55,7 @@ public class UserServiceImplTest {
 		verifyNoMoreInteractions(userRepositoryMock);
 
 		User userArgument = userCaptor.getValue();
+		assertThat(userArgument.getUsername()).isEqualTo(userToSave.getUsername());
 		assertThat(userArgument.getEmail()).isEqualTo(userToSave.getEmail());
 		assertThat(userArgument.getPassword()).isEqualTo(userToSave.getPassword());
 	}
@@ -131,11 +132,13 @@ public class UserServiceImplTest {
 	public void shouldUpdateUserAndReturnIt() throws Exception {
 		//Given:
 		User source = new TestUserBuilder()
+				.withUsername("new_username")
 				.withEmail("new_email@test.com")
 				.withPassword("new_password")
 				.build();
 		User target = new TestUserBuilder()
 				.withId(1L)
+				.withUsername("username")
 				.withEmail("email@test.com")
 				.withPassword("password")
 				.build();
@@ -146,6 +149,7 @@ public class UserServiceImplTest {
 
 		//Then:
 		assertThat(actual.getId()).isEqualTo(target.getId());
+		assertThat(actual.getUsername()).isEqualTo(source.getUsername());
 		assertThat(actual.getEmail()).isEqualTo(source.getEmail());
 		assertThat(actual.getPassword()).isEqualTo(source.getPassword());
 		verify(userRepositoryMock, times(1)).findOne(target.getId());
@@ -157,6 +161,7 @@ public class UserServiceImplTest {
 		//Given:
 		long fakeUserId = 3L;
 		User newUser = new TestUserBuilder()
+				.withUsername("new_username")
 				.withEmail("new_email@test.com")
 				.withPassword("new_password")
 				.build();

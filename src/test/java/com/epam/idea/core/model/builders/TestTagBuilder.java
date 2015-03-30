@@ -1,23 +1,23 @@
 package com.epam.idea.core.model.builders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Tag;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestTagBuilder {
 
 	public static final String DEFAULT_NAME = "Foo";
 	public static final long DEFAULT_ID = 1L;
 
-	private Tag.Builder tagBuilder;
+	private long id;
 	private String name;
-	private List<Idea> ideas = new ArrayList<>(1);
+	private List<Idea> ideas;
 
-	private TestTagBuilder() {
-		this.tagBuilder = Tag.getBuilder();
+	public TestTagBuilder() {
+		this.ideas = new ArrayList<>(1);
 	}
 
 	public static TestTagBuilder aTag() {
@@ -27,7 +27,7 @@ public class TestTagBuilder {
 	}
 
 	public TestTagBuilder withId(final long id) {
-		ReflectionTestUtils.setField(tagBuilder, "id", id);
+		this.id = id;
 		return this;
 	}
 
@@ -48,14 +48,16 @@ public class TestTagBuilder {
 
 	public TestTagBuilder but() {
 		return aTag()
+				.withId(id)
 				.withName(name)
 				.withIdeas(ideas);
 	}
 
 	public Tag build() {
-		return tagBuilder
-				.withName(name)
-				.withIdeas(ideas)
-				.build();
+		final Tag tag = new Tag();
+		ReflectionTestUtils.setField(tag, "id", id);
+		tag.setName(name);
+		tag.setIdeasWithTag(ideas);
+		return tag;
 	}
 }
