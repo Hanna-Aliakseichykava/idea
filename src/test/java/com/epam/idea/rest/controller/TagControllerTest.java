@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static java.util.Arrays.asList;
@@ -81,7 +80,8 @@ public class TagControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(APPLICATION_JSON_UTF8))
                 .andExpect(jsonPath("$." + ID).value(is(((int) foundTag.getId()))))
-                .andExpect(jsonPath("$.name").value(is(foundTag.getName())));
+                .andExpect(jsonPath("$.name").value(is(foundTag.getName())))
+                .andExpect(jsonPath("$.links", hasSize(1)));
 
         verify(tagServiceMock, times(1)).findOne(foundTag.getId());
         verifyNoMoreInteractions(tagServiceMock);

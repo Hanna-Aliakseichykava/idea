@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class RestErrorHandler {
 
 	public static final String USER_NOT_FOUND_LOGREF = "error";
-	public static final String IDEA_NOT_FOUND_LOGREF = "error";
     public static final String TAG_NOT_FOUND_LOGREF = "error";
+	public static final String IDEA_NOT_FOUND_LOGREF = "error";
 
 	@ResponseBody
 	@ExceptionHandler(UserNotFoundException.class)

@@ -1,5 +1,7 @@
 package com.epam.idea.core.service.impl;
 
+import java.util.List;
+import java.util.Optional;
 
 import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.model.builders.TestTagBuilder;
@@ -14,9 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.List;
-import java.util.Optional;
 
 import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -96,7 +95,7 @@ public class TagServiceImplTest {
 
 
     @Test
-    public void shouldReturnFindAllTags() throws Exception {
+    public void shouldReturnAllFoundTags() throws Exception {
         //Given:
         List<Tag> foundTags = asList(TestTagBuilder.aTag().build());
         when(tagRepositoryMock.findAll()).thenReturn(foundTags);

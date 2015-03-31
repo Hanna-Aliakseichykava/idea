@@ -1,5 +1,7 @@
 package com.epam.idea.rest.controller;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.service.TagService;
 import com.epam.idea.rest.resource.TagResource;
@@ -12,8 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/tags")
