@@ -6,7 +6,6 @@ import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.repository.config.PersistenceConfig;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +33,7 @@ public class IdeaRepositoryIntegTest {
 
 	@Autowired
 	private IdeaRepository ideaRepository;
-    @Ignore
+
 	@Test
 	@DatabaseSetup(value = "repository-idea-entries.xml")
 	public void shouldFindAllIdeasByUserId() throws Exception {
