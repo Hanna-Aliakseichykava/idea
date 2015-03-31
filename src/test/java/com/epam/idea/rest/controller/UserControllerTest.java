@@ -404,7 +404,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$[0].tags", hasSize(1)))
 				.andExpect(jsonPath("$[0].tags[0]." + ID).value(is((int) idea.getRelatedTags().get(0).getId())))
 				.andExpect(jsonPath("$[0].tags[0].name").value(is(idea.getRelatedTags().get(0).getName())))
-				.andExpect(jsonPath("$[0].tags[0].links", empty()));
+				.andExpect(jsonPath("$[0].tags[0].links", hasSize(1)));
 
 		verify(ideaServiceMock, times(1)).findIdeasByUserId(userId);
 		verifyNoMoreInteractions(ideaServiceMock);
