@@ -58,7 +58,6 @@ public class TagServiceImplTest {
         verifyNoMoreInteractions(tagRepositoryMock);
 
         Tag tagArgument = tagCaptor.getValue();
-        System.out.println("!!!!!!!!!!!!!!!!!!!" + tagCaptor.getValue());
         assertThat(tagArgument.getName()).isEqualTo(tagToSave.getName());
     }
 
