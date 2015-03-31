@@ -1,12 +1,12 @@
 package com.epam.idea.core.model.builders;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.User;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 
 public class TestCommentBuilder {
 

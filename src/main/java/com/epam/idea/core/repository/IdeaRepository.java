@@ -1,9 +1,9 @@
 package com.epam.idea.core.repository;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Idea;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 public interface IdeaRepository extends BaseRepository<Idea, Long> {
 

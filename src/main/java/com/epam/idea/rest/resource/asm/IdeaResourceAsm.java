@@ -1,15 +1,15 @@
 package com.epam.idea.rest.resource.asm;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.rest.controller.IdeaController;
 import com.epam.idea.rest.controller.UserController;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.TagResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static java.util.Collections.emptyList;
 import static java.util.Objects.requireNonNull;

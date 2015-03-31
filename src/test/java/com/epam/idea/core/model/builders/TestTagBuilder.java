@@ -1,11 +1,11 @@
 package com.epam.idea.core.model.builders;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Tag;
 import org.springframework.test.util.ReflectionTestUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class TestTagBuilder {
 

@@ -1,7 +1,8 @@
 package com.epam.idea.core.model;
 
-import org.hibernate.annotations.Type;
-
+import java.io.Serializable;
+import java.time.ZonedDateTime;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,9 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.Objects;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name = "COMMENT")

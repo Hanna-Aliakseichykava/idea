@@ -1,4 +1,4 @@
-# Idea
+# Idea [![Build Status](https://travis-ci.org/EPAMMogilev/idea.svg?branch=develop)](https://travis-ci.org/EPAMMogilev/idea) [![Coverage Status](https://coveralls.io/repos/EPAMMogilev/idea/badge.svg?branch=develop)](https://coveralls.io/r/EPAMMogilev/idea?branch=develop)
 
 This is a single page web application for submitting your best ideas on how we can improve Mogilev city. It’s also a place where you can discover and vote on other people’s ideas, as well as communicate with them.
 

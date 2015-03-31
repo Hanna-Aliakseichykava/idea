@@ -1,12 +1,12 @@
 package com.epam.idea.assertion;
 
+import java.time.ZonedDateTime;
+
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.User;
 import org.assertj.core.api.AbstractAssert;
 import org.assertj.core.util.Objects;
-
-import java.time.ZonedDateTime;
 
 /**
  * {@link com.epam.idea.core.model.Comment} specific assertions.

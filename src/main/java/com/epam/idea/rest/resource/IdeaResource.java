@@ -1,18 +1,18 @@
 package com.epam.idea.rest.resource;
 
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.validation.constraints.Size;
+
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.rest.resource.support.JsonPropertyName;
 import com.epam.idea.rest.resource.support.View;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.hateoas.ResourceSupport;
-
-import javax.validation.constraints.Size;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class IdeaResource extends ResourceSupport {
 

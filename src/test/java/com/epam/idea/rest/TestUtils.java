@@ -1,12 +1,12 @@
 package com.epam.idea.rest;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.http.MediaType;
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.MediaType;
 
 public class TestUtils {
 
@@ -26,7 +26,7 @@ public class TestUtils {
 			Arrays.fill(array, CHARACTER);
 			return new String(array);
 		}
-		return "";
+		return EMPTY;
 	}
 
 	public static String createEmailWithLength(int length) {
@@ -37,7 +37,7 @@ public class TestUtils {
 			}
 			return builder.toString() + EMAIL_SUFFIX;
 		}
-		return "";
+		return EMPTY;
 	}
 
 	public static byte[] convertObjectToJsonBytes(Object object) throws IOException {

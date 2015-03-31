@@ -1,8 +1,8 @@
 package com.epam.idea.rest.resource.builders;
 
-import com.epam.idea.rest.resource.UserResource;
-
 import java.time.ZonedDateTime;
+
+import com.epam.idea.rest.resource.UserResource;
 
 public class TestUserResourceBuilder {
 	private String username;

@@ -1,8 +1,8 @@
 package com.epam.idea.core.model;
 
-import org.junit.Test;
-
 import java.util.Optional;
+
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

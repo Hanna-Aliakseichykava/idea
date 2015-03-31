@@ -1,5 +1,7 @@
 package com.epam.idea.core.service.impl;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.repository.TagRepository;
 import com.epam.idea.core.service.TagService;
@@ -7,8 +9,6 @@ import com.epam.idea.core.service.exception.TagDoesNotExistException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
