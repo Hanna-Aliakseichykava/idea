@@ -24,14 +24,14 @@ public class TagController {
 
 	@RequestMapping(value = "/{tagId}", method = RequestMethod.GET)
 	public HttpEntity<TagResource> showTag(@PathVariable final long tagId) {
-		Tag foundTag = tagService.findOne(tagId);
+		Tag foundTag = this.tagService.findOne(tagId);
 		TagResource tagResource = new TagResourceAsm().toResource(foundTag);
 		return new ResponseEntity<>(tagResource, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<List<TagResource>> showAllTags() {
-		List<Tag> foundTags = tagService.findAll();
+		List<Tag> foundTags = this.tagService.findAll();
 		List<TagResource> tagResources = new TagResourceAsm().toResources(foundTags);
 		return new ResponseEntity<>(tagResources, HttpStatus.OK);
 	}
