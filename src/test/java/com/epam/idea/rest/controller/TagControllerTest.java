@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -21,6 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -60,14 +62,15 @@ public class TagControllerTest {
 		Tag foundTag = TestTagBuilder.aTag().build();
 		when(tagServiceMock.findAll()).thenReturn(asList(foundTag));
 		mockMvc.perform(get("/api/v1/tags")
-				.accept(APPLICATION_JSON_UTF8)).andDo(print())
+				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$[0]." + ID).value(is(((int) foundTag.getId()))))
 				.andExpect(jsonPath("$[0].name").value(is(foundTag.getName())))
+				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())))
 				.andExpect(jsonPath("$[0].links", hasSize(1)));
-
-		verify(tagServiceMock, times(1)).findAll();
+				verify(tagServiceMock, times(1)).findAll();
 		verifyNoMoreInteractions(tagServiceMock);
 	}
 
@@ -81,6 +84,8 @@ public class TagControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$." + ID).value(is(((int) foundTag.getId()))))
 				.andExpect(jsonPath("$.name").value(is(foundTag.getName())))
+				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())))
 				.andExpect(jsonPath("$.links", hasSize(1)));
 
 		verify(tagServiceMock, times(1)).findOne(foundTag.getId());
@@ -92,7 +97,7 @@ public class TagControllerTest {
 		when(tagServiceMock.findOne(TestTagBuilder.DEFAULT_ID)).thenThrow(new TagDoesNotExistException());
 		mockMvc.perform(get("/api/v1/tags/{tagId}", TestTagBuilder.DEFAULT_ID)
 				.accept(APPLICATION_JSON_UTF8))
-				.andExpect(status().isNotFound())
+				.andExpect(status().isNotFound()).andDo(print())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
 				.andExpect(jsonPath("$[0].logref").value(is(RestErrorHandler.TAG_NOT_FOUND_LOGREF)))
