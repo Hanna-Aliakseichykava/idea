@@ -76,6 +76,7 @@ public class IdeasIntegTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 	}
 
+    @Ignore
 	@Test
 	@DatabaseSetup("idea-entries.xml")
 	public void shouldReturnInfoOfFoundIdeaAsJsonWithHttpCode200() throws Exception {
