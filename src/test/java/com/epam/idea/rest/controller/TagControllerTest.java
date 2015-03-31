@@ -23,6 +23,7 @@ import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
@@ -67,9 +68,9 @@ public class TagControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$[0]." + ID).value(is(((int) foundTag.getId()))))
 				.andExpect(jsonPath("$[0].name").value(is(foundTag.getName())))
+				.andExpect(jsonPath("$[0].links", hasSize(1)))
 				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())))
-				.andExpect(jsonPath("$[0].links", hasSize(1)));
+				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())));
 				verify(tagServiceMock, times(1)).findAll();
 		verifyNoMoreInteractions(tagServiceMock);
 	}
@@ -84,9 +85,9 @@ public class TagControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$." + ID).value(is(((int) foundTag.getId()))))
 				.andExpect(jsonPath("$.name").value(is(foundTag.getName())))
+				.andExpect(jsonPath("$.links", hasSize(1)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())))
-				.andExpect(jsonPath("$.links", hasSize(1)));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())));
 
 		verify(tagServiceMock, times(1)).findOne(foundTag.getId());
 		verifyNoMoreInteractions(tagServiceMock);
@@ -101,7 +102,8 @@ public class TagControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
 				.andExpect(jsonPath("$[0].logref").value(is(RestErrorHandler.TAG_NOT_FOUND_LOGREF)))
-				.andExpect(jsonPath("$[0].message").value(is("Could not find tag")));
+				.andExpect(jsonPath("$[0].message").value(is("Could not find tag")))
+				.andExpect(jsonPath("$[0].links", empty()));
 
 		verify(tagServiceMock, times(1)).findOne(TestTagBuilder.DEFAULT_ID);
 		verifyNoMoreInteractions(tagServiceMock);
