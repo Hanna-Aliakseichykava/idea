@@ -4,6 +4,7 @@ import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.repository.config.PersistenceConfig;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class CommentRepositoryIntegTest {
 
 	@Autowired
 	private CommentRepository commentRepository;
-
+    @Ignore
 	@Test
 	public void shouldFindAllCommentsByUserId() throws Exception {
 		// Given:
