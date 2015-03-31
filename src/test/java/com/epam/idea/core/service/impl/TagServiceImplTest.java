@@ -32,99 +32,99 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class TagServiceImplTest {
 
-    @Mock
-    private TagRepository tagRepositoryMock;
+	@Mock
+	private TagRepository tagRepositoryMock;
 
-    @InjectMocks
-    private TagService sut = new TagServiceImpl();
+	@InjectMocks
+	private TagService sut = new TagServiceImpl();
 
-    @Before
-    public void setUp() throws Exception {
-        Mockito.reset(tagRepositoryMock);
-    }
+	@Before
+	public void setUp() throws Exception {
+		Mockito.reset(tagRepositoryMock);
+	}
 
-    @Test
-    public void shouldSaveNewIdea() throws Exception {
-        //Given:
-        Tag tagToSave = TestTagBuilder.aTag().build();
+	@Test
+	public void shouldSaveNewIdea() throws Exception {
+		//Given:
+		Tag tagToSave = TestTagBuilder.aTag().build();
 
-        //When:
-        sut.save(tagToSave);
+		//When:
+		sut.save(tagToSave);
 
-        //Then:
-        ArgumentCaptor<Tag> tagCaptor = ArgumentCaptor.forClass(Tag.class);
-        verify(tagRepositoryMock, times(1)).save(tagCaptor.capture());
-        verifyNoMoreInteractions(tagRepositoryMock);
+		//Then:
+		ArgumentCaptor<Tag> tagCaptor = ArgumentCaptor.forClass(Tag.class);
+		verify(tagRepositoryMock, times(1)).save(tagCaptor.capture());
+		verifyNoMoreInteractions(tagRepositoryMock);
 
-        Tag tagArgument = tagCaptor.getValue();
-        assertThat(tagArgument.getName()).isEqualTo(tagToSave.getName());
-    }
+		Tag tagArgument = tagCaptor.getValue();
+		assertThat(tagArgument.getName()).isEqualTo(tagToSave.getName());
+	}
 
-    @Test
-    public void shouldFindOne() throws Exception {
-        //Given:
-        Tag foundTag = TestTagBuilder.aTag().build();
-        when(tagRepositoryMock.findOne(eq(foundTag.getId()))).thenReturn(Optional.of(foundTag));
+	@Test
+	public void shouldFindOne() throws Exception {
+		//Given:
+		Tag foundTag = TestTagBuilder.aTag().build();
+		when(tagRepositoryMock.findOne(eq(foundTag.getId()))).thenReturn(Optional.of(foundTag));
 
-        //When:
-        Tag actualTag = sut.findOne(foundTag.getId());
+		//When:
+		Tag actualTag = sut.findOne(foundTag.getId());
 
-        //Then:
-        assertThat(actualTag).isEqualTo(foundTag);
-        verify(tagRepositoryMock, times(1)).findOne(foundTag.getId());
-        verifyNoMoreInteractions(tagRepositoryMock);
-    }
+		//Then:
+		assertThat(actualTag).isEqualTo(foundTag);
+		verify(tagRepositoryMock, times(1)).findOne(foundTag.getId());
+		verifyNoMoreInteractions(tagRepositoryMock);
+	}
 
-    @Test
-    public void shouldThrowExceptionWhenTryFindTagWhichDoesNotExist() throws Exception {
-        //Given:
-        long tagId = 3L;
-        when(tagRepositoryMock.findOne(eq(tagId))).thenReturn(Optional.empty());
+	@Test
+	public void shouldThrowExceptionWhenTryFindTagWhichDoesNotExist() throws Exception {
+		//Given:
+		long tagId = 3L;
+		when(tagRepositoryMock.findOne(eq(tagId))).thenReturn(Optional.empty());
 
-        //When:
-        try {
-            sut.findOne(tagId);
-            fail("TagDoesNotExistException expected because we try to find the tag which does not exist");
-        } catch (TagDoesNotExistException e) {
+		//When:
+		try {
+			sut.findOne(tagId);
+			fail("TagDoesNotExistException expected because we try to find the tag which does not exist");
+		} catch (TagDoesNotExistException e) {
 
-            //Then:
-            verify(tagRepositoryMock, times(1)).findOne(tagId);
-            verifyNoMoreInteractions(tagRepositoryMock);
-        }
-    }
+			//Then:
+			verify(tagRepositoryMock, times(1)).findOne(tagId);
+			verifyNoMoreInteractions(tagRepositoryMock);
+		}
+	}
 
 
-    @Test
-    public void shouldReturnAllFoundTags() throws Exception {
-        //Given:
-        List<Tag> foundTags = asList(TestTagBuilder.aTag().build());
-        when(tagRepositoryMock.findAll()).thenReturn(foundTags);
+	@Test
+	public void shouldReturnAllFoundTags() throws Exception {
+		//Given:
+		List<Tag> foundTags = asList(TestTagBuilder.aTag().build());
+		when(tagRepositoryMock.findAll()).thenReturn(foundTags);
 
-        //When:
-        List<Tag> actualTags = sut.findAll();
+		//When:
+		List<Tag> actualTags = sut.findAll();
 
-        //Then:
-        ArgumentCaptor<Tag> tagCaptor = ArgumentCaptor.forClass(Tag.class);
-        assertThat(actualTags).isEqualTo(foundTags);
-        verify(tagRepositoryMock, times(1)).findAll();
-        verifyNoMoreInteractions(tagRepositoryMock);
-    }
+		//Then:
+		ArgumentCaptor<Tag> tagCaptor = ArgumentCaptor.forClass(Tag.class);
+		assertThat(actualTags).isEqualTo(foundTags);
+		verify(tagRepositoryMock, times(1)).findAll();
+		verifyNoMoreInteractions(tagRepositoryMock);
+	}
 
-    @Test
-    public void shouldDeleteNewIdea() throws Exception {
-        //Given:
-        Tag deletedTag = TestTagBuilder.aTag().build();
-        when(tagRepositoryMock.findOne(eq(deletedTag.getId()))).thenReturn(Optional.of(deletedTag));
+	@Test
+	public void shouldDeleteNewIdea() throws Exception {
+		//Given:
+		Tag deletedTag = TestTagBuilder.aTag().build();
+		when(tagRepositoryMock.findOne(eq(deletedTag.getId()))).thenReturn(Optional.of(deletedTag));
 
-        //When:
-        sut.delete(deletedTag);
+		//When:
+		sut.delete(deletedTag);
 
-        //Then:
-        ArgumentCaptor<Tag> tagCaptor = ArgumentCaptor.forClass(Tag.class);
-        verify(tagRepositoryMock, times(1)).delete(tagCaptor.capture());
-        verifyNoMoreInteractions(tagRepositoryMock);
+		//Then:
+		ArgumentCaptor<Tag> tagCaptor = ArgumentCaptor.forClass(Tag.class);
+		verify(tagRepositoryMock, times(1)).delete(tagCaptor.capture());
+		verifyNoMoreInteractions(tagRepositoryMock);
 
-        Tag tagArgument = tagCaptor.getValue();
-        assertThat(tagArgument.getName()).isEqualTo(deletedTag.getName());
-    }
+		Tag tagArgument = tagCaptor.getValue();
+		assertThat(tagArgument.getName()).isEqualTo(deletedTag.getName());
+	}
 }

@@ -59,10 +59,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringJUnit4ClassRunner.class)
 @ActiveProfiles(TEST)
 @ContextConfiguration(classes = {RootConfig.class, WebAppConfig.class})
-@TestExecutionListeners({ DependencyInjectionTestExecutionListener.class,
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
-		DbUnitTestExecutionListener.class })
+		DbUnitTestExecutionListener.class})
 @WebAppConfiguration
 public class IdeasIntegTest {
 
@@ -76,7 +76,7 @@ public class IdeasIntegTest {
 		mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 	}
 
-    @Ignore
+	@Ignore
 	@Test
 	@DatabaseSetup("idea-entries.xml")
 	public void shouldReturnInfoOfFoundIdeaAsJsonWithHttpCode200() throws Exception {

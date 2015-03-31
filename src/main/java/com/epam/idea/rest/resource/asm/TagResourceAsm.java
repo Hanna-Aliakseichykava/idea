@@ -21,7 +21,7 @@ public class TagResourceAsm extends ResourceAssemblerSupport<Tag, TagResource> {
 		final TagResource tagResource = new TagResource();
 		tagResource.setTagId(original.getId());
 		tagResource.setName(original.getName());
-        tagResource.add(linkTo(methodOn(TagController.class).showTag(original.getId())).withSelfRel());
+		tagResource.add(linkTo(methodOn(TagController.class).showTag(original.getId())).withSelfRel());
 		return tagResource;
 	}
 }

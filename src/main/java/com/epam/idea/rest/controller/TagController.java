@@ -19,20 +19,20 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/api/v1/tags")
 public class TagController {
 
-    @Autowired
-    private TagService tagService;
+	@Autowired
+	private TagService tagService;
 
-    @RequestMapping(value = "/{tagId}", method = RequestMethod.GET)
-    public HttpEntity<TagResource> showTag(@PathVariable final long tagId) {
-        Tag foundTag = tagService.findOne(tagId);
-        TagResource tagResource = new TagResourceAsm().toResource(foundTag);
-        return new ResponseEntity<>(tagResource, HttpStatus.OK);
-    }
+	@RequestMapping(value = "/{tagId}", method = RequestMethod.GET)
+	public HttpEntity<TagResource> showTag(@PathVariable final long tagId) {
+		Tag foundTag = tagService.findOne(tagId);
+		TagResource tagResource = new TagResourceAsm().toResource(foundTag);
+		return new ResponseEntity<>(tagResource, HttpStatus.OK);
+	}
 
-    @RequestMapping(method = RequestMethod.GET)
-    public HttpEntity<List<TagResource>> showAllTags() {
-        List<Tag> foundTags = tagService.findAll();
-        List<TagResource> tagResources = new TagResourceAsm().toResources(foundTags);
-        return new ResponseEntity<> (tagResources , HttpStatus.OK);
-    }
+	@RequestMapping(method = RequestMethod.GET)
+	public HttpEntity<List<TagResource>> showAllTags() {
+		List<Tag> foundTags = tagService.findAll();
+		List<TagResource> tagResources = new TagResourceAsm().toResources(foundTags);
+		return new ResponseEntity<>(tagResources, HttpStatus.OK);
+	}
 }

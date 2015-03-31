@@ -41,64 +41,64 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 public class TagControllerTest {
 
-    @Autowired
-    private TagService tagServiceMock;
+	@Autowired
+	private TagService tagServiceMock;
 
-    @Autowired
-    private WebApplicationContext webApplicationContext;
+	@Autowired
+	private WebApplicationContext webApplicationContext;
 
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    @Before
-    public void setUp() throws Exception {
-        Mockito.reset(tagServiceMock);
-        mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-    }
+	@Before
+	public void setUp() throws Exception {
+		Mockito.reset(tagServiceMock);
+		mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+	}
 
-    @Test
-    public void shouldReturnAllFoundTags() throws Exception {
-        Tag foundTag = TestTagBuilder.aTag().build();
-        when(tagServiceMock.findAll()).thenReturn(asList(foundTag));
-        mockMvc.perform(get("/api/v1/tags")
-                .accept(APPLICATION_JSON_UTF8)).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$[0]." + ID).value(is(((int) foundTag.getId()))))
-                .andExpect(jsonPath("$[0].name").value(is(foundTag.getName())))
-                .andExpect(jsonPath("$[0].links", hasSize(1)));
+	@Test
+	public void shouldReturnAllFoundTags() throws Exception {
+		Tag foundTag = TestTagBuilder.aTag().build();
+		when(tagServiceMock.findAll()).thenReturn(asList(foundTag));
+		mockMvc.perform(get("/api/v1/tags")
+				.accept(APPLICATION_JSON_UTF8)).andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$[0]." + ID).value(is(((int) foundTag.getId()))))
+				.andExpect(jsonPath("$[0].name").value(is(foundTag.getName())))
+				.andExpect(jsonPath("$[0].links", hasSize(1)));
 
-        verify(tagServiceMock, times(1)).findAll();
-        verifyNoMoreInteractions(tagServiceMock);
-    }
+		verify(tagServiceMock, times(1)).findAll();
+		verifyNoMoreInteractions(tagServiceMock);
+	}
 
-    @Test
-    public void shouldReturnTagByIdWithHttpCode200() throws Exception {
-        Tag foundTag = TestTagBuilder.aTag().build();
-        when(tagServiceMock.findOne(foundTag.getId())).thenReturn(foundTag);
-        mockMvc.perform(get("/api/v1/tags/{tagId}", foundTag.getId())
-                .accept(APPLICATION_JSON_UTF8)).andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$." + ID).value(is(((int) foundTag.getId()))))
-                .andExpect(jsonPath("$.name").value(is(foundTag.getName())))
-                .andExpect(jsonPath("$.links", hasSize(1)));
+	@Test
+	public void shouldReturnTagByIdWithHttpCode200() throws Exception {
+		Tag foundTag = TestTagBuilder.aTag().build();
+		when(tagServiceMock.findOne(foundTag.getId())).thenReturn(foundTag);
+		mockMvc.perform(get("/api/v1/tags/{tagId}", foundTag.getId())
+				.accept(APPLICATION_JSON_UTF8)).andDo(print())
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$." + ID).value(is(((int) foundTag.getId()))))
+				.andExpect(jsonPath("$.name").value(is(foundTag.getName())))
+				.andExpect(jsonPath("$.links", hasSize(1)));
 
-        verify(tagServiceMock, times(1)).findOne(foundTag.getId());
-        verifyNoMoreInteractions(tagServiceMock);
-    }
+		verify(tagServiceMock, times(1)).findOne(foundTag.getId());
+		verifyNoMoreInteractions(tagServiceMock);
+	}
 
-    @Test
-    public void shouldReturnErrorWithHttpStatus404WhenTagNotFound() throws Exception {
-        when(tagServiceMock.findOne(TestTagBuilder.DEFAULT_ID)).thenThrow(new TagDoesNotExistException());
-        mockMvc.perform(get("/api/v1/tags/{tagId}", TestTagBuilder.DEFAULT_ID)
-                .accept(APPLICATION_JSON_UTF8))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].logref").value(is(RestErrorHandler.TAG_NOT_FOUND_LOGREF)))
-                .andExpect(jsonPath("$[0].message").value(is("Could not find tag")));
+	@Test
+	public void shouldReturnErrorWithHttpStatus404WhenTagNotFound() throws Exception {
+		when(tagServiceMock.findOne(TestTagBuilder.DEFAULT_ID)).thenThrow(new TagDoesNotExistException());
+		mockMvc.perform(get("/api/v1/tags/{tagId}", TestTagBuilder.DEFAULT_ID)
+				.accept(APPLICATION_JSON_UTF8))
+				.andExpect(status().isNotFound())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].logref").value(is(RestErrorHandler.TAG_NOT_FOUND_LOGREF)))
+				.andExpect(jsonPath("$[0].message").value(is("Could not find tag")));
 
-        verify(tagServiceMock, times(1)).findOne(TestTagBuilder.DEFAULT_ID);
-        verifyNoMoreInteractions(tagServiceMock);
-    }
+		verify(tagServiceMock, times(1)).findOne(TestTagBuilder.DEFAULT_ID);
+		verifyNoMoreInteractions(tagServiceMock);
+	}
 }
