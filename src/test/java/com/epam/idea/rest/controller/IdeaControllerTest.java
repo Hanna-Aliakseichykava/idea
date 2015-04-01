@@ -1,13 +1,18 @@
 package com.epam.idea.rest.controller;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Idea;
+import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.model.builders.TestIdeaBuilder;
+import com.epam.idea.core.model.builders.TestTagBuilder;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.exception.IdeaNotFoundException;
 import com.epam.idea.rest.config.TestConfig;
 import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.builders.TestIdeaResourceBuilder;
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.epam.idea.core.model.builders.TestIdeaBuilder.DEFAULT_IDEA_ID;
+import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static com.epam.idea.core.service.exception.IdeaNotFoundException.ERROR_MSG_PATTERN_IDEA_NOT_FOUND;
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.TestUtils.EMPTY;
@@ -303,5 +309,32 @@ public class IdeaControllerTest {
 		Idea ideaArgument = userCaptor.getValue();
 		assertThat(ideaArgument.getTitle()).isEqualTo(source.getTitle());
 		assertThat(ideaArgument.getDescription()).isEqualTo(source.getDescription());
+	}
+
+	@Test
+	public void shouldReturnAllFoundIdeasForGivenTag() throws Exception {
+		Tag tag = TestTagBuilder.aTag().build();
+		Idea idea = TestIdeaBuilder.anIdea().build();
+		tag.addIdea(idea);
+		idea.addTag(tag);
+
+		when(ideaServiceMock.findIdeasByTagId(tag.getId())).thenReturn(Lists.newArrayList(idea));
+		mockMvc.perform(get("/api/v1/tags/{tagId}/ideas", tag.getId())
+				.accept(APPLICATION_JSON_UTF8))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
+				.andExpect(jsonPath("$", hasSize(1)))
+				.andExpect(jsonPath("$[0].title").value(is(idea.getTitle())))
+				.andExpect(jsonPath("$[0].description").value(is(idea.getDescription())))
+				.andExpect(jsonPath("$[0].rating").value(is(idea.getRating())))
+				.andExpect(jsonPath("$[0].tags", hasSize(1)))
+				.andExpect(jsonPath("$[0].tags[0]." + ID).value(is(((int) tag.getId()))))
+				.andExpect(jsonPath("$[0].tags[0].name").value(is(tag.getName())))
+				.andExpect(jsonPath("$[0].links", hasSize(1)))
+				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/ideas/" + idea.getId())));
+
+		verify(ideaServiceMock, times(1)).findIdeasByTagId(tag.getId());
+		verifyNoMoreInteractions(ideaServiceMock);
 	}
 }

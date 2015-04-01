@@ -27,5 +27,7 @@ public interface IdeaService extends BaseService<Idea, Long> {
 
 	List<Idea> findIdeasByUserId(long userId);
 
+	List<Idea> findIdeasByTagId(long tagId);
+
 	Idea saveForUser(long userId, Idea idea);
 }

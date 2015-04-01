@@ -81,6 +81,11 @@ public class IdeaServiceImpl implements IdeaService {
 	}
 
 	@Override
+	public List<Idea> findIdeasByTagId(final long tagId) {
+		return ideaRepository.findByTagId(tagId);
+	}
+
+	@Override
 	public Idea saveForUser(final long userId, final Idea idea) {
 		Optional<User> userOptional = userRepository.findOne(userId);
 		User user = userOptional.get();
