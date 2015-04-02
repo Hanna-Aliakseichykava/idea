@@ -410,7 +410,6 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$[0].tags[0].links[0].href").value(containsString("/api/v1/tags/" + tag.getId())))
 				.andExpect(jsonPath("$[0].tags[0].links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
 				.andExpect(jsonPath("$[0].tags[0].links[1].href").value(containsString("/api/v1/tags/" + idea.getRelatedTags().get(0).getId() + "/ideas")));
-		;
 
 		verify(ideaServiceMock, times(1)).findIdeasByUserId(userId);
 		verifyNoMoreInteractions(ideaServiceMock);

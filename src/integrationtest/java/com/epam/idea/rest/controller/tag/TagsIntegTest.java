@@ -72,7 +72,7 @@ public class TagsIntegTest {
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
 				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + TAG_ID)))
 				.andExpect(jsonPath("$.links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
-				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/tags/" + TAG_ID + "/ideas")));;;
+				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/tags/" + TAG_ID + "/ideas")));
 	}
 
 	@Test

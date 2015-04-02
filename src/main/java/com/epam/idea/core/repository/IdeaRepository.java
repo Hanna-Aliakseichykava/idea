@@ -18,7 +18,7 @@ public interface IdeaRepository extends BaseRepository<Idea, Long> {
 	List<Idea> findByUserId(Long userId);
 
 	/**
-	 * Return a list of ideas which belongs to the tag with given id,
+	 * Return a list of ideas which marked by the tag with given id,
 	 * or an empty list if the tag has no ideas.
 	 *
 	 * @param tagId The id of the tag.
