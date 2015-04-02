@@ -46,7 +46,7 @@ public class IdeaRepositoryIntegTest {
 		// Then:
 		assertThat(ideas).hasSize(1);
 		assertThatIdea(ideas.get(0))
-				.hasId(1L)
+				.hasId(2L)
 				.hasTitle("Test title")
 				.hasDescription("Test description")
 				.hasRating(5);
@@ -60,15 +60,15 @@ public class IdeaRepositoryIntegTest {
 	@DatabaseSetup(value = "repository-idea-entries.xml")
 	public void shouldFindAllIdeasByTagId() throws Exception {
 		// Given:
-		long tagID = 1L;
+		long tagID = 3L;
 
 		// When:
-		List<Idea> ideas = ideaRepository.findByUserId(tagID);
+		List<Idea> ideas = ideaRepository.findByTagId(tagID);
 
 		// Then:
 		assertThat(ideas).hasSize(1);
 		assertThatIdea(ideas.get(0))
-				.hasId(1L)
+				.hasId(2L)
 				.hasTitle("Test title")
 				.hasDescription("Test description")
 				.hasRating(5);
