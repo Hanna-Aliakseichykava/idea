@@ -55,4 +55,22 @@ public class IdeaRepositoryIntegTest {
 				.hasUsername("Jack")
 				.hasEmail("Jack@test.com");
 	}
+
+	@Test
+	@DatabaseSetup(value = "repository-idea-entries.xml")
+	public void shouldFindAllIdeasByTagId() throws Exception {
+		// Given:
+		long tagID = 1L;
+
+		// When:
+		List<Idea> ideas = ideaRepository.findByUserId(tagID);
+
+		// Then:
+		assertThat(ideas).hasSize(1);
+		assertThatIdea(ideas.get(0))
+				.hasId(1L)
+				.hasTitle("Test title")
+				.hasDescription("Test description")
+				.hasRating(5);
+	}
 }

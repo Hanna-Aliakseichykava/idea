@@ -30,21 +30,21 @@ public class TagController {
 	private IdeaService ideaService;
 
 	@RequestMapping(value = "/{tagId}", method = RequestMethod.GET)
-	public HttpEntity<TagResource> showTag(@PathVariable final long tagId) {
+	public HttpEntity<TagResource> getTag(@PathVariable final long tagId) {
 		Tag foundTag = this.tagService.findOne(tagId);
 		TagResource tagResource = new TagResourceAsm().toResource(foundTag);
 		return new ResponseEntity<>(tagResource, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
-	public HttpEntity<List<TagResource>> showAllTags() {
+	public HttpEntity<List<TagResource>> getAllTags() {
 		List<Tag> foundTags = this.tagService.findAll();
 		List<TagResource> tagResources = new TagResourceAsm().toResources(foundTags);
 		return new ResponseEntity<>(tagResources, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{tagId}/ideas", method = RequestMethod.GET)
-	public HttpEntity<List<IdeaResource>> showAllFoundIdeasForTag(@PathVariable final long tagId) {
+	public HttpEntity<List<IdeaResource>> getAllFoundIdeasForTag(@PathVariable final long tagId) {
 		List<Idea> foundIdeas = this.ideaService.findIdeasByTagId(tagId);
 		List<IdeaResource> ideaResources = new IdeaResourceAsm().toResources(foundIdeas);
 		return new ResponseEntity<>(ideaResources, HttpStatus.OK);

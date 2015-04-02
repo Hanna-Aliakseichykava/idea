@@ -6,6 +6,7 @@ import com.epam.idea.core.service.TagService;
 import com.epam.idea.core.service.exception.TagDoesNotExistException;
 import com.epam.idea.rest.config.TestConfig;
 import com.epam.idea.rest.config.WebAppConfig;
+import com.epam.idea.rest.resource.asm.TagResourceAsm;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,9 +69,11 @@ public class TagControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$[0]." + ID).value(is(((int) foundTag.getId()))))
 				.andExpect(jsonPath("$[0].name").value(is(foundTag.getName())))
-				.andExpect(jsonPath("$[0].links", hasSize(1)))
+				.andExpect(jsonPath("$[0].links", hasSize(2)))
 				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())));
+				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())))
+				.andExpect(jsonPath("$[0].links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$[0].links[1].href").value(containsString("/api/v1/tags/" + foundTag.getId() + "/ideas")));
 				verify(tagServiceMock, times(1)).findAll();
 		verifyNoMoreInteractions(tagServiceMock);
 	}
@@ -85,9 +88,11 @@ public class TagControllerTest {
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$." + ID).value(is(((int) foundTag.getId()))))
 				.andExpect(jsonPath("$.name").value(is(foundTag.getName())))
-				.andExpect(jsonPath("$.links", hasSize(1)))
+				.andExpect(jsonPath("$.links", hasSize(2)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + foundTag.getId())))
+				.andExpect(jsonPath("$.links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/tags/" + foundTag.getId() + "/ideas")));
 
 		verify(tagServiceMock, times(1)).findOne(foundTag.getId());
 		verifyNoMoreInteractions(tagServiceMock);

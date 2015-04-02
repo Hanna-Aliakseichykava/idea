@@ -3,6 +3,7 @@ package com.epam.idea.rest.controller.tag;
 import com.epam.idea.rest.config.RootConfig;
 import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.controller.RestErrorHandler;
+import com.epam.idea.rest.resource.asm.TagResourceAsm;
 import com.github.springtestdbunit.DbUnitTestExecutionListener;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
 import org.junit.Before;
@@ -67,9 +68,11 @@ public class TagsIntegTest {
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$.name").value(is(NAME)))
-				.andExpect(jsonPath("$.links", hasSize(1)))
+				.andExpect(jsonPath("$.links", hasSize(2)))
 				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
-				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + TAG_ID)));
+				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/tags/" + TAG_ID)))
+				.andExpect(jsonPath("$.links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/tags/" + TAG_ID + "/ideas")));;;
 	}
 
 	@Test

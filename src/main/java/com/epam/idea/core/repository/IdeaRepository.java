@@ -18,12 +18,12 @@ public interface IdeaRepository extends BaseRepository<Idea, Long> {
 	List<Idea> findByUserId(Long userId);
 
 	/**
-	 * Return a list of ideas which belongs to the user with given id,
-	 * or an empty list if the user has no ideas.
+	 * Return a list of ideas which belongs to the tag with given id,
+	 * or an empty list if the tag has no ideas.
 	 *
 	 * @param tagId The id of the tag.
 	 * @return All the ideas of the tag.
 	 */
-	@Query("select i from Idea i inner join i.relatedTags t WHERE t.id IN (?1)")
+	@Query("select t.ideasWithTag from Tag t where t.id = ?1")
 	List<Idea> findByTagId(Long tagId);
 }

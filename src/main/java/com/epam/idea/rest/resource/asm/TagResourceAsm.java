@@ -11,6 +11,8 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
 public class TagResourceAsm extends ResourceAssemblerSupport<Tag, TagResource> {
 
+	public static final String IDEAS_REL = "ideas";
+
 	public TagResourceAsm() {
 		super(TagController.class, TagResource.class);
 	}
@@ -21,7 +23,8 @@ public class TagResourceAsm extends ResourceAssemblerSupport<Tag, TagResource> {
 		final TagResource tagResource = new TagResource();
 		tagResource.setTagId(original.getId());
 		tagResource.setName(original.getName());
-		tagResource.add(linkTo(methodOn(TagController.class).showTag(original.getId())).withSelfRel());
+		tagResource.add(linkTo(methodOn(TagController.class).getTag(original.getId())).withSelfRel());
+		tagResource.add(linkTo(methodOn(TagController.class).getAllFoundIdeasForTag(original.getId())).withRel(IDEAS_REL));
 		return tagResource;
 	}
 }
