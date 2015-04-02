@@ -84,7 +84,7 @@ public class IdeaServiceImpl implements IdeaService {
 	public List<Idea> findIdeasByTagId(final long tagId) {
 		List<Idea> ideas = ideaRepository.findByTagId(tagId);
 		ideas.forEach(idea -> {
-			idea.getRelatedTags().size();
+			Hibernate.initialize(idea.getRelatedTags());
 		});
 		return ideas;
 	}
