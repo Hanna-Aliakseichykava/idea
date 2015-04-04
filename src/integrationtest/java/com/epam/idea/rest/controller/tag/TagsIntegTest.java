@@ -24,10 +24,9 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.epam.idea.core.repository.config.support.DatabaseConfigProfile.TEST;
-import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
+import static com.epam.idea.util.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.controller.tag.TagConstants.NAME;
 import static com.epam.idea.rest.controller.tag.TagConstants.TAG_ID;
-import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;

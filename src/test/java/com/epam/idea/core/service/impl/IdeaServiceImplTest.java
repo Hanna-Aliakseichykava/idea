@@ -3,11 +3,12 @@ package com.epam.idea.core.service.impl;
 import java.util.List;
 import java.util.Optional;
 
+import com.epam.idea.builder.model.TestIdeaBuilder;
 import com.epam.idea.core.model.Idea;
-import com.epam.idea.core.model.builders.TestIdeaBuilder;
 import com.epam.idea.core.repository.IdeaRepository;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.exception.IdeaNotFoundException;
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,14 +18,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class IdeaServiceImplTest {
@@ -37,7 +37,7 @@ public class IdeaServiceImplTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Mockito.reset(ideaRepositoryMock);
+		Mockito.reset(this.ideaRepositoryMock);
 	}
 
 	@Test
@@ -46,12 +46,12 @@ public class IdeaServiceImplTest {
 		Idea ideaToSave = TestIdeaBuilder.anIdea().build();
 
 		//When:
-		sut.save(ideaToSave);
+		this.sut.save(ideaToSave);
 
 		//Then:
 		ArgumentCaptor<Idea> ideaCaptor = ArgumentCaptor.forClass(Idea.class);
-		verify(ideaRepositoryMock, times(1)).save(ideaCaptor.capture());
-		verifyNoMoreInteractions(ideaRepositoryMock);
+		verify(this.ideaRepositoryMock, times(1)).save(ideaCaptor.capture());
+		verifyNoMoreInteractions(this.ideaRepositoryMock);
 
 		Idea ideaArgument = ideaCaptor.getValue();
 		assertThat(ideaArgument.getTitle()).isEqualTo(ideaToSave.getTitle());
@@ -62,32 +62,32 @@ public class IdeaServiceImplTest {
 	public void shouldReturnFoundIdea() throws Exception {
 		//Given:
 		Idea foundIdea = TestIdeaBuilder.anIdea().build();
-		when(ideaRepositoryMock.findOne(eq(foundIdea.getId()))).thenReturn(Optional.of(foundIdea));
+		given(this.ideaRepositoryMock.findOne(eq(foundIdea.getId()))).willReturn(Optional.of(foundIdea));
 
 		//When:
-		Idea actual = sut.findOne(foundIdea.getId());
+		Idea actual = this.sut.findOne(foundIdea.getId());
 
 		//Then:
 		assertThat(actual).isEqualTo(foundIdea);
-		verify(ideaRepositoryMock, times(1)).findOne(foundIdea.getId());
-		verifyNoMoreInteractions(ideaRepositoryMock);
+		verify(this.ideaRepositoryMock, times(1)).findOne(foundIdea.getId());
+		verifyNoMoreInteractions(this.ideaRepositoryMock);
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenTryFindIdeaWhichDoesNotExist() throws Exception {
 		//Given:
 		long ideaId = 3L;
-		when(ideaRepositoryMock.findOne(eq(ideaId))).thenReturn(Optional.empty());
+		given(this.ideaRepositoryMock.findOne(eq(ideaId))).willReturn(Optional.empty());
 
 		//When:
 		try {
-			sut.findOne(ideaId);
+			this.sut.findOne(ideaId);
 			fail("IdeaNotFoundException expected because we try to find the idea which does not exist");
-		} catch (IdeaNotFoundException e) {
 
 			//Then:
-			verify(ideaRepositoryMock, times(1)).findOne(ideaId);
-			verifyNoMoreInteractions(ideaRepositoryMock);
+		} catch (IdeaNotFoundException e) {
+			verify(this.ideaRepositoryMock, times(1)).findOne(ideaId);
+			verifyNoMoreInteractions(this.ideaRepositoryMock);
 		}
 	}
 
@@ -95,34 +95,33 @@ public class IdeaServiceImplTest {
 	public void shouldDeleteIdeaAndReturnIt() throws Exception {
 		//Given:
 		Idea deletedIdea = TestIdeaBuilder.anIdea().build();
-		when(ideaRepositoryMock.findOne(eq(deletedIdea.getId()))).thenReturn(Optional.of(deletedIdea));
+		given(this.ideaRepositoryMock.findOne(eq(deletedIdea.getId()))).willReturn(Optional.of(deletedIdea));
 
 		//When:
-		Idea actual = sut.deleteById(deletedIdea.getId());
+		Idea actual = this.sut.deleteById(deletedIdea.getId());
 
 		//Then:
 		assertThat(actual).isEqualTo(deletedIdea);
-
-		verify(ideaRepositoryMock, times(1)).findOne(deletedIdea.getId());
-		verify(ideaRepositoryMock, times(1)).delete(deletedIdea);
-		verifyNoMoreInteractions(ideaRepositoryMock);
+		verify(this.ideaRepositoryMock, times(1)).findOne(deletedIdea.getId());
+		verify(this.ideaRepositoryMock, times(1)).delete(deletedIdea);
+		verifyNoMoreInteractions(this.ideaRepositoryMock);
 	}
 
 	@Test
 	public void shouldThrowExceptionWhenTryDeleteIdeaWhichDoesNotExist() throws Exception {
 		//Given:
 		long fakeIdeaId = 2L;
-		when(ideaRepositoryMock.findOne(eq(fakeIdeaId))).thenReturn(Optional.empty());
+		given(this.ideaRepositoryMock.findOne(eq(fakeIdeaId))).willReturn(Optional.empty());
 
 		//When:
 		try {
-			sut.deleteById(fakeIdeaId);
+			this.sut.deleteById(fakeIdeaId);
 			fail("IdeaNotFoundException expected because we try to delete the idea which does not exist");
-		} catch (IdeaNotFoundException e) {
 
 			//Then:
-			verify(ideaRepositoryMock, times(1)).findOne(fakeIdeaId);
-			verifyNoMoreInteractions(ideaRepositoryMock);
+		} catch (IdeaNotFoundException e) {
+			verify(this.ideaRepositoryMock, times(1)).findOne(fakeIdeaId);
+			verifyNoMoreInteractions(this.ideaRepositoryMock);
 		}
 	}
 
@@ -138,17 +137,17 @@ public class IdeaServiceImplTest {
 				.withTitle("Title")
 				.withDescription("Description")
 				.build();
-		when(ideaRepositoryMock.findOne(eq(target.getId()))).thenReturn(Optional.of(target));
+		given(this.ideaRepositoryMock.findOne(eq(target.getId()))).willReturn(Optional.of(target));
 
 		//When:
-		Idea actual = sut.update(target.getId(), source);
+		Idea actual = this.sut.update(target.getId(), source);
 
 		//Then:
 		assertThat(actual.getId()).isEqualTo(target.getId());
 		assertThat(actual.getTitle()).isEqualTo(source.getTitle());
 		assertThat(actual.getDescription()).isEqualTo(source.getDescription());
-		verify(ideaRepositoryMock, times(1)).findOne(target.getId());
-		verifyNoMoreInteractions(ideaRepositoryMock);
+		verify(this.ideaRepositoryMock, times(1)).findOne(target.getId());
+		verifyNoMoreInteractions(this.ideaRepositoryMock);
 	}
 
 	@Test
@@ -159,32 +158,35 @@ public class IdeaServiceImplTest {
 				.withTitle("New title")
 				.withDescription("New description")
 				.build();
-		when(ideaRepositoryMock.findOne(eq(fakeIdeaId))).thenReturn(Optional.empty());
+		given(this.ideaRepositoryMock.findOne(eq(fakeIdeaId))).willReturn(Optional.empty());
 
 		//When
 		try {
-			sut.update(fakeIdeaId, source);
+			this.sut.update(fakeIdeaId, source);
 			fail("IdeaNotFoundException expected because we try to update the idea which does not exist");
-		} catch (IdeaNotFoundException ex) {
 
 			//Then:
-			verify(ideaRepositoryMock, times(1)).findOne(fakeIdeaId);
-			verifyNoMoreInteractions(ideaRepositoryMock);
+		} catch (IdeaNotFoundException ex) {
+			verify(this.ideaRepositoryMock, times(1)).findOne(fakeIdeaId);
+			verifyNoMoreInteractions(this.ideaRepositoryMock);
 		}
 	}
 
 	@Test
 	public void shouldReturnListOfAllIdeas() throws Exception {
 		//Given:
-		List<Idea> ideas = asList(TestIdeaBuilder.anIdea().build(), TestIdeaBuilder.anIdea().build());
-		when(ideaRepositoryMock.findAll()).thenReturn(ideas);
+		List<Idea> ideas = Lists.newArrayList(
+				TestIdeaBuilder.anIdea().build(),
+				TestIdeaBuilder.anIdea().build()
+		);
+		given(this.ideaRepositoryMock.findAll()).willReturn(ideas);
 
 		//When:
-		List<Idea> actual = sut.findAll();
+		List<Idea> actual = this.sut.findAll();
 
 		//Then:
 		assertThat(actual).isEqualTo(ideas);
-		verify(ideaRepositoryMock, times(1)).findAll();
-		verifyNoMoreInteractions(ideaRepositoryMock);
+		verify(this.ideaRepositoryMock, times(1)).findAll();
+		verifyNoMoreInteractions(this.ideaRepositoryMock);
 	}
 }

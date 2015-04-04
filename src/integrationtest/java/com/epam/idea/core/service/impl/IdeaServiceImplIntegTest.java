@@ -2,8 +2,8 @@ package com.epam.idea.core.service.impl;
 
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Tag;
-import com.epam.idea.core.model.builders.TestIdeaBuilder;
-import com.epam.idea.core.model.builders.TestTagBuilder;
+import com.epam.idea.builder.model.TestIdeaBuilder;
+import com.epam.idea.builder.model.TestTagBuilder;
 import com.epam.idea.core.repository.config.support.DatabaseConfigProfile;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.rest.config.RootConfig;

@@ -1,23 +1,22 @@
 package com.epam.idea.rest.controller;
 
+import com.epam.idea.builder.model.TestCommentBuilder;
+import com.epam.idea.builder.model.TestIdeaBuilder;
+import com.epam.idea.builder.model.TestUserBuilder;
+import com.epam.idea.builder.resource.TestUserResourceBuilder;
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.model.User;
-import com.epam.idea.core.model.builders.TestCommentBuilder;
-import com.epam.idea.core.model.builders.TestIdeaBuilder;
-import com.epam.idea.core.model.builders.TestUserBuilder;
 import com.epam.idea.core.service.CommentService;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.UserService;
 import com.epam.idea.core.service.exception.UserNotFoundException;
-import com.epam.idea.rest.config.TestConfig;
-import com.epam.idea.rest.config.WebAppConfig;
+import com.epam.idea.rest.annotation.WebAppUnitTest;
 import com.epam.idea.rest.resource.UserResource;
 import com.epam.idea.rest.resource.asm.IdeaResourceAsm;
 import com.epam.idea.rest.resource.asm.TagResourceAsm;
 import com.epam.idea.rest.resource.asm.UserResourceAsm;
-import com.epam.idea.rest.resource.builders.TestUserResourceBuilder;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,36 +25,32 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import static com.epam.idea.builder.model.TestTagBuilder.aTag;
+import static com.epam.idea.builder.model.TestUserBuilder.DEFAULT_CREATION_TIME;
+import static com.epam.idea.builder.model.TestUserBuilder.DEFAULT_USER_ID;
+import static com.epam.idea.builder.model.TestUserBuilder.aUser;
 import static com.epam.idea.core.model.User.MAX_LENGTH_EMAIL;
 import static com.epam.idea.core.model.User.MAX_LENGTH_PASSWORD;
 import static com.epam.idea.core.model.User.MAX_LENGTH_USERNAME;
-import static com.epam.idea.core.model.builders.TestTagBuilder.aTag;
-import static com.epam.idea.core.model.builders.TestUserBuilder.DEFAULT_CREATION_TIME;
-import static com.epam.idea.core.model.builders.TestUserBuilder.DEFAULT_USER_ID;
-import static com.epam.idea.core.model.builders.TestUserBuilder.aUser;
-import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
-import static com.epam.idea.rest.TestUtils.EMPTY;
-import static com.epam.idea.rest.TestUtils.convertObjectToJsonBytes;
-import static com.epam.idea.rest.TestUtils.createEmailWithLength;
-import static com.epam.idea.rest.TestUtils.createStringWithLength;
 import static com.epam.idea.rest.controller.RestErrorHandler.USER_NOT_FOUND_LOGREF;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.CREATION_TIME;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.MODIFICATION_TIME;
-import static java.util.Arrays.asList;
+import static com.epam.idea.util.TestUtils.APPLICATION_JSON_UTF8;
+import static com.epam.idea.util.TestUtils.EMPTY;
+import static com.epam.idea.util.TestUtils.convertObjectToJsonBytes;
+import static com.epam.idea.util.TestUtils.createEmailWithLength;
+import static com.epam.idea.util.TestUtils.createStringWithLength;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.times;
@@ -73,8 +68,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestConfig.class, WebAppConfig.class})
-@WebAppConfiguration
+@WebAppUnitTest
 public class UserControllerTest {
 
 	public static final String EXPECTED_USER_CREATION_TIME = "2015-01-12T00:00Z";
@@ -99,80 +93,79 @@ public class UserControllerTest {
 
 	@Before
 	public void setUp() throws Exception {
-		Mockito.reset(userServiceMock);
-
-		mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+		Mockito.reset(this.userServiceMock);
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
 	}
 
 	@Test
 	public void shouldReturnAllFoundUsers() throws Exception {
 		User first = aUser().build();
 
-		when(userServiceMock.findAll()).thenReturn(asList(first));
+		when(this.userServiceMock.findAll()).thenReturn(Lists.newArrayList(first));
 
-		mockMvc.perform(get("/api/v1/users")
+		this.mockMvc.perform(get("/api/v1/users")
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk()).andDo(print())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0]." + ID).value(is(((int) first.getId()))))
-				.andExpect(jsonPath("$[0].username").value(is(first.getUsername())))
-				.andExpect(jsonPath("$[0].email").value(is(first.getEmail())))
+				.andExpect(jsonPath("$[0]." + ID).value(((int) first.getId())))
+				.andExpect(jsonPath("$[0].username").value(first.getUsername()))
+				.andExpect(jsonPath("$[0].email").value(first.getEmail()))
 				.andExpect(jsonPath("$[0].password").doesNotExist())
-				.andExpect(jsonPath("$[0]." + CREATION_TIME).value(is(EXPECTED_USER_CREATION_TIME)))
+				.andExpect(jsonPath("$[0]." + CREATION_TIME).value(EXPECTED_USER_CREATION_TIME))
 				.andExpect(jsonPath("$[0].links", hasSize(3)))
-				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].links[0].rel").value(Link.REL_SELF))
 				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/users/" + first.getId())))
-				.andExpect(jsonPath("$[0].links[1].rel").value(is(UserResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$[0].links[1].rel").value(UserResourceAsm.IDEAS_REL))
 				.andExpect(jsonPath("$[0].links[1].href").value(containsString("/api/v1/users/" + first.getId() + "/ideas")))
-				.andExpect(jsonPath("$[0].links[2].rel").value(is(UserResourceAsm.COMMENTS_REL)))
+				.andExpect(jsonPath("$[0].links[2].rel").value(UserResourceAsm.COMMENTS_REL))
 				.andExpect(jsonPath("$[0].links[2].href").value(containsString("/api/v1/users/" + first.getId() + "/comments")));
 
-		verify(userServiceMock, times(1)).findAll();
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).findAll();
+		verifyNoMoreInteractions(this.userServiceMock);
 	}
 
 	@Test
 	public void shouldReturnFoundUserWithHttpCode200() throws Exception {
 		User user = aUser().build();
 
-		when(userServiceMock.findOne(user.getId())).thenReturn(user);
+		when(this.userServiceMock.findOne(user.getId())).thenReturn(user);
 
-		mockMvc.perform(get("/api/v1/users/{userId}", DEFAULT_USER_ID)
+		this.mockMvc.perform(get("/api/v1/users/{userId}", DEFAULT_USER_ID)
 				.accept(APPLICATION_JSON_UTF8)).andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$." + ID).value(is(((int) user.getId()))))
-				.andExpect(jsonPath("$.username").value(is(user.getUsername())))
-				.andExpect(jsonPath("$.email").value(is(user.getEmail())))
+				.andExpect(jsonPath("$." + ID).value(((int) user.getId())))
+				.andExpect(jsonPath("$.username").value(user.getUsername()))
+				.andExpect(jsonPath("$.email").value(user.getEmail()))
 				.andExpect(jsonPath("$.password").doesNotExist())
-				.andExpect(jsonPath("$." + CREATION_TIME).value(is(EXPECTED_USER_CREATION_TIME)))
+				.andExpect(jsonPath("$." + CREATION_TIME).value(EXPECTED_USER_CREATION_TIME))
 				.andExpect(jsonPath("$.links", hasSize(3)))
-				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$.links[0].rel").value(Link.REL_SELF))
 				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/" + user.getId())))
-				.andExpect(jsonPath("$.links[1].rel").value(is(UserResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$.links[1].rel").value(UserResourceAsm.IDEAS_REL))
 				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/users/" + user.getId() + "/ideas")))
-				.andExpect(jsonPath("$.links[2].rel").value(is(UserResourceAsm.COMMENTS_REL)))
+				.andExpect(jsonPath("$.links[2].rel").value(UserResourceAsm.COMMENTS_REL))
 				.andExpect(jsonPath("$.links[2].href").value(containsString("/api/v1/users/" + user.getId() + "/comments")));
 
-		verify(userServiceMock, times(1)).findOne(user.getId());
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).findOne(user.getId());
+		verifyNoMoreInteractions(this.userServiceMock);
 	}
 
 	@Test
 	public void shouldReturnErrorWithHttpStatus404WhenUserNotFound() throws Exception {
-		when(userServiceMock.findOne(DEFAULT_USER_ID)).thenThrow(new UserNotFoundException(DEFAULT_USER_ID));
+		when(this.userServiceMock.findOne(DEFAULT_USER_ID)).thenThrow(new UserNotFoundException(DEFAULT_USER_ID));
 
-		mockMvc.perform(get("/api/v1/users/{userId}", DEFAULT_USER_ID)
+		this.mockMvc.perform(get("/api/v1/users/{userId}", DEFAULT_USER_ID)
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0].logref").value(is(USER_NOT_FOUND_LOGREF)))
-				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: 1.")));
+				.andExpect(jsonPath("$[0].logref").value(USER_NOT_FOUND_LOGREF))
+				.andExpect(jsonPath("$[0].message").value("Could not find user with id: 1."));
 
-		verify(userServiceMock, times(1)).findOne(DEFAULT_USER_ID);
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).findOne(DEFAULT_USER_ID);
+		verifyNoMoreInteractions(this.userServiceMock);
 	}
 
 	@Test
@@ -187,7 +180,7 @@ public class UserControllerTest {
 				.withPassword(invalidPassword)
 				.build();
 
-		mockMvc.perform(post("/api/v1/users")
+		this.mockMvc.perform(post("/api/v1/users")
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(userResource)))
@@ -204,7 +197,7 @@ public class UserControllerTest {
 						String.format("size must be between %s and %s", User.MIN_LENGTH_USERNAME, User.MAX_LENGTH_USERNAME)
 				)));
 
-		verifyZeroInteractions(userServiceMock);
+		verifyZeroInteractions(this.userServiceMock);
 	}
 
 	@Test
@@ -225,30 +218,30 @@ public class UserControllerTest {
 				.withCreationTime(DEFAULT_CREATION_TIME)
 				.build();
 
-		when(userServiceMock.save(any(User.class))).thenReturn(saved);
+		when(this.userServiceMock.save(any(User.class))).thenReturn(saved);
 
-		mockMvc.perform(post("/api/v1/users")
+		this.mockMvc.perform(post("/api/v1/users")
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(userResource))).andDo(print())
 				.andExpect(status().isCreated())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$." + ID).value(is((int) saved.getId())))
-				.andExpect(jsonPath("$.username").value(is(saved.getUsername())))
-				.andExpect(jsonPath("$.email").value(is(saved.getEmail())))
+				.andExpect(jsonPath("$." + ID).value((int) saved.getId()))
+				.andExpect(jsonPath("$.username").value(saved.getUsername()))
+				.andExpect(jsonPath("$.email").value(saved.getEmail()))
 				.andExpect(jsonPath("$.password").doesNotExist())
-				.andExpect(jsonPath("$." + CREATION_TIME).value(is(EXPECTED_USER_CREATION_TIME)))
+				.andExpect(jsonPath("$." + CREATION_TIME).value(EXPECTED_USER_CREATION_TIME))
 				.andExpect(jsonPath("$.links", hasSize(3)))
-				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$.links[0].rel").value(Link.REL_SELF))
 				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/" + saved.getId())))
-				.andExpect(jsonPath("$.links[1].rel").value(is(UserResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$.links[1].rel").value(UserResourceAsm.IDEAS_REL))
 				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/users/" + saved.getId() + "/ideas")))
-				.andExpect(jsonPath("$.links[2].rel").value(is(UserResourceAsm.COMMENTS_REL)))
+				.andExpect(jsonPath("$.links[2].rel").value(UserResourceAsm.COMMENTS_REL))
 				.andExpect(jsonPath("$.links[2].href").value(containsString("/api/v1/users/" + saved.getId() + "/comments")));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-		verify(userServiceMock, times(1)).save(userCaptor.capture());
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).save(userCaptor.capture());
+		verifyNoMoreInteractions(this.userServiceMock);
 
 		User userArgument = userCaptor.getValue();
 		assertThat(userArgument.getUsername()).isEqualTo(userResource.getUsername());
@@ -260,34 +253,34 @@ public class UserControllerTest {
 	public void shouldDeleteUserAndReturnHttpCode200() throws Exception {
 		User deleted = aUser().build();
 
-		when(userServiceMock.deleteById(deleted.getId())).thenReturn(deleted);
+		when(this.userServiceMock.deleteById(deleted.getId())).thenReturn(deleted);
 
-		mockMvc.perform(delete("/api/v1/users/{userId}", deleted.getId())
+		this.mockMvc.perform(delete("/api/v1/users/{userId}", deleted.getId())
 				.contentType(APPLICATION_JSON_UTF8))
 				.andExpect(status().isOk())
-				.andExpect(content().string(is(EMPTY)));
+				.andExpect(content().string(EMPTY));
 
-		verify(userServiceMock, times(1)).deleteById(deleted.getId());
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).deleteById(deleted.getId());
+		verifyNoMoreInteractions(this.userServiceMock);
 	}
 
 	@Test
 	public void shouldReturnErrorWithHttpStatus404WhenDeleteUserWhichDoesNotExist() throws Exception {
 		long userId = 3L;
-		when(userServiceMock.deleteById(userId)).thenThrow(new UserNotFoundException(userId));
+		when(this.userServiceMock.deleteById(userId)).thenThrow(new UserNotFoundException(userId));
 
-		mockMvc.perform(delete("/api/v1/users/{userId}", userId)
+		this.mockMvc.perform(delete("/api/v1/users/{userId}", userId)
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0].logref").value(is(USER_NOT_FOUND_LOGREF)))
-				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: " + userId + ".")))
+				.andExpect(jsonPath("$[0].logref").value(USER_NOT_FOUND_LOGREF))
+				.andExpect(jsonPath("$[0].message").value("Could not find user with id: " + userId + "."))
 				.andExpect(jsonPath("$[0].links", empty()));
 
-		verify(userServiceMock, times(1)).deleteById(userId);
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).deleteById(userId);
+		verifyNoMoreInteractions(this.userServiceMock);
 	}
 
 	@Test
@@ -309,30 +302,30 @@ public class UserControllerTest {
 				.withCreationTime(DEFAULT_CREATION_TIME)
 				.build();
 
-		when(userServiceMock.update(eq(userId), any(User.class))).thenReturn(updated);
+		when(this.userServiceMock.update(eq(userId), any(User.class))).thenReturn(updated);
 
-		mockMvc.perform(put("/api/v1/users/{userId}", userId)
+		this.mockMvc.perform(put("/api/v1/users/{userId}", userId)
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(source)))
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
-				.andExpect(jsonPath("$." + ID).value(is((int) updated.getId())))
-				.andExpect(jsonPath("$.username").value(is(updated.getUsername())))
-				.andExpect(jsonPath("$.email").value(is(updated.getEmail())))
+				.andExpect(jsonPath("$." + ID).value((int) updated.getId()))
+				.andExpect(jsonPath("$.username").value(updated.getUsername()))
+				.andExpect(jsonPath("$.email").value(updated.getEmail()))
 				.andExpect(jsonPath("$.password").doesNotExist())
-				.andExpect(jsonPath("$." + CREATION_TIME).value(is(EXPECTED_USER_CREATION_TIME)))
+				.andExpect(jsonPath("$." + CREATION_TIME).value(EXPECTED_USER_CREATION_TIME))
 				.andExpect(jsonPath("$.links", hasSize(3)))
-				.andExpect(jsonPath("$.links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$.links[0].rel").value(Link.REL_SELF))
 				.andExpect(jsonPath("$.links[0].href").value(containsString("/api/v1/users/" + updated.getId())))
-				.andExpect(jsonPath("$.links[1].rel").value(is(UserResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$.links[1].rel").value(UserResourceAsm.IDEAS_REL))
 				.andExpect(jsonPath("$.links[1].href").value(containsString("/api/v1/users/" + updated.getId() + "/ideas")))
-				.andExpect(jsonPath("$.links[2].rel").value(is(UserResourceAsm.COMMENTS_REL)))
+				.andExpect(jsonPath("$.links[2].rel").value(UserResourceAsm.COMMENTS_REL))
 				.andExpect(jsonPath("$.links[2].href").value(containsString("/api/v1/users/" + updated.getId() + "/comments")));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-		verify(userServiceMock, times(1)).update(eq(userId), userCaptor.capture());
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).update(eq(userId), userCaptor.capture());
+		verifyNoMoreInteractions(this.userServiceMock);
 
 		User userArgument = userCaptor.getValue();
 		assertThat(userArgument.getUsername()).isEqualTo(source.getUsername());
@@ -349,22 +342,22 @@ public class UserControllerTest {
 				.withPassword("new_password")
 				.build();
 
-		when(userServiceMock.update(eq(userId), any(User.class))).thenThrow(new UserNotFoundException(userId));
+		when(this.userServiceMock.update(eq(userId), any(User.class))).thenThrow(new UserNotFoundException(userId));
 
-		mockMvc.perform(put("/api/v1/users/{userId}", userId)
+		this.mockMvc.perform(put("/api/v1/users/{userId}", userId)
 				.contentType(APPLICATION_JSON_UTF8)
 				.accept(APPLICATION_JSON_UTF8)
 				.content(convertObjectToJsonBytes(source)))
 				.andExpect(status().isNotFound())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0].logref").value(is(USER_NOT_FOUND_LOGREF)))
-				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: " + userId + ".")))
+				.andExpect(jsonPath("$[0].logref").value(USER_NOT_FOUND_LOGREF))
+				.andExpect(jsonPath("$[0].message").value("Could not find user with id: " + userId + "."))
 				.andExpect(jsonPath("$[0].links", hasSize(0)));
 
 		ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-		verify(userServiceMock, times(1)).update(eq(userId), userCaptor.capture());
-		verifyNoMoreInteractions(userServiceMock);
+		verify(this.userServiceMock, times(1)).update(eq(userId), userCaptor.capture());
+		verifyNoMoreInteractions(this.userServiceMock);
 
 		User userArgument = userCaptor.getValue();
 		assertThat(userArgument.getUsername()).isEqualTo(source.getUsername());
@@ -382,37 +375,37 @@ public class UserControllerTest {
 				.withTags(Lists.newArrayList(tag))
 				.build();
 
-		when(ideaServiceMock.findIdeasByUserId(userId)).thenReturn(asList(idea));
+		when(this.ideaServiceMock.findIdeasByUserId(userId)).thenReturn(Lists.newArrayList(idea));
 
-		mockMvc.perform(get("/api/v1/users/{userId}/ideas", userId)
+		this.mockMvc.perform(get("/api/v1/users/{userId}/ideas", userId)
 				.accept(APPLICATION_JSON_UTF8))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0]" + ID).value(is((int) idea.getId())))
-				.andExpect(jsonPath("$[0].title").value(is(idea.getTitle())))
-				.andExpect(jsonPath("$[0].description").value(is(idea.getDescription())))
-				.andExpect(jsonPath("$[0].rating").value(is(idea.getRating())))
-				.andExpect(jsonPath("$[0]." + CREATION_TIME).value(is(EXPECTED_IDEA_CREATION_TIME)))
-				.andExpect(jsonPath("$[0]." + MODIFICATION_TIME).value(is(EXPECTED_IDEA_MODIFICATION_TIME)))
+				.andExpect(jsonPath("$[0]" + ID).value((int) idea.getId()))
+				.andExpect(jsonPath("$[0].title").value(idea.getTitle()))
+				.andExpect(jsonPath("$[0].description").value(idea.getDescription()))
+				.andExpect(jsonPath("$[0].rating").value(idea.getRating()))
+				.andExpect(jsonPath("$[0]." + CREATION_TIME).value(EXPECTED_IDEA_CREATION_TIME))
+				.andExpect(jsonPath("$[0]." + MODIFICATION_TIME).value(EXPECTED_IDEA_MODIFICATION_TIME))
 				.andExpect(jsonPath("$[0].author").doesNotExist())
 				.andExpect(jsonPath("$[0].links", hasSize(2)))
-				.andExpect(jsonPath("$[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].links[0].rel").value(Link.REL_SELF))
 				.andExpect(jsonPath("$[0].links[0].href").value(containsString("/api/v1/ideas/" + idea.getId())))
-				.andExpect(jsonPath("$[0].links[1].rel").value(is(IdeaResourceAsm.REL_AUTHOR)))
+				.andExpect(jsonPath("$[0].links[1].rel").value(IdeaResourceAsm.REL_AUTHOR))
 				.andExpect(jsonPath("$[0].links[1].href").value(containsString("/api/v1/users/" + author.getId())))
 				.andExpect(jsonPath("$[0].tags", hasSize(1)))
-				.andExpect(jsonPath("$[0].tags[0]." + ID).value(is((int) idea.getRelatedTags().get(0).getId())))
-				.andExpect(jsonPath("$[0].tags[0].name").value(is(idea.getRelatedTags().get(0).getName())))
+				.andExpect(jsonPath("$[0].tags[0]." + ID).value((int) idea.getRelatedTags().get(0).getId()))
+				.andExpect(jsonPath("$[0].tags[0].name").value(idea.getRelatedTags().get(0).getName()))
 				.andExpect(jsonPath("$[0].tags[0].links", hasSize(2)))
-				.andExpect(jsonPath("$[0].tags[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].tags[0].links[0].rel").value(Link.REL_SELF))
 				.andExpect(jsonPath("$[0].tags[0].links[0].href").value(containsString("/api/v1/tags/" + tag.getId())))
-				.andExpect(jsonPath("$[0].tags[0].links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$[0].tags[0].links[1].rel").value(TagResourceAsm.IDEAS_REL))
 				.andExpect(jsonPath("$[0].tags[0].links[1].href").value(containsString("/api/v1/tags/" + idea.getRelatedTags().get(0).getId() + "/ideas")));
 
-		verify(ideaServiceMock, times(1)).findIdeasByUserId(userId);
-		verifyNoMoreInteractions(ideaServiceMock);
+		verify(this.ideaServiceMock, times(1)).findIdeasByUserId(userId);
+		verifyNoMoreInteractions(this.ideaServiceMock);
 	}
 
 	@Test
@@ -426,22 +419,22 @@ public class UserControllerTest {
 		user.addComment(comment);
 		idea.addComment(comment);
 
-		when(commentServiceMock.findCommentsByUserId(userId)).thenReturn(Lists.newArrayList(comment));
+		when(this.commentServiceMock.findCommentsByUserId(userId)).thenReturn(Lists.newArrayList(comment));
 
-		mockMvc.perform(get("/api/v1/users/{userId}/comments", userId)
+		this.mockMvc.perform(get("/api/v1/users/{userId}/comments", userId)
 				.accept(APPLICATION_JSON_UTF8))
 				.andDo(print())
 				.andExpect(status().isOk())
 				.andExpect(content().contentType(APPLICATION_JSON_UTF8))
 				.andExpect(jsonPath("$", hasSize(1)))
-				.andExpect(jsonPath("$[0]." + ID).value(is((int) comment.getId())))
-				.andExpect(jsonPath("$[0].body").value(is(comment.getBody())))
-				.andExpect(jsonPath("$[0].rating").value(is(comment.getRating())))
-				.andExpect(jsonPath("$[0]." + CREATION_TIME).value(is(EXPECTED_COMMENT_CREATION_TIME)))
-				.andExpect(jsonPath("$[0]." + MODIFICATION_TIME).value(is(EXPECTED_COMMENT_MODIFICATION_TIME)))
+				.andExpect(jsonPath("$[0]." + ID).value((int) comment.getId()))
+				.andExpect(jsonPath("$[0].body").value(comment.getBody()))
+				.andExpect(jsonPath("$[0].rating").value(comment.getRating()))
+				.andExpect(jsonPath("$[0]." + CREATION_TIME).value(EXPECTED_COMMENT_CREATION_TIME))
+				.andExpect(jsonPath("$[0]." + MODIFICATION_TIME).value(EXPECTED_COMMENT_MODIFICATION_TIME))
 				.andExpect(jsonPath("$[0].links", empty()));
 
-		verify(commentServiceMock, times(1)).findCommentsByUserId(userId);
-		verifyNoMoreInteractions(commentServiceMock);
+		verify(this.commentServiceMock, times(1)).findCommentsByUserId(userId);
+		verifyNoMoreInteractions(this.commentServiceMock);
 	}
 }

@@ -1,4 +1,4 @@
-package com.epam.idea.core.model.builders;
+package com.epam.idea.builder.model;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
