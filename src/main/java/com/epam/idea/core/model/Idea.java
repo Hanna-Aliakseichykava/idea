@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -163,29 +162,5 @@ public class Idea implements Serializable {
 				", description='" + description + '\'' +
 				", rating=" + rating +
 				'}';
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(title, description, creationTime, modificationTime, rating, author, relatedTags, comments);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (obj == null || getClass() != obj.getClass()) {
-			return false;
-		}
-		final Idea other = (Idea) obj;
-		return Objects.equals(this.title, other.title)
-				&& Objects.equals(this.description, other.description)
-				&& Objects.equals(this.creationTime, other.creationTime)
-				&& Objects.equals(this.modificationTime, other.modificationTime)
-				&& Objects.equals(this.rating, other.rating)
-				&& Objects.equals(this.author, other.author)
-				&& Objects.equals(this.relatedTags, other.relatedTags)
-				&& Objects.equals(this.comments, other.comments);
 	}
 }
