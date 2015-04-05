@@ -25,33 +25,34 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	@Transactional(readOnly = true)
-		public List<User> findAll() {
-			List<User> userList = userRepository.findAll();
-			userList.forEach(user -> Hibernate.initialize(user.getIdeas()));
-			return userList;
-		}
+	public List<User> findAll() {
+		final List<User> userList = userRepository.findAll();
+		//userList.forEach(user -> Hibernate.initialize(user.getIdeas()));
+		userList.forEach(Hibernate::initialize);
+		return userList;
+	}
 
-		@Override
-		@Transactional(readOnly = true)
-		public User findOne(final Long id) {
-			return userRepository.findOne(id).orElseThrow(() -> new UserNotFoundException(id));
-		}
+	@Override
+	@Transactional(readOnly = true)
+	public User findOne(final Long id) {
+		return userRepository.findOne(id).orElseThrow(() -> new UserNotFoundException(id));
+	}
 
-		@Override
-		public User save(final User persisted) {
-			return userRepository.save(persisted);
-		}
+	@Override
+	public User save(final User persisted) {
+		return userRepository.save(persisted);
+	}
 
-		@Override
-		public User deleteById(final long userId) {
-			User deleted = findOne(userId);
-			userRepository.delete(deleted);
+	@Override
+	public User deleteById(final long userId) {
+		final User deleted = findOne(userId);
+		userRepository.delete(deleted);
 		return deleted;
 	}
 
 	@Override
 	public User update(final long userId, final User source) {
-		User target = findOne(userId);
+		final User target = findOne(userId);
 		target.updateWith(source);
 		return target;
 	}

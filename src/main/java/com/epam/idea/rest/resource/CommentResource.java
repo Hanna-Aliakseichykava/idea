@@ -22,11 +22,8 @@ public class CommentResource extends ResourceSupport {
 
 	private int rating;
 
-//	@JsonView({View.ExtendedBasic.class})
-//	private UserResource author;
-
-//	@JsonView({View.Basic.class, View.UserComments.class})
-//	private IdeaResource subject;
+	//@JsonView({View.ExtendedBasic.class})
+	private UserResource author;
 
 	public CommentResource() {
 		//empty
@@ -72,21 +69,13 @@ public class CommentResource extends ResourceSupport {
 		this.rating = rating;
 	}
 
-//	public UserResource getAuthor() {
-//		return author;
-//	}
-//
-//	public void setAuthor(UserResource author) {
-//		this.author = author;
-//	}
-//
-//	public IdeaResource getSubject() {
-//		return subject;
-//	}
-//
-//	public void setSubject(IdeaResource subject) {
-//		this.subject = subject;
-//	}
+	public UserResource getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(UserResource author) {
+		this.author = author;
+	}
 
 	public Comment toComment() {
 		final Comment comment = new Comment();
@@ -94,9 +83,6 @@ public class CommentResource extends ResourceSupport {
 		comment.setRating(rating);
 //		if (author != null) {
 //			comment.setAuthor(author.toUser());
-//		}
-//		if (subject != null) {
-//			comment.setSubject(subject.toIdea());
 //		}
 		return comment;
 	}

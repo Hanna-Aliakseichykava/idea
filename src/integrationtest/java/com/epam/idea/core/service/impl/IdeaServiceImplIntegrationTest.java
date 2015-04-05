@@ -32,9 +32,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 		DirtiesContextTestExecutionListener.class,
 		TransactionalTestExecutionListener.class,
 		DbUnitTestExecutionListener.class})
-@DatabaseSetup("repository-idea-entries.xml")
+@DatabaseSetup("ideaRepository-ideas.xml")
 @Ignore
-public class IdeaServiceImplIntegTest {
+public class IdeaServiceImplIntegrationTest {
 
 	@Autowired
 	private IdeaService ideaService;
