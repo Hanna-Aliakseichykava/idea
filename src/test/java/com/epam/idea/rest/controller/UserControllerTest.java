@@ -15,6 +15,7 @@ import com.epam.idea.rest.config.TestConfig;
 import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.resource.UserResource;
 import com.epam.idea.rest.resource.asm.IdeaResourceAsm;
+import com.epam.idea.rest.resource.asm.TagResourceAsm;
 import com.epam.idea.rest.resource.asm.UserResourceAsm;
 import com.epam.idea.rest.resource.builders.TestUserResourceBuilder;
 import com.google.common.collect.Lists;
@@ -283,7 +284,7 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$", hasSize(1)))
 				.andExpect(jsonPath("$[0].logref").value(is(USER_NOT_FOUND_LOGREF)))
 				.andExpect(jsonPath("$[0].message").value(is("Could not find user with id: " + userId + ".")))
-				.andExpect(jsonPath("$[0].links", hasSize(0)));
+				.andExpect(jsonPath("$[0].links", empty()));
 
 		verify(userServiceMock, times(1)).deleteById(userId);
 		verifyNoMoreInteractions(userServiceMock);
@@ -404,7 +405,11 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$[0].tags", hasSize(1)))
 				.andExpect(jsonPath("$[0].tags[0]." + ID).value(is((int) idea.getRelatedTags().get(0).getId())))
 				.andExpect(jsonPath("$[0].tags[0].name").value(is(idea.getRelatedTags().get(0).getName())))
-				.andExpect(jsonPath("$[0].tags[0].links", empty()));
+				.andExpect(jsonPath("$[0].tags[0].links", hasSize(2)))
+				.andExpect(jsonPath("$[0].tags[0].links[0].rel").value(is(Link.REL_SELF)))
+				.andExpect(jsonPath("$[0].tags[0].links[0].href").value(containsString("/api/v1/tags/" + tag.getId())))
+				.andExpect(jsonPath("$[0].tags[0].links[1].rel").value(is(TagResourceAsm.IDEAS_REL)))
+				.andExpect(jsonPath("$[0].tags[0].links[1].href").value(containsString("/api/v1/tags/" + idea.getRelatedTags().get(0).getId() + "/ideas")));
 
 		verify(ideaServiceMock, times(1)).findIdeasByUserId(userId);
 		verifyNoMoreInteractions(ideaServiceMock);

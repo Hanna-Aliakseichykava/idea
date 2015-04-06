@@ -81,6 +81,15 @@ public class IdeaServiceImpl implements IdeaService {
 	}
 
 	@Override
+	public List<Idea> findIdeasByTagId(final long tagId) {
+		List<Idea> ideas = ideaRepository.findByTagId(tagId);
+		ideas.forEach(idea -> {
+			Hibernate.initialize(idea.getRelatedTags());
+		});
+		return ideas;
+	}
+
+	@Override
 	public Idea saveForUser(final long userId, final Idea idea) {
 		Optional<User> userOptional = userRepository.findOne(userId);
 		User user = userOptional.get();

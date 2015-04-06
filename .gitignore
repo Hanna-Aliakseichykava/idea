@@ -3,6 +3,7 @@
 build
 target
 out/
+bin/
 
 # IDEA artifacts and output dirs
 *.iml

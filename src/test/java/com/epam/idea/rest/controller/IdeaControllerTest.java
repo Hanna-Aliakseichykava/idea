@@ -1,13 +1,18 @@
 package com.epam.idea.rest.controller;
 
+import java.util.List;
+
 import com.epam.idea.core.model.Idea;
+import com.epam.idea.core.model.Tag;
 import com.epam.idea.core.model.builders.TestIdeaBuilder;
+import com.epam.idea.core.model.builders.TestTagBuilder;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.exception.IdeaNotFoundException;
 import com.epam.idea.rest.config.TestConfig;
 import com.epam.idea.rest.config.WebAppConfig;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.builders.TestIdeaResourceBuilder;
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,6 +28,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 import static com.epam.idea.core.model.builders.TestIdeaBuilder.DEFAULT_IDEA_ID;
+import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static com.epam.idea.core.service.exception.IdeaNotFoundException.ERROR_MSG_PATTERN_IDEA_NOT_FOUND;
 import static com.epam.idea.rest.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.rest.TestUtils.EMPTY;
