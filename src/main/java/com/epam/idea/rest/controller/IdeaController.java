@@ -32,7 +32,7 @@ public class IdeaController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<List<IdeaResource>> showAll() {
-		List<Idea> foundIdeas = ideaService.findAll();
+		final List<Idea> foundIdeas = ideaService.findAll();
 		return new ResponseEntity<>(new IdeaResourceAsm().toResources(foundIdeas), HttpStatus.OK);
 	}
 

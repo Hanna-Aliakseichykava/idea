@@ -5,7 +5,6 @@ import javax.sql.DataSource;
 
 public interface DatabaseConfig {
 	String SCHEMA_SCRIPT_LOCATION = "classpath:db/sql/schema.sql";
-	String TEST_SCHEMA_SCRIPT_LOCATION = "classpath:db/sql/test-schema.sql";
 	String DATA_SCRIPT_LOCATION = "classpath:db/sql/test-data.sql";
 
 	/** Name of the DataSource class provided by the JDBC driver. */

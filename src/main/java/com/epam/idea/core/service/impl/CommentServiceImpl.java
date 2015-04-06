@@ -40,6 +40,7 @@ public class CommentServiceImpl implements CommentService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Comment> findCommentsByUserId(Long userId) {
 		return commentRepository.findByUserId(userId);
 	}

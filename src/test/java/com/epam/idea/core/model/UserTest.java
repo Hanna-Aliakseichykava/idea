@@ -1,6 +1,6 @@
 package com.epam.idea.core.model;
 
-import com.epam.idea.core.model.builders.TestUserBuilder;
+import com.epam.idea.builder.model.TestUserBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

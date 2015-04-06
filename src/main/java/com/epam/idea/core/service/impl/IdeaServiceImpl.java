@@ -32,7 +32,7 @@ public class IdeaServiceImpl implements IdeaService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<Idea> findAll() {
-		List<Idea> allIdeas = ideaRepository.findAll();
+		final List<Idea> allIdeas = ideaRepository.findAll();
 		allIdeas.forEach(idea -> {
 			Hibernate.initialize(idea.getAuthor());
 			Hibernate.initialize(idea.getRelatedTags());
@@ -43,7 +43,7 @@ public class IdeaServiceImpl implements IdeaService {
 	@Override
 	@Transactional(readOnly = true)
 	public Idea findOne(final Long ideaId) {
-		Optional<Idea> ideaOptional = ideaRepository.findOne(ideaId);
+		final Optional<Idea> ideaOptional = ideaRepository.findOne(ideaId);
 		return ideaOptional.map(idea -> {
 					Hibernate.initialize(idea.getRelatedTags());
 					return idea;
@@ -63,29 +63,30 @@ public class IdeaServiceImpl implements IdeaService {
 
 	@Override
 	public Idea deleteById(final long ideaId) {
-		Idea deleted = findOne(ideaId);
+		final Idea deleted = findOne(ideaId);
 		ideaRepository.delete(deleted);
 		return deleted;
 	}
 
 	@Override
 	public Idea update(final long ideaId, final Idea source) {
+		final
 		Idea target = findOne(ideaId);
 		target.updateWith(source);
 		return target;
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Idea> findIdeasByUserId(final long userId) {
 		return ideaRepository.findByUserId(userId);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<Idea> findIdeasByTagId(final long tagId) {
-		List<Idea> ideas = ideaRepository.findByTagId(tagId);
-		ideas.forEach(idea -> {
-			Hibernate.initialize(idea.getRelatedTags());
-		});
+		final List<Idea> ideas = ideaRepository.findByTagId(tagId);
+		ideas.forEach(idea -> Hibernate.initialize(idea.getRelatedTags()));
 		return ideas;
 	}
 

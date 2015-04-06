@@ -1,4 +1,4 @@
-package com.epam.idea.rest.resource.builders;
+package com.epam.idea.builder.resource;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
