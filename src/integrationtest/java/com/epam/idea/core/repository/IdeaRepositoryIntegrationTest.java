@@ -1,13 +1,17 @@
 package com.epam.idea.core.repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.epam.idea.annotation.TransactionalIntegrationTest;
 import com.epam.idea.core.model.Idea;
+import com.epam.idea.util.DbTestUtil;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.epam.idea.assertion.IdeaProjectAssertions.assertThatIdea;
@@ -22,7 +26,7 @@ public class IdeaRepositoryIntegrationTest {
 	public static final long USER_ID = 1L;
 	public static final String USERNAME = "potato";
 	public static final String USER_EMAIL = "potato@test.com";
-	public static final long IDEA_ID = 2L;
+	public static final long IDEA_ID = 4L;
 	public static final String IDEA_TITLE = "Test title";
 	public static final String IDEA_DESCRIPTION = "Test description";
 	public static final int IDEA_RATING = -1;
@@ -31,6 +35,10 @@ public class IdeaRepositoryIntegrationTest {
 
 	@Autowired
 	private IdeaRepository ideaRepository;
+
+
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@Test
 	@DatabaseSetup(value = "ideaRepository-ideas.xml")
@@ -67,5 +75,11 @@ public class IdeaRepositoryIntegrationTest {
 		assertThatTag(ideas.get(0).getRelatedTags().get(0))
 				.hasId(TAG_ID)
 				.hasName(TAG_NAME);
+	}
+
+	@After
+	public void setUp() throws SQLException {
+		DbTestUtil.resetAutoIncrementColumns(applicationContext, "idea");
+		DbTestUtil.resetAutoIncrementColumns(applicationContext, "tag");
 	}
 }

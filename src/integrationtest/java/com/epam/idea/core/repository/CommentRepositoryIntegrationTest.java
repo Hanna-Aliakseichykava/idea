@@ -1,13 +1,17 @@
 package com.epam.idea.core.repository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.epam.idea.annotation.TransactionalIntegrationTest;
 import com.epam.idea.core.model.Comment;
+import com.epam.idea.util.DbTestUtil;
 import com.github.springtestdbunit.annotation.DatabaseSetup;
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.epam.idea.assertion.IdeaProjectAssertions.assertThatComment;
@@ -24,6 +28,9 @@ public class CommentRepositoryIntegrationTest {
 	public static final String USER_EMAIL = "user@test.com";
 	public static final long COMMENT_ID = 3L;
 	public static final int COMMENT_RATING = 10;
+
+	@Autowired
+	private ApplicationContext applicationContext;
 
 	@Autowired
 	private CommentRepository commentRepository;
@@ -44,5 +51,11 @@ public class CommentRepositoryIntegrationTest {
 				.hasId(USER_ID)
 				.hasUsername(USERNAME)
 				.hasEmail(USER_EMAIL);
+	}
+
+	@After
+	public void setUp() throws SQLException {
+		DbTestUtil.resetAutoIncrementColumns(applicationContext, "idea");
+		DbTestUtil.resetAutoIncrementColumns(applicationContext, "tag");
 	}
 }
