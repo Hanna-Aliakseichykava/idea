@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<dataset>
-    <user id="1" username="Jack" email="Jack@test.com" password="password" creation_time="2014-08-02 00:00:00"/>
-    <tag id="1" name="Programming" />
-
-</dataset>

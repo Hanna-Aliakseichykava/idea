@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionalIntegrationTest
-
+@DatabaseSetup("ideaService/ideaService-entries.xml")
 public class IdeaServiceImplIntegrationTest {
 
 	@Autowired
@@ -38,8 +38,7 @@ public class IdeaServiceImplIntegrationTest {
 	ApplicationContext applicationContext;
 
 	@Test
-	@DatabaseSetup("ideaService-entries.xml")
-	@ExpectedDatabase(value = "ideaService-create-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "ideaService/ideaService-create-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldSaveNewIdea() throws Exception {
 		Tag tag = tagService.findOne(1L);
 		Idea idea = new TestIdeaBuilder()
@@ -54,8 +53,7 @@ public class IdeaServiceImplIntegrationTest {
 	}
 //
 	@Test
-	@DatabaseSetup("ideaService-entries.xml")
-	@ExpectedDatabase(value = "ideaService-update-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "ideaService/ideaService-update-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldUpdateIdea() throws Exception {
 		Tag tag = new TestTagBuilder().withName("Dota").build();
 		tagService.save(tag);
@@ -68,8 +66,7 @@ public class IdeaServiceImplIntegrationTest {
 	}
 
 	@Test
-	@DatabaseSetup("ideaService-entries.xml")
-	@ExpectedDatabase(value = "ideaService-delete-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "ideaService/ideaService-delete-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldDeleteIdea() throws Exception {
 		Idea idea = ideaService.findOne(1L);
 		ideaService.delete(idea);
@@ -77,8 +74,7 @@ public class IdeaServiceImplIntegrationTest {
 	}
 
 	@Test
-	@DatabaseSetup("ideaService-entries.xml")
-	@ExpectedDatabase(value = "ideaService-delete-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "ideaService/ideaService-delete-idea.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldDeleteIdeaById() throws Exception {
 		ideaService.deleteById(1L);
 		assertThat(ideaService.findAll().size()).isEqualTo(0);
@@ -89,5 +85,7 @@ public class IdeaServiceImplIntegrationTest {
 		ideaService.findAll();
 		DbTestUtil.resetAutoIncrementColumns(applicationContext, "idea");
 		DbTestUtil.resetAutoIncrementColumns(applicationContext, "tag");
+		DbTestUtil.resetAutoIncrementColumns(applicationContext, "comment");
+		DbTestUtil.resetAutoIncrementColumns(applicationContext, "user");
 	}
 }

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+    <user id="1" username="newname" email="newmail@test.com" password="newpassword"/>
+    <idea id="2" title="Test title" description="Test description" rating="2" user_id="1"/>
+    <comment id="1" user_id="1" idea_id="2" body="Awesome" rating="10"/>
+</dataset>

@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionalIntegrationTest
+@DatabaseSetup("tagService/tagService-entries.xml")
 public class TagServiceImplIntegrationTest {
 
 	@Autowired
@@ -45,8 +46,7 @@ public class TagServiceImplIntegrationTest {
 
 	@Test
 	@Ignore
-	@DatabaseSetup("tagService-entries.xml")
-	@ExpectedDatabase(value = "tagService-create-tag.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "tagService/tagService-create-tag.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldSaveNewTag() throws Exception {
 		Tag tag = new TestTagBuilder().withName("Dota").build();
 		Idea idea = ideaService.findOne(1L);
@@ -56,8 +56,7 @@ public class TagServiceImplIntegrationTest {
 	}
 
 	@Test
-	@DatabaseSetup("tagService-entries.xml")
-	@ExpectedDatabase(value = "tagService-update-tag.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "tagService/tagService-update-tag.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldUpdateTag() throws Exception {
 		Tag tag = tagService.findOne(1L);
 		tag.setName("WoW");
@@ -67,8 +66,7 @@ public class TagServiceImplIntegrationTest {
 	}
 
 	@Test
-	@DatabaseSetup("tagService-entries.xml")
-	@ExpectedDatabase(value = "tagService-delete-tag.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
+	@ExpectedDatabase(value = "tagService/tagService-delete-tag.xml", assertionMode = DatabaseAssertionMode.NON_STRICT)
 	public void shouldDeleteTag() throws Exception {
 		Tag tag = tagService.findOne(1L);
 		tagService.delete(tag);

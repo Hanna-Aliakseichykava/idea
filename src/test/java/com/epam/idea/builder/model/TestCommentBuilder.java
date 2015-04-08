@@ -24,7 +24,7 @@ public class TestCommentBuilder {
 	private User author;
 	private Idea subject;
 
-	private TestCommentBuilder() {
+	public TestCommentBuilder() {
 		//empty
 	}
 
