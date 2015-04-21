@@ -5,8 +5,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.epam.idea.core.model.Idea;
-import com.epam.idea.rest.controller.IdeaController;
-import com.epam.idea.rest.controller.UserController;
+import com.epam.idea.rest.endpoint.IdeaRestEndpoint;
+import com.epam.idea.rest.endpoint.UserRestEndpoint;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.TagResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
@@ -22,7 +22,7 @@ public class IdeaResourceAsm extends ResourceAssemblerSupport<Idea, IdeaResource
 	public static final String REL_AUTHOR = "author";
 
 	public IdeaResourceAsm() {
-		super(IdeaController.class, IdeaResource.class);
+		super(IdeaRestEndpoint.class, IdeaResource.class);
 	}
 
 	@Override
@@ -43,9 +43,9 @@ public class IdeaResourceAsm extends ResourceAssemblerSupport<Idea, IdeaResource
 		} else {
 			ideaResource.setTags(emptyList());
 		}
-		ideaResource.add(linkTo(methodOn(IdeaController.class).show(original.getId())).withSelfRel());
+		ideaResource.add(linkTo(methodOn(IdeaRestEndpoint.class).show(original.getId())).withSelfRel());
 		Optional.ofNullable(original.getAuthor()).ifPresent(author ->
-				ideaResource.add(linkTo(methodOn(UserController.class).getUser(author.getId())).withRel(REL_AUTHOR)));
+				ideaResource.add(linkTo(methodOn(UserRestEndpoint.class).getUser(author.getId())).withRel(REL_AUTHOR)));
 		//todo add link to comments
 		return ideaResource;
 	}

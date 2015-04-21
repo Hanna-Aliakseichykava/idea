@@ -1,4 +1,4 @@
-package com.epam.idea.rest.controller;
+package com.epam.idea.rest.endpoint;
 
 import java.util.Collections;
 
@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import static com.epam.idea.rest.controller.RestErrorHandler.IDEA_NOT_FOUND_LOGREF;
+import static com.epam.idea.rest.endpoint.RestErrorHandler.IDEA_NOT_FOUND_LOGREF;
 import static com.epam.idea.util.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.util.TestUtils.convertObjectToJsonBytes;
 import static org.hamcrest.Matchers.empty;
@@ -39,7 +39,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionalIntegrationTest
-public class IdeaControllerIntegrationTest {
+public class IdeaRestEndpointIntegrationTest {
 
 	public static final long IDEA_ID = 2L;
 	public static final String IDEA_TITLE = "Test idea title";

@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 import com.epam.idea.core.repository.config.PersistenceConfig;
 import com.epam.idea.core.repository.config.support.DatabaseConfigProfile;
-import com.epam.idea.rest.config.RootConfig;
-import com.epam.idea.rest.config.WebAppConfig;
+import com.epam.idea.rest.config.RootContextConfiguration;
+import com.epam.idea.rest.config.RestServletContextConfiguration;
 import com.github.springtestdbunit.TransactionDbUnitTestExecutionListener;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
@@ -19,7 +19,7 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import org.springframework.test.context.web.WebAppConfiguration;
 
 /**
- * {@code @IntegrationTest} is a class-level annotation that is is used to define
+ * {@code @IntegrationTest} is a class-level annotation that is used to define
  * common configuration for integration test scenarios.
  *
  * Note that {@code @IntegrationTest} must be used in conjunction with
@@ -36,8 +36,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @Retention(RetentionPolicy.RUNTIME)
 @ActiveProfiles(DatabaseConfigProfile.TEST)
 @ContextHierarchy({
-		@ContextConfiguration(classes = {RootConfig.class, PersistenceConfig.class}),
-		@ContextConfiguration(classes = WebAppConfig.class)
+		@ContextConfiguration(classes = {RootContextConfiguration.class, PersistenceConfig.class}),
+		@ContextConfiguration(classes = RestServletContextConfiguration.class)
 })
 @TestExecutionListeners({
 		DependencyInjectionTestExecutionListener.class,

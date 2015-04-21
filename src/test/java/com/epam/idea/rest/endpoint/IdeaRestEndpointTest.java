@@ -1,4 +1,4 @@
-package com.epam.idea.rest.controller;
+package com.epam.idea.rest.endpoint;
 
 import com.epam.idea.builder.model.TestIdeaBuilder;
 import com.epam.idea.builder.resource.TestIdeaResourceBuilder;
@@ -22,7 +22,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static com.epam.idea.builder.model.TestIdeaBuilder.DEFAULT_IDEA_ID;
 import static com.epam.idea.core.service.exception.IdeaNotFoundException.ERROR_MSG_PATTERN_IDEA_NOT_FOUND;
-import static com.epam.idea.rest.controller.RestErrorHandler.IDEA_NOT_FOUND_LOGREF;
+import static com.epam.idea.rest.endpoint.RestErrorHandler.IDEA_NOT_FOUND_LOGREF;
 import static com.epam.idea.util.TestUtils.APPLICATION_JSON_UTF8;
 import static com.epam.idea.util.TestUtils.EMPTY;
 import static com.epam.idea.util.TestUtils.convertObjectToJsonBytes;
@@ -50,7 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppUnitTest
-public class IdeaControllerTest {
+public class IdeaRestEndpointTest {
 
 	@Autowired
 	private IdeaService ideaServiceMock;

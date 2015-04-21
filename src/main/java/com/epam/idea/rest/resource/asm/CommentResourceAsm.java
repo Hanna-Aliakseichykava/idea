@@ -1,7 +1,7 @@
 package com.epam.idea.rest.resource.asm;
 
 import com.epam.idea.core.model.Comment;
-import com.epam.idea.rest.controller.CommentController;
+import com.epam.idea.rest.endpoint.CommentRestEndpoint;
 import com.epam.idea.rest.resource.CommentResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
@@ -10,7 +10,7 @@ import static java.util.Objects.requireNonNull;
 public class CommentResourceAsm extends ResourceAssemblerSupport<Comment, CommentResource> {
 
 	public CommentResourceAsm() {
-		super(CommentController.class, CommentResource.class);
+		super(CommentRestEndpoint.class, CommentResource.class);
 	}
 
 	@Override

@@ -2,6 +2,8 @@ package com.epam.idea.rest.config;
 
 import java.util.List;
 
+import com.epam.idea.rest.config.annotation.RestEndpoint;
+import com.epam.idea.rest.config.annotation.RestEndpointAdvice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
@@ -20,8 +22,13 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = {"com.epam.idea.rest.controller"})
-public class WebAppConfig extends WebMvcConfigurerAdapter {
+@ComponentScan(
+		basePackages = "com.epam.idea.rest.endpoint",
+		useDefaultFilters = false,
+		includeFilters =
+		@ComponentScan.Filter({RestEndpoint.class, RestEndpointAdvice.class})
+)
+public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean
 	public ObjectMapper objectMapper() {

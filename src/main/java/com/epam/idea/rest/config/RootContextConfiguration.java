@@ -10,7 +10,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @Configuration
 @Import({PersistenceConfig.class})
 @ComponentScan("com.epam.idea.core.service.impl")
-public class RootConfig {
+public class RootContextConfiguration {
 
 	// PropertySourcesPlaceholderConfigurer has to be static in order to kick in very early in the context initialization process.
 	@Bean

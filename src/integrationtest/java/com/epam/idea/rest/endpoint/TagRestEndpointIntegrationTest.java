@@ -1,4 +1,4 @@
-package com.epam.idea.rest.controller;
+package com.epam.idea.rest.endpoint;
 
 import com.epam.idea.annotation.TransactionalIntegrationTest;
 import com.epam.idea.rest.resource.asm.TagResourceAsm;
@@ -25,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionalIntegrationTest
-public class TagControllerIntegrationTest {
+public class TagRestEndpointIntegrationTest {
 
 	public static final long TAG_ID = 3L;
 	public static final String TAG_NAME = "Programming";

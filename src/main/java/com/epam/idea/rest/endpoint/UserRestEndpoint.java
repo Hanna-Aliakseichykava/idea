@@ -1,4 +1,4 @@
-package com.epam.idea.rest.controller;
+package com.epam.idea.rest.endpoint;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -9,6 +9,7 @@ import com.epam.idea.core.model.User;
 import com.epam.idea.core.service.CommentService;
 import com.epam.idea.core.service.IdeaService;
 import com.epam.idea.core.service.UserService;
+import com.epam.idea.rest.config.annotation.RestEndpoint;
 import com.epam.idea.rest.resource.CommentResource;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.UserResource;
@@ -25,11 +26,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
+@RestEndpoint
 @RequestMapping("/api/v1/users")
-public class UserController {
+public class UserRestEndpoint {
 
 	@Autowired
 	private UserService userService;
@@ -80,7 +80,6 @@ public class UserController {
 		return new ResponseEntity<>(new IdeaResourceAsm().toResources(userIdeas), HttpStatus.OK);
 	}
 
-	@JsonView(View.Basic.class)
 	@RequestMapping(value = "/{userId}/ideas", method = RequestMethod.POST)
 	public HttpEntity<IdeaResource> createIdeaOfUser(@PathVariable final long userId, @Valid @RequestBody final IdeaResource ideaRes) {
 		final Idea savedIdea = this.ideaService.saveForUser(userId, ideaRes.toIdea());

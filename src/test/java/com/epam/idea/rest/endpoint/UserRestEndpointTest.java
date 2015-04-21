@@ -1,4 +1,4 @@
-package com.epam.idea.rest.controller;
+package com.epam.idea.rest.endpoint;
 
 import com.epam.idea.builder.model.TestCommentBuilder;
 import com.epam.idea.builder.model.TestIdeaBuilder;
@@ -37,7 +37,7 @@ import static com.epam.idea.builder.model.TestUserBuilder.aUser;
 import static com.epam.idea.core.model.User.MAX_LENGTH_EMAIL;
 import static com.epam.idea.core.model.User.MAX_LENGTH_PASSWORD;
 import static com.epam.idea.core.model.User.MAX_LENGTH_USERNAME;
-import static com.epam.idea.rest.controller.RestErrorHandler.USER_NOT_FOUND_LOGREF;
+import static com.epam.idea.rest.endpoint.RestErrorHandler.USER_NOT_FOUND_LOGREF;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.CREATION_TIME;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.ID;
 import static com.epam.idea.rest.resource.support.JsonPropertyName.MODIFICATION_TIME;
@@ -69,7 +69,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppUnitTest
-public class UserControllerTest {
+public class UserRestEndpointTest {
 
 	public static final String EXPECTED_USER_CREATION_TIME = "2015-01-12T00:00Z";
 	public static final String EXPECTED_IDEA_CREATION_TIME = "2014-02-12T10:00Z";

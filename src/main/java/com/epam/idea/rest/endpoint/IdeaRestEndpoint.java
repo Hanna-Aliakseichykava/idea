@@ -1,25 +1,25 @@
-package com.epam.idea.rest.controller;
+package com.epam.idea.rest.endpoint;
 
 import java.util.List;
 import javax.validation.Valid;
 
 import com.epam.idea.core.model.Idea;
 import com.epam.idea.core.service.IdeaService;
+import com.epam.idea.rest.config.annotation.RestEndpoint;
 import com.epam.idea.rest.resource.IdeaResource;
 import com.epam.idea.rest.resource.asm.IdeaResourceAsm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-@Controller
+@RestEndpoint
 @RequestMapping("/api/v1/ideas")
-public class IdeaController {
+public class IdeaRestEndpoint {
 
 	@Autowired
 	private IdeaService ideaService;

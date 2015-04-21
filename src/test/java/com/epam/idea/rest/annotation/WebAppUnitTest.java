@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import com.epam.idea.rest.config.TestRootConfig;
-import com.epam.idea.rest.config.WebAppConfig;
+import com.epam.idea.rest.config.RestServletContextConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.ContextHierarchy;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -28,7 +28,7 @@ import org.springframework.test.context.web.WebAppConfiguration;
 @Retention(RetentionPolicy.RUNTIME)
 @ContextHierarchy({
 		@ContextConfiguration(classes = TestRootConfig.class),
-		@ContextConfiguration(classes = WebAppConfig.class)
+		@ContextConfiguration(classes = RestServletContextConfiguration.class)
 })
 @WebAppConfiguration
 public @interface WebAppUnitTest {}

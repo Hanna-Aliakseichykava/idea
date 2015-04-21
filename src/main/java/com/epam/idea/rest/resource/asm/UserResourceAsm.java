@@ -1,7 +1,7 @@
 package com.epam.idea.rest.resource.asm;
 
 import com.epam.idea.core.model.User;
-import com.epam.idea.rest.controller.UserController;
+import com.epam.idea.rest.endpoint.UserRestEndpoint;
 import com.epam.idea.rest.resource.UserResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
 
@@ -15,7 +15,7 @@ public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource
 	public static final String COMMENTS_REL = "comments";
 
 	public UserResourceAsm() {
-		super(UserController.class, UserResource.class);
+		super(UserRestEndpoint.class, UserResource.class);
 	}
 
 	@Override
@@ -26,9 +26,9 @@ public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource
 		userResource.setUsername(original.getUsername());
 		userResource.setEmail(original.getEmail());
 		userResource.setCreationTime(original.getCreationTime());
-		userResource.add(linkTo(methodOn(UserController.class).getUser(original.getId())).withSelfRel());
-		userResource.add(linkTo(methodOn(UserController.class).getUserIdeas(original.getId())).withRel(IDEAS_REL));
-		userResource.add(linkTo(methodOn(UserController.class).getUserComments(original.getId())).withRel(COMMENTS_REL));
+		userResource.add(linkTo(methodOn(UserRestEndpoint.class).getUser(original.getId())).withSelfRel());
+		userResource.add(linkTo(methodOn(UserRestEndpoint.class).getUserIdeas(original.getId())).withRel(IDEAS_REL));
+		userResource.add(linkTo(methodOn(UserRestEndpoint.class).getUserComments(original.getId())).withRel(COMMENTS_REL));
 		return userResource;
 	}
 }
