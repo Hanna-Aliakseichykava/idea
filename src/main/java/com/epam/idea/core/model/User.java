@@ -14,10 +14,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "USER")
@@ -46,6 +46,7 @@ public class User implements Serializable {
 
 	@Column(name = "CREATION_TIME", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
+	@CreatedDate
 	private ZonedDateTime creationTime;
 
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
@@ -140,12 +141,6 @@ public class User implements Serializable {
 		this.roles.add(role);
 	}
 
-	@PrePersist
-	public void prePersist() {
-		this.creationTime = ZonedDateTime.now();
-	}
-
-
 	@Override
 	public String toString() {
 		return "User{" +
@@ -156,4 +151,5 @@ public class User implements Serializable {
 				", creationTime=" + creationTime +
 				'}';
 	}
+
 }

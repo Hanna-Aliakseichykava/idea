@@ -22,4 +22,5 @@ public enum Authority {
 				.filter(v -> v.getId() == id)
 				.findAny();
 	}
+
 }

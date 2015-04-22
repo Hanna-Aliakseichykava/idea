@@ -29,7 +29,6 @@ public class IdeaResource extends ResourceSupport {
 	@JsonProperty(JsonPropertyName.MODIFICATION_TIME)
 	private ZonedDateTime modificationTime;
 
-	//@JsonView({View.Basic.class})
 	private int rating;
 
 	private UserResource author;

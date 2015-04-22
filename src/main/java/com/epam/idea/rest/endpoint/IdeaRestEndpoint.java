@@ -24,22 +24,25 @@ public class IdeaRestEndpoint {
 	@Autowired
 	private IdeaService ideaService;
 
+	@Autowired
+	private IdeaResourceAsm ideaResourceAsm;
+
 	@RequestMapping(value = "/{ideaId}", method = RequestMethod.GET)
 	public HttpEntity<IdeaResource> show(@PathVariable final long ideaId) {
 		final Idea foundIdea = this.ideaService.findOne(ideaId);
-		return new ResponseEntity<>(new IdeaResourceAsm().toResource(foundIdea), HttpStatus.OK);
+		return new ResponseEntity<>(this.ideaResourceAsm.toResource(foundIdea), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<List<IdeaResource>> showAll() {
 		final List<Idea> foundIdeas = ideaService.findAll();
-		return new ResponseEntity<>(new IdeaResourceAsm().toResources(foundIdeas), HttpStatus.OK);
+		return new ResponseEntity<>(this.ideaResourceAsm.toResources(foundIdeas), HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.POST)
 	public HttpEntity<IdeaResource> create(@Valid @RequestBody final IdeaResource ideaRes) {
 		final Idea createdIdea = this.ideaService.save(ideaRes.toIdea());
-		return new ResponseEntity<>(new IdeaResourceAsm().toResource(createdIdea), HttpStatus.CREATED);
+		return new ResponseEntity<>(this.ideaResourceAsm.toResource(createdIdea), HttpStatus.CREATED);
 	}
 
 	@RequestMapping(value = "/{ideaId}", method = RequestMethod.DELETE)
@@ -51,6 +54,7 @@ public class IdeaRestEndpoint {
 	@RequestMapping(value = "/{ideaId}", method = RequestMethod.PUT)
 	public HttpEntity<IdeaResource> update(@Valid @RequestBody final IdeaResource ideaResource, @PathVariable final long ideaId) {
 		final Idea updatedIdea = this.ideaService.update(ideaId, ideaResource.toIdea());
-		return new ResponseEntity<>(new IdeaResourceAsm().toResource(updatedIdea), HttpStatus.OK);
+		return new ResponseEntity<>(this.ideaResourceAsm.toResource(updatedIdea), HttpStatus.OK);
 	}
+
 }

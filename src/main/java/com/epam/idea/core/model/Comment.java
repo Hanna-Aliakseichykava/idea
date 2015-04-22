@@ -9,11 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "COMMENT")
@@ -29,10 +29,12 @@ public class Comment implements Serializable {
 
 	@Column(name = "CREATION_TIME", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
+	@CreatedDate
 	private ZonedDateTime creationTime;
 
 	@Column(name = "MODIFICATION_TIME", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
+	@LastModifiedDate
 	private ZonedDateTime modificationTime;
 
 	@Column(name = "RATING", nullable = false)
@@ -94,18 +96,6 @@ public class Comment implements Serializable {
 		this.subject = subject;
 	}
 
-	@PreUpdate
-	public void preUpdate() {
-		this.modificationTime = ZonedDateTime.now();
-	}
-
-	@PrePersist
-	public void prePersist() {
-		ZonedDateTime now = ZonedDateTime.now();
-		this.creationTime = now;
-		this.modificationTime = now;
-	}
-
 	@Override
 	public String toString() {
 		return "Comment{" +
@@ -114,4 +104,5 @@ public class Comment implements Serializable {
 				", rating=" + rating +
 				'}';
 	}
+
 }

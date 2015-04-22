@@ -1,14 +1,17 @@
 package com.epam.idea.rest.resource.asm;
 
+import java.util.Objects;
+
 import com.epam.idea.core.model.User;
 import com.epam.idea.rest.endpoint.UserRestEndpoint;
 import com.epam.idea.rest.resource.UserResource;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.stereotype.Component;
 
-import static java.util.Objects.requireNonNull;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+@Component
 public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource> {
 
 	public static final String IDEAS_REL = "ideas";
@@ -20,7 +23,7 @@ public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource
 
 	@Override
 	public UserResource toResource(final User original) {
-		requireNonNull(original, "User cannot be null");
+		Objects.requireNonNull(original, "User must not be null");
 		final UserResource userResource = new UserResource();
 		userResource.setUserId(original.getId());
 		userResource.setUsername(original.getUsername());
@@ -31,4 +34,5 @@ public class UserResourceAsm extends ResourceAssemblerSupport<User, UserResource
 		userResource.add(linkTo(methodOn(UserRestEndpoint.class).getUserComments(original.getId())).withRel(COMMENTS_REL));
 		return userResource;
 	}
+
 }

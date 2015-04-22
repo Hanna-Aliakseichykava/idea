@@ -1,7 +1,6 @@
 package com.epam.idea.rest.resource;
 
 import java.time.ZonedDateTime;
-import javax.persistence.Transient;
 import javax.validation.constraints.Size;
 
 import com.epam.idea.core.model.User;
@@ -25,7 +24,6 @@ public class UserResource extends ResourceSupport {
 	private String email;
 
 	@JsonView(View.Admin.class)
-	@Transient
 	@Size(min = User.MIN_LENGTH_PASSWORD, max = User.MAX_LENGTH_PASSWORD)
 	private String password;
 
@@ -83,4 +81,5 @@ public class UserResource extends ResourceSupport {
 		user.setPassword(password);
 		return user;
 	}
+
 }

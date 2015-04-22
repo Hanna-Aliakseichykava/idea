@@ -22,7 +22,6 @@ public class CommentResource extends ResourceSupport {
 
 	private int rating;
 
-	//@JsonView({View.ExtendedBasic.class})
 	private UserResource author;
 
 	public CommentResource() {

@@ -1,16 +1,13 @@
 package com.epam.idea.rest.resource;
 
 import com.epam.idea.core.model.Tag;
-import com.epam.idea.rest.resource.support.JsonPropertyName;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.hateoas.ResourceSupport;
 
 public class TagResource extends ResourceSupport {
 
-	@JsonProperty(JsonPropertyName.ID)
-	private long tagId;
-
 	private String name;
+
+	private int ideasCount;
 
 	public TagResource() {
 		//empty
@@ -18,14 +15,6 @@ public class TagResource extends ResourceSupport {
 
 	public TagResource(String name) {
 		this.name = name;
-	}
-
-	public long getTagId() {
-		return tagId;
-	}
-
-	public void setTagId(long tagId) {
-		this.tagId = tagId;
 	}
 
 	public String getName() {
@@ -36,9 +25,18 @@ public class TagResource extends ResourceSupport {
 		this.name = name;
 	}
 
+	public int getIdeasCount() {
+		return ideasCount;
+	}
+
+	public void setIdeasCount(int ideasCount) {
+		this.ideasCount = ideasCount;
+	}
+
 	public Tag toTag() {
 		final Tag tag = new Tag();
 		tag.setName(name);
 		return tag;
 	}
+
 }

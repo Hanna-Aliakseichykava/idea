@@ -15,11 +15,11 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Type;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Table(name = "IDEA")
@@ -42,10 +42,12 @@ public class Idea implements Serializable {
 
 	@Column(name = "CREATION_TIME", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
+	@CreatedDate
 	private ZonedDateTime creationTime;
 
 	@Column(name = "MODIFICATION_TIME", nullable = false)
 	@Type(type = "org.jadira.usertype.dateandtime.threeten.PersistentZonedDateTime")
+	@LastModifiedDate
 	private ZonedDateTime modificationTime;
 
 	@Column(name = "RATING", nullable = false)
@@ -142,18 +144,6 @@ public class Idea implements Serializable {
 		this.description = source.description;
 	}
 
-	@PreUpdate
-	public void preUpdate() {
-		this.modificationTime = ZonedDateTime.now();
-	}
-
-	@PrePersist
-	public void prePersist() {
-		ZonedDateTime now = ZonedDateTime.now();
-		this.creationTime = now;
-		this.modificationTime = now;
-	}
-
 	@Override
 	public String toString() {
 		return "Idea{" +
@@ -163,4 +153,5 @@ public class Idea implements Serializable {
 				", rating=" + rating +
 				'}';
 	}
+
 }

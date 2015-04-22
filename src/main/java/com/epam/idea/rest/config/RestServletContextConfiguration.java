@@ -2,8 +2,6 @@ package com.epam.idea.rest.config;
 
 import java.util.List;
 
-import com.epam.idea.rest.config.annotation.RestEndpoint;
-import com.epam.idea.rest.config.annotation.RestEndpointAdvice;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
@@ -23,11 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @Configuration
 @EnableWebMvc
 @ComponentScan(
-		basePackages = "com.epam.idea.rest.endpoint",
-		useDefaultFilters = false,
-		includeFilters =
-		@ComponentScan.Filter({RestEndpoint.class, RestEndpointAdvice.class})
-)
+		basePackages = {"com.epam.idea.rest.endpoint", "com.epam.idea.rest.resource"})
 public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Bean
@@ -50,4 +44,5 @@ public class RestServletContextConfiguration extends WebMvcConfigurerAdapter {
 	public void configureMessageConverters(final List<HttpMessageConverter<?>> converters) {
 		converters.add(mappingJackson2HttpMessageConverter());
 	}
+
 }

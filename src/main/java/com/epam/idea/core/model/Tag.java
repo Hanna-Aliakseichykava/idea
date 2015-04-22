@@ -3,6 +3,7 @@ package com.epam.idea.core.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-
-import static java.util.Objects.requireNonNull;
 
 @Entity
 @Table(name = "TAG")
@@ -38,7 +37,7 @@ public class Tag implements Serializable {
 	}
 
 	public Tag(String name) {
-		requireNonNull(name, "name cannot be null");
+		Objects.requireNonNull(name, "name cannot be null");
 		this.name = name;
 		this.ideasWithTag = new ArrayList<>();
 	}
@@ -70,8 +69,9 @@ public class Tag implements Serializable {
 	@Override
 	public String toString() {
 		return "Tag{" +
-				"id=" + id +
-				", name='" + name +
+				"id=" + getId() +
+				", name='" + getName() +
 				'}';
 	}
+
 }

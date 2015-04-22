@@ -38,4 +38,10 @@ public class TagServiceImpl implements TagService {
 	public Tag save(final Tag persisted) {
 		return tagRepository.save(persisted);
 	}
+
+	@Override
+	public int getIdeasCountForTag(final String name) {
+		return tagRepository.getIdeasCountForTag(name);
+	}
+
 }

@@ -24,11 +24,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by Ihar_Niakhlebau on 07-Apr-15.
- */
 @RunWith(SpringJUnit4ClassRunner.class)
 @TransactionalIntegrationTest
+@Ignore
 public class TagServiceImplIntegrationTest {
 
 	@Autowired

@@ -1,13 +1,19 @@
 package com.epam.idea.rest.resource.asm;
 
+import java.util.Objects;
+
 import com.epam.idea.core.model.Comment;
 import com.epam.idea.rest.endpoint.CommentRestEndpoint;
 import com.epam.idea.rest.resource.CommentResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.mvc.ResourceAssemblerSupport;
+import org.springframework.stereotype.Component;
 
-import static java.util.Objects.requireNonNull;
-
+@Component
 public class CommentResourceAsm extends ResourceAssemblerSupport<Comment, CommentResource> {
+
+	@Autowired
+	private UserResourceAsm userResourceAsm;
 
 	public CommentResourceAsm() {
 		super(CommentRestEndpoint.class, CommentResource.class);
@@ -15,22 +21,16 @@ public class CommentResourceAsm extends ResourceAssemblerSupport<Comment, Commen
 
 	@Override
 	public CommentResource toResource(final Comment original) {
-		requireNonNull(original, "Comment cannot be null");
+		Objects.requireNonNull(original, "Comment must not be null");
 		final CommentResource commentResource = new CommentResource();
 		commentResource.setCommentId(original.getId());
 		commentResource.setBody(original.getBody());
 		commentResource.setCreationTime(original.getCreationTime());
 		commentResource.setModificationTime(original.getModificationTime());
 		commentResource.setRating(original.getRating());
-//		final User author = original.getAuthor();
-//		if (author != null && isInitialized(author)) {
-//			commentResource.setAuthor(new UserResourceAsm().toResource(author));
-//		}
-//		final Idea subject = original.getSubject();
-//		if (subject != null && isInitialized(subject)) {
-//			commentResource.setSubject(new IdeaResourceAsm().toResource(subject));
-//		}
+		commentResource.setAuthor(this.userResourceAsm.toResource(original.getAuthor()));
 		//todo add links
 		return commentResource;
 	}
+
 }

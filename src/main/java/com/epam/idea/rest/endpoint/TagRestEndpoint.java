@@ -29,24 +29,31 @@ public class TagRestEndpoint {
 	@Autowired
 	private IdeaService ideaService;
 
+	@Autowired
+	private TagResourceAsm tagResourceAsm;
+
+	@Autowired
+	private IdeaResourceAsm ideaResourceAsm;
+
 	@RequestMapping(value = "/{tagId}", method = RequestMethod.GET)
 	public HttpEntity<TagResource> getTag(@PathVariable final long tagId) {
 		final Tag foundTag = this.tagService.findOne(tagId);
-		final TagResource tagResource = new TagResourceAsm().toResource(foundTag);
+		final TagResource tagResource = this.tagResourceAsm.toResource(foundTag);
 		return new ResponseEntity<>(tagResource, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
 	public HttpEntity<List<TagResource>> getAllTags() {
 		final List<Tag> foundTags = this.tagService.findAll();
-		final List<TagResource> tagResources = new TagResourceAsm().toResources(foundTags);
+		final List<TagResource> tagResources = this.tagResourceAsm.toResources(foundTags);
 		return new ResponseEntity<>(tagResources, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{tagId}/ideas", method = RequestMethod.GET)
 	public HttpEntity<List<IdeaResource>> getAllFoundIdeasForTag(@PathVariable final long tagId) {
 		final List<Idea> foundIdeas = this.ideaService.findIdeasByTagId(tagId);
-		final List<IdeaResource> ideaResources = new IdeaResourceAsm().toResources(foundIdeas);
+		final List<IdeaResource> ideaResources = this.ideaResourceAsm.toResources(foundIdeas);
 		return new ResponseEntity<>(ideaResources, HttpStatus.OK);
 	}
+
 }
