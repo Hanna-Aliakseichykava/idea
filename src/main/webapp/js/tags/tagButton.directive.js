@@ -1,11 +1,9 @@
 (function() {
     'use strict';
-	
-	angular.module('app.directives', []);
-	
+
 	angular
 		.module('app.directives')
-		.directive('button', tagButton);
+		.directive('tagButton', tagButton);
 
 	function tagButton() {
 		return {

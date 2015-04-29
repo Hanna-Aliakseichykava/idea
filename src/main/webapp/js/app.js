@@ -15,7 +15,7 @@ angular
 		'app.Controller'
 	]);
 	
-//	angular.module('ideaDirectives', []); // set Directives
-//	angular.module('ideaServices', []); // set Services
+	angular.module('app.directives', []); // set Directives
+	angular.module('app.services', []); // set Services
 	angular.module('app.Controller', []); // set Ctrls
-//	angular.module('ideaFilters', []); // set Filters
+	angular.module('app.filters', []); // set Filters

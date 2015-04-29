@@ -7,7 +7,7 @@ angular.module('ideaApp')
 	
 	var vm = this;
 
-	vm.ideas = Data;
+	vm.ideas = Data.getIdeas();
 
 	vm.selectByCategory =function (tag) {
 	     vm.ideas = IdeasSelectedByTag.getIdeas(tag);
@@ -27,4 +27,3 @@ angular.module('ideaApp')
 
       
       
-     
