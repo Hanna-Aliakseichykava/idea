@@ -146,3 +146,25 @@ check.dependsOn integrationTest
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
 }
+
+//---------------------------Deploy in local Tomcat--------------------------------------------------//
+
+def tomcat_home = System.getenv('CATALINA_HOME')
+def tomcat_webapps = tomcat_home+'/webapps'
+def tomcat_bin = tomcat_home+'/bin'
+
+task deployToTomcat(type: Copy) {
+    from war
+    into tomcat_webapps
+}
+
+task startTomcat(type:Exec) {
+  workingDir tomcat_bin
+  commandLine 'cmd', '/c', 'startup.bat'
+}
+
+task stopTomcat(type:Exec) {
+  workingDir tomcat_bin
+  commandLine 'cmd', '/c', 'shutdown.bat'
+}
+
