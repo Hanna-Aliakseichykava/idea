@@ -151,14 +151,9 @@ task wrapper(type: Wrapper) {
 
 task tom << {
     def tomcat_home = System.getenv('CATALINA_HOME')
-    def tomcat_bin = tomcat_home+'/bin'
+    def tomcat_bin = "$tomcat_home/bin"
     def tomcat_base = System.getenv('CATALINA_BASE')
-    def tomcat_webapps = tomcat_home+'/webapps'
-    println 'Environment Variable CATALINA_HOME is '+tomcat_home
-    if (tomcat_base != null) {
-        println 'Environment Variable CATALINA_BASE is '+tomcat_base
-        tomcat_webapps = tomcat_base+'/webapps'
-    }
+    def tomcat_webapps = tomcat_base ? "$tomcat_base/webapps" : "$tomcat_home/webapps"
     if (project.hasProperty('start')) {
         startTom(tomcat_bin)
     } else if (project.hasProperty('stop')) {
@@ -173,7 +168,7 @@ task tom << {
 }
 
 def startTom(tomcat_bin) {
-    println 'Tomcat is starting...'
+    println 'Starting Tomcat...'
     exec {
         workingDir tomcat_bin
         commandLine 'cmd', '/c', 'startup.bat'
@@ -181,22 +176,19 @@ def startTom(tomcat_bin) {
 }
 
 def stopTom(tomcat_bin) {
-    println 'Tomcat is stopping...'
+    println 'Stopping Tomcat...'
     exec {
         workingDir tomcat_bin
         commandLine 'cmd', '/c', 'shutdown.bat'
     }
-    println 'Tomcat has stopped.'
 }
 
 def webappsCopy(tomcat_webapps) {
-    println 'App is deploying...'
+    println "Start copying war into $tomcat_webapps"
     copy {
         from 'build/libs'
         into tomcat_webapps
         include '*.war'
     }
-    println 'App has deployed'
+    println 'Finish copying war'
 }
-
-//---------------------------------------------------------------------------------------//
